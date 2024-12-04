@@ -1,0 +1,171 @@
+@model IEnumerable<ResultUnvanWithPersonelCountDto>
+@{
+    ViewData["Title"] = "Tanýmlamalar / Ünvan";
+}
+@section StyleCss {
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="/AdminTemplate/plugins/datatables/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/AdminTemplate/plugins/datatables/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="/AdminTemplate/plugins/datatables/css/buttons.bootstrap4.min.css">
+    <link rel="stylesheet" href="/AdminTemplate/plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/searchpanes/2.3.3/css/searchPanes.bootstrap5.css">
+    <link rel="stylesheet" href="/AdminTemplate/dist/css/CustomCss.css">
+}
+<div class="card">
+    <div class="card-body">
+        <table id="example" class="table table-bordered table-hover display text-center" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Ünvan Adý</th>
+                    <th class="text-center">Öncelik Sýrasý</th>
+                    <th class="text-center">Ünvana Sahip Personel Sayýsý</th>
+                    <th>Durum</th>
+                    <th>Ýþlemler</th>
+                </tr>
+            </thead>
+            <tbody class="text-heading">
+                @foreach (ResultUnvanWithPersonelCountDto unvan in Model)
+                {
+                    <tr>
+                        <td>@unvan.UnvanAdi</td>
+                        <td class="text-center">@unvan.OncelikSirasi</td>
+                        <td class="text-center"><i class="fas fa-user mr-1"></i>@unvan.PersonelSayisi</td>
+                        <td><span class="badge badge-lg @BadgeHelper.GetBadgeClass(unvan.DurumId)"> @unvan.DurumAdi</span></td>
+                        <td>
+                            <a href="#" class="btn btn-icon"><i class="fa fa-trash text-danger" title="Arýza Sil" aria-hidden="true"></i></a>
+                            <a href="#" class="btn btn-icon"><i class="fa fa-eye text-primary" title="Arýza Detay Göster" aria-hidden="true"></i></a>
+                            <a href="#" class="btn btn-icon"><i class="fa fa-check text-success" title="Arýza Kapatma Onayla" aria-hidden="true"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Ünvan Adý</th>
+                    <th class="text-center">Öncelik Sýrasý</th>
+                    <th class="text-center">Ünvana Sahip Personel Sayýsý</th>
+                    <th>Durum</th>
+                    <th>Ýþlemler</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+@section Scripts {
+
+    <script src="/AdminTemplate/plugins/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
+
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/dataTables.buttons.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.dataTables.js"></script>
+
+    <script src="https://cdn.datatables.net/searchpanes/2.3.3/js/dataTables.searchPanes.js"></script>
+    <script src="https://cdn.datatables.net/searchpanes/2.3.3/js/searchPanes.bootstrap5.js"></script>
+    <script src="https://cdn.datatables.net/select/2.1.0/js/dataTables.select.js"></script>
+    <script src="https://cdn.datatables.net/select/2.1.0/js/select.bootstrap5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.print.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#example').DataTable({
+                "responsive": true,
+                "lengthChange": false,
+                "autoWidth": false,
+                "lengthChange": true,
+                "lengthMenu": [
+                    [10, 25, 50, 75, 100, -1],
+                    [10, 25, 50, 75, 100, 'Hepsi']
+                ],
+                "order": [[1, 'asc']],
+                "language": {
+                    "searchPanes": {
+                        "emptyPanes": 'Filtreleme Paneli Bulunamadý',
+                        "title": {
+                            _: 'Seçili Alan - %d',
+                            0: ''
+                        }
+                    },
+                    "sProcessing": "Ýþleniyor...",
+                    "sLengthMenu": "_MENU_",
+                    "sZeroRecords": "Eþleþen Kayýt Bulunmadý",
+                    "sInfo": "Toplam _TOTAL_ kayýttan _START_ - _END_ arasý gösteriliyor",
+                    "sInfoEmpty": "Kayýt Yok",
+                    "emptyTable": "Tabloda veri bulunmamaktadýr",
+                    "sInfoFiltered": "(toplam _MAX_ kayýttan filtrelendi)",
+                    "sSearch": "",
+                    "searchPlaceholder": 'Arama Yapýnýz...',
+                    "oPaginate": {
+                        "sFirst": "Ýlk",
+                        "sPrevious": "Önceki",
+                        "sNext": "Sonraki",
+                        "sLast": "Son"
+                    }
+                },
+                dom: 'PBflrtip',
+                layout: {
+                    top1: {
+                        searchPanes: {
+                            cascadePanes: true,
+                            layout: 'columns-2'
+                        }
+                    },
+                    topStart: {
+                        buttons: [
+                            {
+                                extend: 'collection',
+                                text: '<i class="fas fa-upload mr-1"></i> Aktar', // Dropdown ana düðme ikonu
+                                buttons: [
+                                    {
+                                        extend: 'excel',
+                                        text: '<i class="fas fa-file-excel mr-1"></i> Excel',
+                                        exportOptions: {
+                                            columns: ':visible:not(:eq(4))'
+                                        }
+                                    },
+                                    {
+                                        extend: 'pdf',
+                                        text: '<i class="fas fa-file-pdf mr-1"></i> PDF',
+                                        exportOptions: {
+                                            columns: [0, 1, 2, 3]
+                                        },
+                                        customize: function (doc) {
+                                            // Tablonun baþlýklarýný ve içeriðini ortala
+                                            doc.styles.tableHeader.alignment = 'center';
+                                            doc.content[1].table.body.forEach(function (row) {
+                                                row.forEach(function (cell) {
+                                                    cell.alignment = 'center';
+                                                });
+                                            });
+                                        }
+                                    },
+                                    {
+                                        extend: 'print',
+                                        text: '<i class="fas fa-print mr-1"></i> Yazdýr',
+                                        exportOptions: {
+                                            columns: ':visible:not(:eq(4))'
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                },
+                columnDefs: [
+                    {
+                        searchPanes: {
+                            show: true
+                        },
+                        targets: [0, 3]
+                    }
+                ]
+            });
+        });
+    </script>
+}

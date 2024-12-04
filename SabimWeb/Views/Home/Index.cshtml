@@ -1,0 +1,517 @@
+﻿@{
+    ViewData["Title"] = "Home";
+    Layout = "_AdminLayout";
+}
+
+@section StyleCss {
+    <link rel="stylesheet" href="/AdminTemplate/plugins/datatables/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/AdminTemplate/plugins/datatables/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="/AdminTemplate/plugins/datatables/css/buttons.bootstrap4.min.css">
+    <link rel="stylesheet" href="/AdminTemplate/plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="/AdminTemplate/dist/css/CustomCss.css">
+    <style>
+        .custom-select-sm {
+            font-size: 100%;
+            padding-left: .5rem;
+            margin-bottom: .5rem;
+            margin-left: .5rem;
+            margin-right: .5rem;
+            height:2.5rem;
+            max-height:2.5rem;       
+        }
+
+        .btn-icon {
+            transition: transform 0.3s ease, background-color 0.3s ease; /* Geçiş efektini ayarlıyoruz */
+            border-radius: 5px; /* Arka planın kenarlarını yuvarlamak için */
+            padding: 5px; /* Arka planın iconu çevrelemesi için iç boşluk */
+        }
+
+            .btn-icon:hover {
+                transform: translateY(-5px); /* Hover durumunda yukarı kaydırma */
+                background-color:ghostwhite; /* Daha açık bir arka plan rengi (şeffaf siyah) */
+            }
+
+        /* Diğer dropdown ayarları */
+        .dropdown-item {
+            padding: .5rem .5rem .5rem 1rem;
+            clear:both;
+        }
+
+        /* Aktif öğelerde onay işaretini sağa hizalama */
+        .dropdown-item.active,
+        .dropdown-item:active {
+            color: #212529;
+            text-decoration: none;
+                background-color: #f9f9f9;
+            padding-right: 3rem !important; /* Sağ tarafta boşluk bırak */
+            position: relative; /* Absolute konumlandırma için gerekli */
+        }
+
+            /* Onay işaretinin konumu */
+            .dropdown-item.active:after {
+                position: absolute;
+                right: 1em;
+                display: inline-block;
+                content: "✓";
+                color: inherit;
+                font-weight: bold;
+            }
+
+
+        /* Açılır menü için overflow ayarı */
+        .dropdown-menu {
+            overflow: hidden;
+            white-space: nowrap;
+            max-width: 100%;
+            position: relative; /* Hover sırasında konumlandırma sorunlarını engeller */
+            box-sizing: border-box; /* Padding ve border dahil olarak genişliği belirler */
+        }
+
+            /* Uzun metinler için ellipsis efekti */
+            .dropdown-menu a {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            .custom-buttons{
+                margin-left:1rem;
+                margin-right:1rem;
+            }
+
+            .dataTables_filter input[type="search"] {
+                padding-top: 1.2rem;  /* Adjust the value as needed */
+                padding-bottom: 1.2rem;  /* Adjust the value as needed */
+            }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            background-color: #007bff;
+            border-color: #006fe6;
+            color: #fff;
+            padding: 0 10px;
+            margin-top: .31rem;
+        }
+    </style>
+}
+
+<div class="card">
+<div class="card-header">
+    <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Ünvan Adı:</label>
+                    <select class="select2" id="unvanSelect" multiple="multiple" data-placeholder="Ünvan Seç">
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Durum:</label>
+                    <select class="select2" id="durumSelect" multiple="multiple" data-placeholder="Durum Seç">
+                    </select>
+                </div>
+            </div>
+    </div>
+</div>
+<div class="card-body">
+<table id="example1" class="table table-bordered table-hover">
+    <thead class="text-center">
+        <tr>
+            <th>Ünvan Adı</th>
+            <th>Öncelik Sırası</th>
+            <th>Ünvana Sahip Personel Sayısı</th>
+            <th>Durum</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody class="text-center text-heading">
+        <tr>
+            <td>Adalet Komisyon Başkanı</td>
+            <td>1</td>
+            <td><i class="fas fa-user mr-1"></i>1</td>
+            <td><span class="badge badge-lg bg-label-success badge-success">Aktif</span></td>
+            <td>
+                <a href="#" class="btn btn-icon"><i class="fa fa-trash text-danger" title="Arıza Sil" aria-hidden="true"></i></a>
+                <a href="#" class="btn btn-icon"><i class="fa fa-eye text-primary" title="Arıza Detay Göster" aria-hidden="true"></i></a>
+                <a href="#" class="btn btn-icon"><i class="fa fa-check text-success" title="Arıza Kapatma Onayla" aria-hidden="true"></i></a>
+            </td>
+        </tr>
+        <tr>
+            <td>Cumhuriyet Başsavcısı</td>
+            <td>2</td>
+            <td><i class="fas fa-user mr-1"></i>1</td>
+            <td><span class="badge badge-lg bg-label-success badge-success">Aktif</span></td>
+            <td>
+                <a href="#" class="btn btn-icon"><i class="fa fa-trash text-danger" title="Arıza Sil" aria-hidden="true"></i></a>
+                <a href="#" class="btn btn-icon"><i class="fa fa-eye text-primary" title="Arıza Detay Göster" aria-hidden="true"></i></a>
+                <a href="#" class="btn btn-icon"><i class="fa fa-check text-success" title="Arıza Kapatma Onayla" aria-hidden="true"></i></a>
+            </td>
+        </tr>
+        <tr>
+            <td>Cumhuriyet Başsavcı Vekili</td>
+            <td>3</td>
+            <td><i class="fas fa-user mr-1"></i>3</td>
+            <td><span class="badge badge-lg bg-label-success badge-success">Aktif</span></td>
+            <td>
+                <a href="#" class="btn btn-icon"><i class="fa fa-trash text-danger" title="Arıza Sil" aria-hidden="true"></i></a>
+                <a href="#" class="btn btn-icon"><i class="fa fa-eye text-primary" title="Arıza Detay Göster" aria-hidden="true"></i></a>
+                <a href="#" class="btn btn-icon"><i class="fa fa-check text-success" title="Arıza Kapatma Onayla" aria-hidden="true"></i></a>
+            </td>
+        </tr>
+        <tr>
+            <td>Cumhuriyet Savcısı</td>
+            <td>4</td>
+            <td><i class="fas fa-user mr-1"></i>57</td>
+            <td><span class="badge badge-lg bg-label-success badge-success">Aktif</span></td>
+            <td>
+                <a href="#" class="btn btn-icon"><i class="fa fa-trash text-danger" title="Arıza Sil" aria-hidden="true"></i></a>
+                <a href="#" class="btn btn-icon"><i class="fa fa-eye text-primary" title="Arıza Detay Göster" aria-hidden="true"></i></a>
+                <a href="#" class="btn btn-icon"><i class="fa fa-check text-success" title="Arıza Kapatma Onayla" aria-hidden="true"></i></a>
+            </td>
+        </tr>
+        <tr>
+            <td>Ağır Ceza Başkanı</td>
+            <td>5</td>
+            <td><i class="fas fa-user mr-1"></i>4</td>
+            <td><span class="badge badge-lg bg-label-success badge-success">Aktif</span></td>
+            <td>
+                <a href="#" class="btn btn-icon"><i class="fa fa-trash text-danger" title="Arıza Sil" aria-hidden="true"></i></a>
+                <a href="#" class="btn btn-icon"><i class="fa fa-eye text-primary" title="Arıza Detay Göster" aria-hidden="true"></i></a>
+                <a href="#" class="btn btn-icon"><i class="fa fa-check text-success" title="Arıza Kapatma Onayla" aria-hidden="true"></i></a>
+            </td>
+        </tr>
+        <tr>
+            <td>Başkan</td>
+            <td>6</td>
+            <td><i class="fas fa-user mr-1"></i>1</td>
+            <td><span class="badge badge-lg bg-label-secondary">Pasif</span></td>
+            <td>
+                <a href="#" class="btn btn-icon"><i class="fa fa-trash text-danger" title="Arıza Sil" aria-hidden="true"></i></a>
+                <a href="#" class="btn btn-icon"><i class="fa fa-eye text-primary" title="Arıza Detay Göster" aria-hidden="true"></i></a>
+                <a href="#" class="btn btn-icon"><i class="fa fa-check text-success" title="Arıza Kapatma Onayla" aria-hidden="true"></i></a>
+            </td>
+        </tr>
+        <tr>
+            <td>Hakim</td>
+            <td>7</td>
+            <td><i class="fas fa-user mr-1"></i>84</td>
+            <td><span class="badge badge-lg bg-label-success">Aktif</span></td>
+            <td>
+                <a href="#" class="btn btn-icon"><i class="fa fa-trash text-danger" title="Arıza Sil" aria-hidden="true"></i></a>
+                <a href="#" class="btn btn-icon"><i class="fa fa-eye text-primary" title="Arıza Detay Göster" aria-hidden="true"></i></a>
+                <a href="#" class="btn btn-icon"><i class="fa fa-check text-success" title="Arıza Kapatma Onayla" aria-hidden="true"></i></a>
+            </td>
+        </tr>
+        <tr>
+            <td>Yazı İşleri Müdürü</td>
+            <td>8</td>
+            <td><i class="fas fa-user mr-1"></i>75</td>
+            <td><span class="badge badge-lg bg-label-success">Aktif</span></td>
+            <td>
+                <a href="#" class="btn btn-icon"><i class="fa fa-trash text-danger" title="Arıza Sil" aria-hidden="true"></i></a>
+                <a href="#" class="btn btn-icon"><i class="fa fa-eye text-primary" title="Arıza Detay Göster" aria-hidden="true"></i></a>
+                <a href="#" class="btn btn-icon"><i class="fa fa-check text-success" title="Arıza Kapatma Onayla" aria-hidden="true"></i></a>
+            </td>
+        </tr>
+        <tr>
+            <td>Memur(Engelli)</td>
+            <td>15</td>
+            <td><i class="fas fa-user mr-1"></i>5</td>
+            <td><span class="badge badge-lg bg-label-secondary">Pasif</span></td>
+            <td>
+                <a href="#" class="btn btn-icon"><i class="fa fa-trash text-danger" title="Arıza Sil" aria-hidden="true"></i></a>
+                <a href="#" class="btn btn-icon"><i class="fa fa-eye text-primary" title="Arıza Detay Göster" aria-hidden="true"></i></a>
+                <a href="#" class="btn btn-icon"><i class="fa fa-check text-success" title="Arıza Kapatma Onayla" aria-hidden="true"></i></a>
+            </td>
+        </tr>
+        <tr>
+            <td>Mübaşir</td>
+            <td>9</td>
+            <td><i class="fas fa-user mr-1"></i>69</td>
+            <td><span class="badge badge-lg bg-label-success">Aktif</span></td>
+            <td>
+                <a href="#" class="btn btn-icon"><i class="fa fa-trash text-danger" title="Arıza Sil" aria-hidden="true"></i></a>
+                <a href="#" class="btn btn-icon"><i class="fa fa-eye text-primary" title="Arıza Detay Göster" aria-hidden="true"></i></a>
+                <a href="#" class="btn btn-icon"><i class="fa fa-check text-success" title="Arıza Kapatma Onayla" aria-hidden="true"></i></a>
+            </td>
+        </tr>
+        <tr>
+            <td>Pedegog</td>
+            <td>14</td>
+            <td><i class="fas fa-user mr-1"></i>1</td>
+            <td><span class="badge badge-lg bg-label-danger">Silinmiş</span></td>
+            <td>
+                <a href="#" class="btn btn-icon"><i class="fa fa-trash text-danger" title="Arıza Sil" aria-hidden="true"></i></a>
+                <a href="#" class="btn btn-icon"><i class="fa fa-eye text-primary" title="Arıza Detay Göster" aria-hidden="true"></i></a>
+                <a href="#" class="btn btn-icon"><i class="fa fa-check text-success" title="Arıza Kapatma Onayla" aria-hidden="true"></i></a>
+            </td>
+        </tr>
+        <tr>
+            <td>Adli Destek Mağdur Hizmetleri Müdürü</td>
+            <td>6</td>
+            <td><i class="fas fa-user mr-1"></i>1</td>
+            <td><span class="badge badge-lg bg-label-secondary">Pasif</span></td>
+            <td>
+                <a href="#" class="btn btn-icon"><i class="fa fa-trash text-danger" title="Arıza Sil" aria-hidden="true"></i></a>
+                <a href="#" class="btn btn-icon"><i class="fa fa-eye text-primary" title="Arıza Detay Göster" aria-hidden="true"></i></a>
+                <a href="#" class="btn btn-icon"><i class="fa fa-check text-success" title="Arıza Kapatma Onayla" aria-hidden="true"></i></a>
+            </td>
+        </tr>
+        <tr>
+            <td>Daimi(Sürekli) İşçi</td>
+            <td>16</td>
+            <td><i class="fas fa-user mr-1"></i>59</td>
+            <td><span class="badge badge-lg bg-label-danger">Silinmiş</span></td>
+            <td>
+                <a href="#" class="btn btn-icon"><i class="fa fa-trash text-danger" title="Arıza Sil" aria-hidden="true"></i></a>
+                <a href="#" class="btn btn-icon"><i class="fa fa-eye text-primary" title="Arıza Detay Göster" aria-hidden="true"></i></a>
+                <a href="#" class="btn btn-icon"><i class="fa fa-check text-success" title="Arıza Kapatma Onayla" aria-hidden="true"></i></a>
+            </td>
+        </tr>
+    </tbody>
+    <tfoot class="text-center">
+        <tr>
+            <th>Ünvan Adı</th>
+            <th>Öncelik Sırası</th>
+            <th>Ünvana Sahip Personel Sayısı</th>
+            <th>Durum</th>
+            <th>İşlemler</th>
+        </tr>
+    </tfoot>
+</table>
+</div>
+</div>
+@section Scripts {
+    <script src="/AdminTemplate/plugins/jquery/jquery.min.js"></script>
+    <script src="/AdminTemplate/plugins/datatables/js/jquery.dataTables.min.js"></script>
+    <!-- Select2 -->
+    <script src="/AdminTemplate/plugins/select2/js/select2.full.min.js"></script>
+    <script src="/AdminTemplate/plugins/datatables/js/dataTables.bootstrap4.min.js"></script> 
+    <script src="/AdminTemplate/plugins/datatables/js/dataTables.responsive.min.js"></script>
+    <script src="/AdminTemplate/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
+    <script src="/AdminTemplate/plugins/datatables/js/dataTables.buttons.min.js"></script> 
+    <script src="/AdminTemplate/plugins/datatables/js/buttons.bootstrap4.min.js"></script>
+    <script src="/AdminTemplate/plugins/datatables/js/jszip.min.js"></script>
+    <script src="/AdminTemplate/plugins/datatables/js/pdfmake.min.js"></script>
+    <script src="/AdminTemplate/plugins/datatables/js/vfs_fonts.js"></script>
+    <script src="/AdminTemplate/plugins/datatables/js/buttons.html5.min.js"></script>
+    <script src="/AdminTemplate/plugins/datatables/js/buttons.print.min.js"></script>
+    <script src="/AdminTemplate/plugins/datatables/js/buttons.colVis.min.js"></script>
+    <script>
+        $(document).ready(function() {
+              $("#example1").DataTable({
+                "responsive": true,
+                "lengthChange": false,
+                "autoWidth": false,
+                "lengthChange": true,
+                "lengthMenu": [
+                    [10, 25, 50, 75, 100, -1],
+                    [10, 25, 50, 75, 100, 'Hepsi']
+                ],
+                 "buttons": [
+                            {
+                                extend: 'collection',
+                                text: '<i class="fas fa-upload mr-1"></i> Aktar', // Dropdown ana düğme ikonu
+                                buttons: [
+                                    { 
+                                        extend: 'excel', 
+                                        text: '<i class="fas fa-file-excel mr-1"></i> Excel',
+                                        exportOptions: {
+                                        columns: ':visible:not(:eq(4))'
+                                        },
+                                    },
+                                    { 
+                                        extend: 'pdf', 
+                                        text: '<i class="fas fa-file-pdf mr-1"></i> PDF',
+                                        exportOptions: {
+                                        columns: [0, 1, 2, 3]
+                                            },
+                                        customize: function (doc) {
+                                        // Tablonun başlıklarını sola hizala
+                                        doc.styles.tableHeader.alignment = 'center';
+
+                                        // Tablonun içeriklerini sola hizala
+                                        doc.content[1].table.body.forEach(function (row, index) {
+                                            row.forEach(function (cell) {
+                                                cell.alignment = 'center';
+                                            });
+                                        });
+                                    }
+                                    },
+                                    { 
+                                        extend: 'print', 
+                                        text: '<i class="fas fa-print mr-1"></i> Yazdır',
+                                        exportOptions: {
+                                        columns: ':visible:not(:eq(4))'
+                                        },
+                                    }
+                                ]
+                            },
+                            {
+                                extend: 'colvis',
+                                columns: function (idx, data, node) {
+                                return [0].indexOf(idx) === -1;
+                                },
+                                text: '<i class="fas fa-columns mr-1"></i> Sütun Görünürlüğü'
+                            }
+                        ],
+                "order": [[1, 'asc']],
+                "language": {
+                    "sProcessing": "İşleniyor...",
+                    "sLengthMenu": "_MENU_",
+                    "sZeroRecords": "Eşleşen Kayıt Bulunmadı",
+                    "sInfo": "Toplam _TOTAL_ kayıttan _START_ - _END_ arası gösteriliyor",
+                    "sInfoEmpty": "Kayıt Yok",
+                    "sInfoFiltered": "(toplam _MAX_ kayıttan filtrelendi)",
+                    "sSearch": "",
+                    "searchPlaceholder": 'Arama Yapınız...',
+                    "oPaginate": {
+                        "sFirst": "İlk",
+                        "sPrevious": "Önceki",
+                        "sNext": "Sonraki",
+                        "sLast": "Son"
+                    },
+                    "buttons": {
+                        "copyTitle": 'Panoya kopyala',
+                        "copySuccess": {
+                            1: "Panoya bir satır kopyalandı",
+                            _: "Panoya %d satır kopyalandı"
+                        },
+                        "copyKeys": 'Tablo verilerini sistem panonuza kopyalamak için <i>ctrl</i> veya <i>\u2318</i> + <i>C</i> tuşlarına basın.<br><br>İptal etmek için bu mesaja tıklayın veya escape tuşuna basın.'
+                    }
+                }
+            }).buttons().container()
+              .addClass('custom-buttons') 
+              .appendTo('#example1_filter');
+
+            var unvanlar = new Set();
+            var durumlar = new Set();
+
+            // DataTable'ı al
+            var table = $('#example1').DataTable();
+            var numberOfRows = table.data().length;
+
+            // Tablo verilerini döngü ile oku
+            for (var i = 0; i < numberOfRows; i++) {
+                var rowData = table.data()[i]; // Satır verilerini al
+                unvanlar.add(rowData[0]); // Ünvan Adı'nın olduğu sütun
+                var durumHtml = rowData[3]; // HTML içeriği olarak alır
+                var tempDiv = document.createElement("div"); // Geçici bir div oluştur
+                tempDiv.innerHTML = durumHtml; // HTML'i içine yerleştir
+                var durumText = tempDiv.innerText || tempDiv.textContent; // Yalnızca metni al
+                durumlar.add(durumText); // Sadece metni sete ekle
+            }
+
+            // Sıralı liste oluşturma
+            var sortedUnvanlar = [];
+            unvanlar.forEach(function(unvan) {
+                sortedUnvanlar.push(unvan); // Set'ten elemanları diziye ekle
+            });
+
+            // Basit sıralama algoritması (Bubble Sort örneği)
+            for (var i = 0; i < sortedUnvanlar.length - 1; i++) {
+                for (var j = 0; j < sortedUnvanlar.length - 1 - i; j++) {
+                    if (sortedUnvanlar[j] > sortedUnvanlar[j + 1]) {
+                        // Elemanları yer değiştir
+                        var temp = sortedUnvanlar[j];
+                        sortedUnvanlar[j] = sortedUnvanlar[j + 1];
+                        sortedUnvanlar[j + 1] = temp;
+                    }
+                }
+            }
+
+            // Ünvan seçeneklerini doldur
+            sortedUnvanlar.forEach(function(unvan) {
+                $("#unvanSelect").append(new Option(unvan, unvan));
+            });
+
+
+            // Ünvan filtresi
+            $('#unvanSelect').on('change', function() {
+                var selectedUnvans = $(this).val();
+                var durumlarToShow = new Set();
+
+                // Tablodaki satırları kontrol et ve seçilen unvanlara göre durumları filtrele
+                if (selectedUnvans) {
+                    for (var i = 0; i < numberOfRows; i++) {
+                        var rowData = table.data()[i];
+                        if (selectedUnvans.includes(rowData[0])) {
+                            durumlarToShow.add($(rowData[3]).text().trim());
+                        }
+                    }
+                } else {
+                    durumlarToShow = durumlar;
+                }
+
+                // Durum select kutusunu yeniden oluştur
+                $("#durumSelect").empty().append(new Option("Tümü", ""));
+                durumlarToShow.forEach(function(durum) {
+                    $("#durumSelect").append(new Option(durum, durum));
+                });
+
+                // Verileri filtrele
+                table.column(0).search(selectedUnvans ? selectedUnvans.join('|') : '', true, false).draw();
+            });
+
+           // Durumları sıralama
+            var sortedDurumlar = [];
+            durumlar.forEach(function(durum) {
+                sortedDurumlar.push(durum); // Set'ten elemanları diziye ekle
+            });
+
+            // Bubble Sort ile sıralama
+            for (var i = 0; i < sortedDurumlar.length - 1; i++) {
+                for (var j = 0; j < sortedDurumlar.length - 1 - i; j++) {
+                    if (sortedDurumlar[j] > sortedDurumlar[j + 1]) {
+                        // Elemanları yer değiştir
+                        var temp = sortedDurumlar[j];
+                        sortedDurumlar[j] = sortedDurumlar[j + 1];
+                        sortedDurumlar[j + 1] = temp;
+                    }
+                }
+            }
+
+            // Durum seçeneklerini doldur
+            sortedDurumlar.forEach(function(durum) {
+                $("#durumSelect").append(new Option(durum, durum));
+            });
+
+
+            // Durum filtresi
+            $('#durumSelect').on('change', function() {
+                var selectedDurums = $(this).val();
+                var unvanlarToShow = new Set();
+
+                // Seçilen durumlara göre unvanları filtrele
+                if (selectedDurums) {
+                    for (var i = 0; i < numberOfRows; i++) {
+                        var rowData = table.data()[i];
+                        if (selectedDurums.includes($(rowData[3]).text().trim())) {
+                            unvanlarToShow.add(rowData[0]);
+                        }
+                    }
+                } else {
+                    unvanlarToShow = unvanlar;
+                }
+
+                // Ünvan select kutusunu yeniden oluştur
+                $("#unvanSelect").empty().append(new Option("Tümü", ""));
+                unvanlarToShow.forEach(function(unvan) {
+                    $("#unvanSelect").append(new Option(unvan, unvan));
+                });
+
+                // Verileri filtrele
+                table.column(3).search(selectedDurums ? selectedDurums.join('|') : '', true, false).draw();
+            });
+
+
+            $('#unvanSelect').select2({
+                closeOnSelect: false,
+                width: '100%'
+            });
+            $('#durumSelect').select2({
+                closeOnSelect: false,
+                width: '100%'
+            });
+        });
+    </script>
+}

@@ -1,0 +1,91 @@
+﻿@model LoginAppUserDto
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SabimWeb | SignIn</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/AdminTemplate/dist/img/adalet_bakanligi_logo.png" />
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link href="/AdminTemplate/plugins/fontawesome/css/all.min.css" rel="stylesheet" />
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/AdminTemplate/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="/AdminTemplate/dist/css/CustomCss.css">
+</head>
+<body class="hold-transition login-page">
+    <div class="login-box">
+        <!-- /.login-logo -->
+        <div class="card card-outline card-primary">
+            <div class="card-header text-center">
+                <a href="#" class="h1"><b>Sabim</b>WEB</a>
+            </div>
+            <div class="card-body">
+                <p class="login-box-msg text-secondary font-weight-bolder">Oturumu başlatmak için giriş yapınız</p>
+                <form asp-controller="Login" asp-action="SignIn" id="LoginForm" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="input-group form-group mb-0">
+                        <input type="text" asp-for="UserName"  class="form-control" id="InputLoginUser" placeholder="Kullanıcı Adı">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-user"></span>
+                            </div>
+                        </div>                     
+                    </div>
+                    <div class="row input-group-append mt-0">
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+                    <div class="input-group form-group mb-0 mt-3">
+                         <input type="password" asp-for="Password" class="form-control" id="InputLoginPassword" placeholder="Parola">
+                         <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-lock"></span>
+                                </div>
+                         </div>
+                    </div>
+                    <div class="row input-group-append mt-0">
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-8">
+                            <div class="icheck-primary">
+                                <input type="checkbox" asp-for="RememberMe" id="remember">
+                                <label for="remember" class="text-dark">
+                                    Beni Hatırla
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="social-auth-links text-center mt-2 mb-3">
+                        <button type="submit" class="btn btn-block btn-primary">
+                            <i class="fa fa-arrow-circle-right mr-2"></i> Giriş Yapınız
+                        </button>
+                    </div>
+                </form>
+                <p class="mb-1">
+                    <a href="forgot-password-v2.html" class="text-secondary font-weight-bolder"><i class="fa fa-envelope mr-2"></i>Şifremi Unuttum</a>
+                </p>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+    <!-- /.login-box -->
+    <!-- jQuery -->
+    <script src="/AdminTemplate/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="/AdminTemplate/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="/AdminTemplate/dist/js/adminlte.min.js"></script>
+    <!-- jquery-validation -->
+    <script src="/AdminTemplate/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="/AdminTemplate/plugins/jquery-validation/additional-methods.min.js"></script>
+    <!-- Page specific script -->
+     <script src="/AdminTemplate/dist/js/custom.js"></script> 
+
+</body>
+</html>

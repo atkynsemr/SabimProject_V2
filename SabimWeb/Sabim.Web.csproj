@@ -1,0 +1,71 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Areas\Admin\Data\**" />
+    <Compile Remove="Areas\Admin\Models\**" />
+    <Compile Remove="Areas\User\Data\**" />
+    <Compile Remove="Areas\User\Models\**" />
+    <Compile Remove="wwwroot\template\**" />
+    <Content Remove="Areas\Admin\Data\**" />
+    <Content Remove="Areas\Admin\Models\**" />
+    <Content Remove="Areas\User\Data\**" />
+    <Content Remove="Areas\User\Models\**" />
+    <Content Remove="wwwroot\template\**" />
+    <EmbeddedResource Remove="Areas\Admin\Data\**" />
+    <EmbeddedResource Remove="Areas\Admin\Models\**" />
+    <EmbeddedResource Remove="Areas\User\Data\**" />
+    <EmbeddedResource Remove="Areas\User\Models\**" />
+    <EmbeddedResource Remove="wwwroot\template\**" />
+    <None Remove="Areas\Admin\Data\**" />
+    <None Remove="Areas\Admin\Models\**" />
+    <None Remove="Areas\User\Data\**" />
+    <None Remove="Areas\User\Models\**" />
+    <None Remove="wwwroot\template\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\AdminTemplate\dist\js\custom.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.11">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sabim.Infrastructure\Sabim.Infrastructure.csproj" />
+    <ProjectReference Include="..\Sabim.Services\Sabim.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\AdminTemplate\dist\css\adminlte.css.map" />
+    <None Include="wwwroot\AdminTemplate\dist\css\adminlte.min.css.map" />
+    <None Include="wwwroot\AdminTemplate\dist\js\adminlte.min.js" />
+    <None Include="wwwroot\AdminTemplate\dist\js\custom.js" />
+    <None Include="wwwroot\AdminTemplate\plugins\bootstrap\js\bootstrap.bundle.min.js" />
+    <None Include="wwwroot\AdminTemplate\dist\js\demo.js" />
+    <None Include="wwwroot\AdminTemplate\plugins\fontawesome\webfonts\fa-brands-400.svg" />
+    <None Include="wwwroot\AdminTemplate\plugins\fontawesome\webfonts\fa-brands-400.woff2" />
+    <None Include="wwwroot\AdminTemplate\plugins\fontawesome\webfonts\fa-regular-400.svg" />
+    <None Include="wwwroot\AdminTemplate\plugins\fontawesome\webfonts\fa-regular-400.woff2" />
+    <None Include="wwwroot\AdminTemplate\plugins\fontawesome\webfonts\fa-solid-900.svg" />
+    <None Include="wwwroot\AdminTemplate\plugins\fontawesome\webfonts\fa-solid-900.woff2" />
+    <None Include="wwwroot\AdminTemplate\plugins\jquery\jquery.min.js" />
+    <None Include="wwwroot\AdminTemplate\plugins\jquery\jquery.min.map" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\BilgiIslem\Data\" />
+    <Folder Include="Areas\BilgiIslem\Models\" />
+  </ItemGroup>
+
+</Project>

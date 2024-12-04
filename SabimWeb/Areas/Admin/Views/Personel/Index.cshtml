@@ -1,0 +1,259 @@
+﻿@{
+    ViewData["Title"] = "Personel";
+}
+
+@section StyleCss {
+    <link rel="stylesheet" href="/AdminTemplate/plugins/bootstrap/css/bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.1.2/css/buttons.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/searchpanes/2.3.3/css/searchPanes.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/select/2.1.0/css/select.bootstrap4.css">
+    <link rel="stylesheet" href="/AdminTemplate/dist/css/CustomCss.css">
+}
+
+<!-- Modal -->
+<div class="modal fade" id="unvanBazlıVerilerModal" tabindex="-1" role="dialog" aria-labelledby="unvanBazlıVerilerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header font-weight-bolder text-primary">
+                <h5 class="modal-title" id="unvanBazlıVerilerModalLabel">Personel İstatiksel Veriler</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalContent">
+                <p id="loadingMessage" class="font-weight-bolder">Veriler yükleniyor, lütfen bekleyin...</p>
+                <!-- Partial view içeriği burada dinamik olarak yerleştirilecek -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="unvanBazlıVerilerCloseModal" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="d-flex justify-content-between card-header">
+        <button type="button" class="btn btn-outline-dark btn-flat my-2" data-toggle="modal" data-target="#unvanBazlıVerilerModal"><i class="fas fa-chart-bar mr-1"></i> Ünvan İstatistikleri</button>
+        <button type="button" class="btn btn-outline-primary btn-flat my-2 ml-auto"><i class="fa fa-plus-circle mr-1"></i> Yeni Personel</button>
+    </div>
+    <div class="card-body mt-2">
+        <table id="example" class="table table-bordered table-hover display text-center mt-3" style="width:100% !important">
+            <thead>
+                <tr>
+                    <th>Ünvan Önceliği</th>
+                    <th>Ad Ve Soyad</th>
+                    <th class="text-center">Sicil No</th>
+                    <th>T.C Kimlik No</th>
+                    <th>Unvan</th>
+                    <th>Derece ve Kademe</th>
+                    <th>Doğum Yeri ve Tarihi</th>
+                    <th>Cinsiyet</th>
+                    <th>Kan Grubu</th>
+                    <th>Cep Telefonu</th>
+                    <th>Kadrosunun Bulunduğu Kurum</th>
+                    <th>Kadro Türü</th>
+                    <th>Çalışma Durumu</th>
+                    <th>İşlemler</th>
+                </tr>
+            </thead>
+            <tbody class="text-heading">
+                @foreach (ResultPersonelDto personel in Model)
+                {
+                    <tr>
+                        <td>@personel.OncelikSirasi</td>
+                        <td>@personel.AdSoyad</td>
+                        <td class="text-center">@personel.SicilNumarasi</td>
+                        <td>@personel.KimlikNo</td>
+                        <td>@personel.UnvanAdi</td>
+                        <td>@personel.DereceKademe</td>
+                        <td>@personel.DogumYeriYili</td>
+                        <td>@personel.CinsiyetAdi</td>
+                        <td>@personel.KanGrubuAdi</td>
+                        <td>@personel.CepTelefonu</td>
+                        <td>@personel.KurumAdi</td>
+                        <td>@personel.KadroTuruAdi</td>
+                        <td>@personel.CalismaDurumAdi</td>
+                        <td>
+                            <a href="#" class="btn btn-icon"><i class="fas fa-edit text-primary" title="Ünvan Düzenle" aria-hidden="true"></i></a>
+                            <a href="#" class="btn btn-icon"><i class="far fa-trash-alt text-danger" title="Ünvan Sil" aria-hidden="true"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Ünvan Önceliği</th>
+                    <th>Ad Ve Soyad</th>
+                    <th class="text-center">Sicil No</th>
+                    <th>T.C Kimlik No</th>
+                    <th>Unvan</th>
+                    <th>Derece ve Kademe</th>
+                    <th>Doğum Yeri ve Tarihi</th>
+                    <th>Cinsiyet</th>
+                    <th>Kan Grubu</th>
+                    <th>Cep Telefonu</th>
+                    <th>Kadrosunun Bulunduğu Kurum</th>
+                    <th>Kadro Türü</th>
+                    <th>Çalışma Durumu</th>
+                    <th>İşlemler</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+@section Scripts {
+
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/dataTables.buttons.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/searchpanes/2.3.3/js/dataTables.searchPanes.js"></script>
+    <script src="https://cdn.datatables.net/searchpanes/2.3.3/js/searchPanes.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/select/2.1.0/js/dataTables.select.js"></script>
+    <script src="https://cdn.datatables.net/select/2.1.0/js/select.bootstrap4.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.colVis.min.js"></script>
+    <script src="https://cdn.datatables.net/colreorder/2.0.4/js/dataTables.colReorder.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var table = $('#example').DataTable({
+                "scrollX": true,
+                "responsive": true,
+                "autoWidth": false,
+                "lengthChange": true,
+                "pageLength": 25,
+                "order": [[0, 'asc']],
+                "language": {
+                    "searchPanes": {
+                        "emptyPanes": 'Filtreleme Paneli Bulunamadı',
+                        "title": {
+                            _: 'Seçili Alan - %d',
+                            0: ''
+                        },
+                        "collapseMessage": 'Tümünü Kapat',
+                        "showMessage": 'Hepsini Göster',
+                        "clearMessage": 'Hepsini Temizle'
+                    },
+                    "sProcessing": "İşleniyor...",
+                    "sLengthMenu": "_MENU_",
+                    "sZeroRecords": "Eşleşen Kayıt Bulunmadı",
+                    "sInfo": "Toplam _TOTAL_ kayıttan _START_ - _END_ arası gösteriliyor",
+                    "sInfoEmpty": "Kayıt Yok",
+                    "emptyTable": "Tabloda veri bulunmamaktadır",
+                    "sInfoFiltered": "(toplam _MAX_ kayıttan filtrelendi)",
+                    "sSearch": "",
+                    "searchPlaceholder": 'Arama Yapınız...',
+                    "oPaginate": {
+                        "sFirst": "İlk",
+                        "sPrevious": "Önceki",
+                        "sNext": "Sonraki",
+                        "sLast": "Son"
+                    }
+                },
+                layout: {
+                    topStart:
+                    {
+                        buttons:
+                            [
+                                {
+                                    extend: 'searchPanes',
+                                    text: '<i class="fa fa-filter mr-1"></i>Filtreleme Paneli',
+                                    config: {
+                                        cascadePanes: true,
+                                        layout: 'columns-2',
+                                        orderable: false,
+                                        initCollapsed: true
+                                    }
+                                },
+
+
+                                {
+                                    extend: 'collection',
+                                    text: '<i class="fas fa-upload mr-1"></i> Aktar',
+                                    buttons:
+                                        [
+                                            {
+                                                extend: 'excel',
+                                                text: '<i class="fas fa-file-excel mr-1"></i> Excel',
+                                                exportOptions: {
+                                                    columns: ':visible:not(:eq(4))'
+                                                }
+                                            },
+                                            {
+                                                extend: 'pdf',
+                                                text: '<i class="fas fa-file-pdf mr-1"></i> PDF',
+                                                exportOptions: {
+                                                    columns: ':visible:not(:eq(4))'
+                                                },
+                                                customize: function(doc) {
+                                                    // Tablonun başlıklarını ve içeriğini ortala
+                                                    doc.styles.tableHeader.alignment = 'center';
+                                                    doc.content[1].table.body.forEach(function(row) {
+                                                        row.forEach(function(cell) {
+                                                            cell.alignment = 'center';
+                                                        });
+                                                    });
+                                                    doc.content[1].table.widths = new Array(doc.content[1].table.body[0].length).fill('*');
+                                                }
+                                            },
+                                            {
+                                                extend: 'print',
+                                                text: '<i class="fas fa-print mr-1"></i> Yazdır',
+                                                exportOptions: {
+                                                    columns: ':visible:not(:eq(4))'
+                                                }
+                                            }
+                                        ]
+                                },
+                                {
+                                    extend: 'colvis',
+                                    columns: function(idx, data, node) {
+                                        return [0].indexOf(idx) === -1;
+                                    },
+                                    text: '<i class="fas fa-columns mr-1"></i> Sütun Görünürlüğü'
+                                }
+                            ]
+                    }
+                },
+                columnDefs: [
+                    {
+                        searchPanes: {
+                            show: true
+                        },
+                        targets: [4, 7, 10, 11, 12]
+                    },
+                    {
+                        searchPanes: {
+                            show: false
+                        },
+                        targets: '_all'  
+                    },
+                    {
+                        targets: [0],
+                        visible: false,
+                        searchable: false
+                    }
+                ]
+            });
+            // const container = document.querySelector('.content'); // Container seçicinizi burada belirtin
+            // const resizeObserver = new ResizeObserver(() => {
+            //     table.columns.adjust().draw(); // Tabloyu yeniden boyutlandır
+            // });
+            // // Container gözlemini başlat
+            // resizeObserver.observe(container);
+            $('.nav-item').on('click', function() {
+                // Yan menü animasyonunun tamamlanmasını bekleyin
+                setTimeout(function() {
+                    table.columns.adjust().draw(false); // Tabloyu yeniden boyutlandır ve çiz
+                }, 300); // Menü animasyon süresine göre gecikme ekleyin (örneğin, 300 ms)
+            });
+        });
+    </script>
+}
+

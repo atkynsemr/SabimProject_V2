@@ -1,0 +1,201 @@
+﻿@{
+    ViewData["Title"] = "Tanımlamalar / Kısım";
+}
+@section StyleCss {
+    <link rel="stylesheet" href="/AdminTemplate/plugins/bootstrap/css/bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.1.2/css/buttons.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/searchpanes/2.3.3/css/searchPanes.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/select/2.1.0/css/select.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/colreorder/2.0.4/css/colReorder.bootstrap4.css">
+    <link rel="stylesheet" href="/AdminTemplate/dist/css/CustomCss.css">
+
+}
+<div class="card">
+    <div class="card-header text-right">
+        <button type="button" class="btn btn-outline-primary btn-flat my-2"><i class="fa fa-plus-circle mr-1"></i> Yeni Kısım</button>
+    </div>
+    <div class="card-body mt-2">
+        <table id="example" class="table table-bordered table-hover display text-center mt-3" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Kısımın Bağlı Olduğu Birim Adı</th>
+                    <th>Kısım Adı</th>
+                    <th>Bulunduğu Yer</th>
+                    <th>Dahili Telefon Numarası</th>
+                    <th class="text-center">Kısıma Bağlı Personel Sayısı</th>
+                    <th>Durum</th>
+                    <th>İşlemler</th>
+                </tr>
+            </thead>
+            <tbody class="text-heading">
+                @foreach (ResultKisimWithPersonelCountDto kisim in Model)
+                {
+                    <tr>
+                        <td>@kisim.BirimAdi</td>
+                        <td>@kisim.KisimAdi</td>
+                        <td>@kisim.Aciklama</td>
+                        <td>@kisim.DahiliTelefon</td>
+                        <td class="text-center"><i class="fas fa-user mr-1 text-secondary"></i>@kisim.PersonelSayisi</td>
+                        <td><span class="badge badge-lg @BadgeHelper.GetBadgeClass(kisim.DurumId)"> @kisim.DurumAdi</span></td>
+                        <td>
+                            <a href="#" class="btn btn-icon"><i class="fas fa-edit text-primary" title="Kısım Düzenle" aria-hidden="true"></i></a>
+                            <a href="#" class="btn btn-icon"><i class="far fa-trash-alt text-danger" title="Kısım Sil" aria-hidden="true"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Kısımın Bağlı Olduğu Birim Adı</th>
+                    <th>Kısım Adı</th>
+                    <th>Bulunduğu Yer</th>
+                    <th>Dahili Telefon Numarası</th>
+                    <th class="text-center">Kısıma Bağlı Personel Sayısı</th>
+                    <th>Durum</th>
+                    <th>İşlemler</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+@section Scripts {
+
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/dataTables.buttons.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/searchpanes/2.3.3/js/dataTables.searchPanes.js"></script>
+    <script src="https://cdn.datatables.net/searchpanes/2.3.3/js/searchPanes.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/select/2.1.0/js/dataTables.select.js"></script>
+    <script src="https://cdn.datatables.net/select/2.1.0/js/select.bootstrap4.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.colVis.min.js"></script>
+    <script src="https://cdn.datatables.net/colreorder/2.0.4/js/dataTables.colReorder.js"></script>
+    <script src="https://cdn.datatables.net/colreorder/2.0.4/js/colReorder.bootstrap4.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#example').DataTable({
+                "responsive": true,
+                "lengthChange": false,
+                "autoWidth": false,
+                "lengthChange": true,
+                "pageLength": 25,
+                "order": [[0, 'asc']],
+                "language": {
+                    "searchPanes": {
+                        "emptyPanes": 'Filtreleme Paneli Bulunamadı',
+                        "title": {
+                            _: 'Seçili Alan - %d',
+                            0: ''
+                        },
+                        "collapseMessage": 'Tümünü Kapat',
+                        "showMessage": 'Hepsini Göster',
+                        "clearMessage": 'Hepsini Temizle'
+                    },
+                    "sProcessing": "İşleniyor...",
+                    "sLengthMenu": "_MENU_",
+                    "sZeroRecords": "Eşleşen Kayıt Bulunmadı",
+                    "sInfo": "Toplam _TOTAL_ kayıttan _START_ - _END_ arası gösteriliyor",
+                    "sInfoEmpty": "Kayıt Yok",
+                    "emptyTable": "Tabloda veri bulunmamaktadır",
+                    "sInfoFiltered": "(toplam _MAX_ kayıttan filtrelendi)",
+                    "sSearch": "",
+                    "searchPlaceholder": 'Arama Yapınız...',
+                    "oPaginate": {
+                        "sFirst": "İlk",
+                        "sPrevious": "Önceki",
+                        "sNext": "Sonraki",
+                        "sLast": "Son"
+                    }
+                },
+                colReorder: true,
+                layout: {
+                    topStart:
+                    {
+                        buttons:
+                            [
+                                {
+                                    extend: 'searchPanes',
+                                    text: '<i class="fa fa-filter mr-1"></i>Filtreleme Paneli',
+                                    config: {
+                                        cascadePanes: true,
+                                        layout: 'columns-2',
+                                        orderable: false,
+                                        initCollapsed: true
+                                    }
+                                },
+
+
+                                {
+                                    extend: 'collection',
+                                    text: '<i class="fas fa-upload mr-1"></i> Aktar',
+                                    buttons:
+                                        [
+                                            {
+                                                extend: 'excel',
+                                                text: '<i class="fas fa-file-excel mr-1"></i> Excel',
+                                                exportOptions: {
+                                                    columns: ':visible:not(:eq(4))'
+                                                }
+                                            },
+                                            {
+                                                extend: 'pdf',
+                                                text: '<i class="fas fa-file-pdf mr-1"></i> PDF',
+                                                exportOptions: {
+                                                    columns: ':visible:not(:eq(4))'
+                                                },
+                                                customize: function (doc) {
+                                                    // Tablonun başlıklarını ve içeriğini ortala
+                                                    doc.styles.tableHeader.alignment = 'center';
+                                                    doc.content[1].table.body.forEach(function (row) {
+                                                        row.forEach(function (cell) {
+                                                            cell.alignment = 'center';
+                                                        });
+                                                    });
+                                                    doc.content[1].table.widths = new Array(doc.content[1].table.body[0].length).fill('*');
+                                                }
+                                            },
+                                            {
+                                                extend: 'print',
+                                                text: '<i class="fas fa-print mr-1"></i> Yazdır',
+                                                exportOptions: {
+                                                    columns: ':visible:not(:eq(4))'
+                                                }
+                                            }
+                                        ]
+                                },
+                                {
+                                    extend: 'colvis',
+                                    columns: function (idx, data, node) {
+                                        return [1].indexOf(idx) === -1;
+                                    },
+                                    text: '<i class="fas fa-columns mr-1"></i> Sütun Görünürlüğü'
+                                }
+                            ]
+                    }
+                },
+                columnDefs: [
+                    {
+                        searchPanes: {
+                            show: true
+                        },
+                        targets: [0, 1]
+                    },
+                    {
+                        searchPanes: {
+                            show: false
+                        },
+                        targets: '_all'  // Diğer tüm sütunlarda searchPane devre dışı
+                    }
+                ]
+            });
+        });
+    </script>
+
+}

@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Entities\Ekran.cs\**" />
+    <Compile Remove="Entities\RolEkranYetki.cs\**" />
+    <EmbeddedResource Remove="Entities\Ekran.cs\**" />
+    <EmbeddedResource Remove="Entities\RolEkranYetki.cs\**" />
+    <None Remove="Entities\Ekran.cs\**" />
+    <None Remove="Entities\RolEkranYetki.cs\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Entities\AppRole.cs~RF26d03cc.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.11" />
+  </ItemGroup>
+
+</Project>
