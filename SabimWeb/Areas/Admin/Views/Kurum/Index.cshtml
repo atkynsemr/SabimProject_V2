@@ -140,9 +140,9 @@
             </div>
             <div class="modal-body">
                 <!-- Form Başlangıcı -->
-                <form id="KurumTipiSilForm">
+                <form id="KurumSilForm">
                     @Html.AntiForgeryToken()
-                    <input type="hidden" name="KurumTipiID" id="KurumID" />
+                    <input type="hidden" name="KurumID" id="KurumID" />
                     <p id="KurumAdiLabel">Kurum Adı: <strong id="kurumAdi"></strong> silinecektir. Onaylıyor musunuz?</p>
                 </form>
             </div>
@@ -223,6 +223,20 @@
             initDataTable();
             //Kayıt İşlemi
             $('#KaydetKurumButton').click(saveKurum);
+            $(".modal").on("hidden.bs.modal", function () {
+                $('.modal').each(function () {
+                    let modal = $(this);
+                    let form = modal.find('form');
+                    // Eğer form varsa, formu sıfırla
+                    if (form.length) {
+                        form[0].reset();
+                    }
+                    // Hata mesajlarını temizle
+                    modal.find('span.text-danger').text('');
+                });
+                // Overlay (arka plan) elemanını gizle
+                $('.overlay').hide();
+            });
             $('[data-widget="pushmenu"]').on('click', function() {
                 setTimeout(function() {
                     var table = $('#example').DataTable();
@@ -266,6 +280,8 @@
             });
              // Düzenle Kaydet Butonu
             $('#GuncelleKurumButton').click(saveUpdatedKurum);
+            // Sil Modal'ı
+            $('#SilKurumButton').click(deleteKurum);
         });
 
         function initDataTable() {
@@ -460,7 +476,7 @@
                 }
             });
         }
-          function editKurum(id) {
+        function editKurum(id) {
             // event.preventDefault();
             $.ajax({
                 url: `/Admin/Kurum/GetKurumById/${id}`,
@@ -528,6 +544,29 @@
                         }
                         $('.modal .overlay').hide();
                     }
+                }
+            });
+        }
+        function deleteKurum() {
+            $('#deleteModal .overlay').show();
+            var formData = $('#KurumSilForm').serialize(); // Form verilerini al
+            $.ajax({
+                url: '/Admin/Kurum/SilKurum', // Silme işlemi için endpoint
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        $('#deleteModal').modal('hide'); // Modalı kapat
+                        reloadTable(); // Tabloyu yeniden yükle
+                        showToast(response.message, 'Bilgi Mesajı', 'topRight', 2500, 'bg-success', true);
+                    }
+                    else {
+                        $('#deleteModal').modal('hide');
+                        showToast(response.message, 'Hata Mesajı', 'topRight', 3500, 'bg-danger', true);
+                    }
+                },
+                error: function (xhr) {
+                    handleError(xhr); // Hata durumunu yönet
                 }
             });
         }
