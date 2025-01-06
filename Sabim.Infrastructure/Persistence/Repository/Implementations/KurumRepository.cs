@@ -27,5 +27,14 @@ namespace Sabim.Infrastructure.Persistence.Repository.Implementations
                 .ToListAsync();
             return result;
         }
+
+        public bool IsKurumExists(string kurumAdi, short sehirId, short? excludeId = null)
+        {
+            return _context.Kurum
+                .AsNoTracking() // Performans için AsNoTracking kullanımı
+                .Where(k => k.KurumAdi == kurumAdi && k.SehirId == sehirId) // Şartları uygula
+                .Where(k => !excludeId.HasValue || k.KurumID != excludeId.Value) // excludeId varsa hariç tut
+                .Any(); // Herhangi bir eşleşme var mı kontrol et
+        }
     }
 }

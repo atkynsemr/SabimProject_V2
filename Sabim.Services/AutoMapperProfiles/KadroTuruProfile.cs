@@ -8,6 +8,8 @@ namespace Sabim.Services.AutoMapperProfiles
     {
         public KadroTuruProfile()
         {
+            CreateMap<KadroTuru,CreateKadroTuruDto>().ReverseMap();
+            CreateMap<KadroTuru,UpdateKadroTuruDto>().ReverseMap();
             CreateMap<KadroTuru,KadroTuruBaseDto>().ReverseMap();
             CreateMap<KadroTuru,ResultKadroTuruWithPersonelCountDto>()
                 .ForMember(dest => dest.PersonelSayisi, opt => opt.MapFrom(src => (ushort)src.Personels.Count))

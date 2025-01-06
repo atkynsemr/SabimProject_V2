@@ -25,13 +25,15 @@ namespace Sabim.Services.Implementations
         private readonly IAppUserService _appUserService;
         private readonly ISidebarMenuService _sidebarMenuService;
         private readonly IEkranService _ekranService;
+        private readonly IEmailService _emailService;
+        private readonly ILoggerService _loggerService;
 
         public ServiceManager(ICalismaDurumuService calismaDurumuService, ICinsiyetService cinsiyetService, IDurumService durumService,
             IGorevlendirilmeTuruService gorevlendirilmeTuruService, IKadroTuruService kadroTuruService,
             IKanGrubuService kanGrubuService, IKurumService kurumService, IKurumTipiService kurumTipiService, IPersonelService personelService,
             ISehirService sehirService, IUnvanService unvanService, IBolumService bolumService, IBirimService birimService, IKisimService kisimService, IKabinetBazliBolumService kabinetBazliBolumService,
-            IGorevlendirilmeTipiService gorevlendirilmeTipiService, IPersonelGorevlendirilmeService personelGorevlendirilmeService, IAppRoleService appRoleService, IAppUserService appUserService, 
-            ISidebarMenuService sidebarMenuService, IEkranService ekranService)
+            IGorevlendirilmeTipiService gorevlendirilmeTipiService, IPersonelGorevlendirilmeService personelGorevlendirilmeService, IAppRoleService appRoleService, IAppUserService appUserService,
+            ISidebarMenuService sidebarMenuService, IEkranService ekranService, IEmailService emailService, ILoggerService loggerService)
         {
             _calismaDurumuService = calismaDurumuService;
             _cinsiyetService = cinsiyetService;
@@ -54,6 +56,8 @@ namespace Sabim.Services.Implementations
             _appUserService = appUserService;
             _sidebarMenuService = sidebarMenuService;
             _ekranService = ekranService;
+            _emailService = emailService;
+            _loggerService = loggerService;
         }
 
         public ICalismaDurumuService CalismaDurumuService => _calismaDurumuService;
@@ -77,5 +81,7 @@ namespace Sabim.Services.Implementations
         public IAppUserService AppUserService => _appUserService;
         public ISidebarMenuService SidebarMenuService => _sidebarMenuService;
         public IEkranService EkranService => _ekranService;
+        public IEmailService EmailService => _emailService;
+        public ILoggerService LoggerService => _loggerService;
     }
 }

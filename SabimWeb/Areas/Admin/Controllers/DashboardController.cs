@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sabim.Services.Contracts;
-using Sabim.Web.Filters;
 
 namespace Sabim.Web.Areas.Admin.Controllers
 {

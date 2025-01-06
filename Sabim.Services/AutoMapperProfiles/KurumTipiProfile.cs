@@ -8,6 +8,8 @@ namespace Sabim.Services.AutoMapperProfiles
     {
         public KurumTipiProfile()
         {
+            CreateMap<KurumTipi, CreateKurumTipiDto>().ReverseMap();
+            CreateMap<KurumTipi, UpdateKurumTipiDto>().ReverseMap();
             CreateMap<KurumTipi, ResultKurumTipiDto>().ReverseMap();
             CreateMap<KurumTipi, ResultKurumTipiWithKurumCountDto>()
                     .ForMember(dest => dest.KurumSayisi, opt => opt.MapFrom(src => (ushort)src.Kurums.Count()))

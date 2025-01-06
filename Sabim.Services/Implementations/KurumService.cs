@@ -12,6 +12,12 @@ namespace Sabim.Services.Implementations
         {
             _repositoryManager = repositoryManager;
         }
+
+        public bool TIsKurumExists(string kurumAdi, short sehirId, short? excludeId = null)
+        {
+            return _repositoryManager.Kurum.IsKurumExists(kurumAdi, sehirId, excludeId);
+        }
+
         public async Task<List<ResultKurumWithPersonelCountDto>> TGetAllKurumWithPersonelCountAsync(bool trackChanges)
         {
            var kurums = await _repositoryManager.Kurum.GetAllKurumWithPersonelCountAsync(trackChanges);

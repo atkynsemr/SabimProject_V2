@@ -6,6 +6,6 @@
         public string SehirAdi { get; set; }
         public byte SehirKodu { get; set; }
         //Navigation property
-        public virtual ICollection<Kurum> Kurums { get; set; } = new List<Kurum>();
+        public ICollection<Kurum> Kurums { get; set; } = new List<Kurum>();
     }
 }

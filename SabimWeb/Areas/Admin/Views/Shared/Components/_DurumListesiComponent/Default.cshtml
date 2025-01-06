@@ -1,0 +1,20 @@
+﻿@using Sabim.Domain.DTOs.DurumDtos
+@model List<ResultDurumDto>
+
+<tbody class="text-heading">
+    @foreach (var durum in Model)
+    {
+        <tr>
+            <td>@durum.DurumAdi</td>
+            <td>
+                @Html.Raw(IconHelper.GetStatusIcon(durum.AktifMi))
+                @Html.Raw(BadgeHelper.GetBadge(durum.AktifMi))
+            </td>
+            <td>
+                @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-showinfo", "", IconHelper.GetInfoIcon(), "Göster", "showInfoDurum", durum.DurumID.ToString()))
+                @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-edit", "", IconHelper.GetEditIcon(), "Düzenle", "editDurum", durum.DurumID.ToString()))
+                @Html.Raw(IconHelper.CreateLink("btn btn-icon btn-delete", "", IconHelper.GetDeleteIcon(), "Sil", "deleteDurum", durum.DurumID.ToString()))
+            </td>
+        </tr>
+    }
+</tbody>

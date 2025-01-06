@@ -8,6 +8,8 @@ namespace Sabim.Services.AutoMapperProfiles
     {
         public GorevlendirilmeTuruProfile()
         {
+            CreateMap<GorevlendirilmeTuru, CreateGorevlendirilmeTuruDto>().ReverseMap();
+            CreateMap<GorevlendirilmeTuru, UpdateGorevlendirilmeTuruDto>().ReverseMap();
             CreateMap<GorevlendirilmeTuru, ResultGorevlendirilmeTuruDto>().ReverseMap();
             CreateMap<GorevlendirilmeTuru, ResultGorevlendirilmeTuruWithPersonelCountDto>()
                 .ForMember(dest => dest.PersonelSayisi, opt => opt.MapFrom(src => (ushort)src.Personels.Count))

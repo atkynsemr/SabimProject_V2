@@ -9,6 +9,8 @@ namespace Sabim.Services.AutoMapperProfiles
         public DurumProfile()
         {
             CreateMap<Durum,ResultDurumDto>().ReverseMap();
+            CreateMap<Durum,CreateDurumDto>().ReverseMap();
+            CreateMap<Durum,UpdateDurumDto>().ReverseMap();
         }
     }
 }

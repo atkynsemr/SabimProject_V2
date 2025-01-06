@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Sabim.Domain.DTOs.SehirDtos;
+﻿using Sabim.Domain.DTOs.SehirDtos;
 using Sabim.Domain.Entities;
 using Sabim.Infrastructure.Persistence.Repository.Contracts;
 using Sabim.Services.Contracts;
@@ -13,7 +12,6 @@ namespace Sabim.Services.Implementations
         {
             _repositoryManager = repositoryManager;
         }
-
         public async Task<List<ResultSehirWithKurumCountDto>> TGetAllSehirWithKurumCountAsync(bool trackChanges)
         {
             var sehirs = await _repositoryManager.Sehir.GetAllSehirWithKurumCountAsync(trackChanges);

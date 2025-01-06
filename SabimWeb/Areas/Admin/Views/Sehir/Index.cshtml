@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Sabim.Web.ViewModels.SehirViewModel
+@{
     ViewData["Title"] = "Tanımlamalar / Şehir";
 }
 @section StyleCss {
@@ -12,50 +13,185 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/4.0.1/css/fixedHeader.bootstrap4.css">
     <link rel="stylesheet" href="/AdminTemplate/dist/css/CustomCss.css">
 }
+
+<!-- Şehir Safahat Modal Başlangıç-->
+<div class="modal fade" id="auditTrailModal" tabindex="-1" role="dialog" aria-labelledby="auditTrailModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-secondary">
+                <h5 class="modal-title" id="auditTrailModalLabel">Safahat Bilgileri</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!--Veriler Yüklenecek-->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ./Şehir Safahat Modal Başlangıç-->
+<!-- Şehir Ekleme Modal Başlangıç-->
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="overlay" style="display: none;">
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                    <div class="spinner-border text-light" role="status">
+                        <span class="sr-only">Lütfen Bekleyiniz...</span>
+                    </div>
+                    <div>
+                        <span class="text-center text-white">Lütfen Bekleyiniz...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-header primary">
+                <h5 class="modal-title" id="createModalLabel">Şehir Ekle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Form Başlangıcı -->
+                <form id="SehirEkleForm">
+                    @Html.AntiForgeryToken()
+                    <div class="form-group">
+                        <label for="SehirAdi">Şehir Adı</label>
+                        <input type="text" class="form-control capitalize-input" id="sehirAdi" name="SehirAdi" asp-for="YeniSehir.SehirAdi" placeholder="Şehir Adı Giriniz" maxlength="20" required />
+                        <span asp-validation-for="YeniSehir.SehirAdi" name="SehirAdi" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="SehirKodu">Şehir Kodu</label>
+                        <input type="text" class="form-control" id="sehirKodu" name="SehirKodu" asp-for="YeniSehir.SehirKodu" placeholder="Şehir Kodunu Giriniz" maxlength="2" required />
+                        <span asp-validation-for="YeniSehir.SehirKodu" name="SehirKodu" class="text-danger"></span>
+                    </div>
+                    <input type="hidden" id="DurumId" name="DurumId" asp-for="YeniSehir.DurumId" value="1" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" id="KaydetSehirButton">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ./Şehir Ekleme Modal Bitiş-->
+<!-- Şehir Düzenleme Modal Başlangıç-->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="overlay">
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                    <div class="spinner-border text-light" role="status">
+                        <span class="sr-only">Lütfen Bekleyiniz...</span>
+                    </div>
+                    <div>
+                        <span class="text-center text-white">Lütfen Bekleyiniz...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-header warning">
+                <h5 class="modal-title" id="editModalLabel">Şehir Düzenle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Form Başlangıcı -->
+                <form id="SehirGuncelleForm">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="SehirID" id="SehirID" asp-for="GuncelleSehir.SehirID" />
+                    <div class="form-group">
+                        <label for="DurumAdi">Şehir Adı</label>
+                        <input type="text" class="form-control capitalize-input" name="SehirAdi" id="sehirAdi" asp-for="GuncelleSehir.SehirAdi" placeholder="Şehir Adı Giriniz" maxlength="20" required />
+                        <span asp-validation-for="GuncelleSehir.SehirAdi" name="DurumAdi" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="SehirKodu">Şehir Kodu</label>
+                        <input type="text" class="form-control" id="sehirKodu" name="SehirKodu" asp-for="GuncelleSehir.SehirKodu" placeholder="Şehir Kodunu Giriniz" maxlength="2" required />
+                        <span asp-validation-for="GuncelleSehir.SehirKodu" name="SehirKodu" class="text-danger"></span>
+                    </div>
+                    @await Component.InvokeAsync("_DurumListesiGenelComponent")
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-warning" id="GuncelleSehirButton">Güncelle</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ./Şehir Düzenleme Modal Bitiş-->
+<!-- Şehir Silme Modal Başlangıç-->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="deleteModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="overlay" style="display: none;">
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                    <div class="spinner-border text-light" role="status">
+                        <span class="sr-only">Lütfen Bekleyiniz...</span>
+                    </div>
+                    <div>
+                        <span class="text-center text-white">Lütfen Bekleyiniz...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-header danger">
+                <h5 class="modal-title" id="deleteModalLabel">Şehir Sil</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Form Başlangıcı -->
+                <form id="SehirSilForm">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="SehirID" id="SehirID" />
+                    <p id="sehirAdiLabel">Şehir Adı: <strong id="sehirAdi"></strong> silinecektir. Onaylıyor musunuz?</p>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-danger" id="SilSehirButton">Sil</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ./Şehir Silme Modal Bitiş-->
 <div class="card">
     <div class="card-header text-right">
-        <button type="button" class="btn btn-outline-primary btn-flat my-2"><i class="fa fa-plus-circle mr-1"></i> Yeni Şehir</button>
+        @Html.Raw(IconHelper.CreateButton("btn btn-outline-primary btn-flat my-2", "Yeni Şehir", IconHelper.GetAddIcon(), "Yeni Şehir Ekle", "createModal"))
     </div>
     <div class="card-body mt-2">
-        <table id="example" class="table table-bordered table-hover display nowrap text-center mt-3" style="width:100%">
-            <thead>
-                <tr>
-                    <th>Şehir Adı</th>
-                    <th class="text-center">Şehir Kodu</th>
-                    <th class="text-center">Şehire Bağlı  Kurum Sayısı</th>
-                    <th>Durum</th>
-                    <th>İşlemler</th>
-                </tr>
-            </thead>
-            <tbody class="text-heading">
-                @foreach (ResultSehirWithKurumCountDto sehir in Model)
-                {
+        <div id="SehirTablosu">
+            <table id="example" class="table table-bordered table-hover display nowrap text-center mt-3" style="width:100%">
+                <thead>
                     <tr>
-                        <td>@sehir.SehirAdi</td>
-                        <td class="text-center">@sehir.SehirKodu</td>
-                        <td class="text-center"><i class="fa fa-building mr-1"></i>@sehir.KurumSayisi</td>
-                        <td><span class="badge badge-lg @BadgeHelper.GetBadgeClass(sehir.DurumId)"> @sehir.DurumAdi</span></td>
-                        <td>
-                            <a href="#" class="btn btn-icon"><i class="fas fa-edit text-primary" title="Şehir Düzenle" aria-hidden="true"></i></a>
-                            <a href="#" class="btn btn-icon"><i class="far fa-trash-alt text-danger" title="Şehir Sil" aria-hidden="true"></i></a>
-                        </td>
+                        <th>Şehir Adı</th>
+                        <th class="text-center">Şehir Kodu</th>
+                        <th class="text-center">Şehire Bağlı  Kurum Sayısı</th>
+                        <th>Durum</th>
+                        <th>İşlemler</th>
                     </tr>
-                }
-            </tbody>
-            <tfoot>
-                <tr>
-                    <th>Şehir Adı</th>
-                    <th class="text-center">Şehir Kodu</th>
-                    <th class="text-center">Şehire Bağlı  Kurum Sayısı</th>
-                    <th>Durum</th>
-                    <th>İşlemler</th>
-                </tr>
-            </tfoot>
-        </table>
+                </thead>
+                @await Component.InvokeAsync("_SehirListesiComponent")
+                <tfoot>
+                    <tr>
+                        <th>Şehir Adı</th>
+                        <th class="text-center">Şehir Kodu</th>
+                        <th class="text-center">Şehire Bağlı  Kurum Sayısı</th>
+                        <th>Durum</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
     </div>
 </div>
 @section Scripts {
-
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap4.js"></script>
     <script src="https://cdn.datatables.net/buttons/3.1.2/js/dataTables.buttons.js"></script>
@@ -76,9 +212,85 @@
     <script src="https://cdn.datatables.net/responsive/3.0.3/js/responsive.bootstrap4.js"></script>
     <script src="https://cdn.datatables.net/fixedheader/4.0.1/js/dataTables.fixedHeader.js"></script>
     <script src="https://cdn.datatables.net/fixedheader/4.0.1/js/fixedHeader.bootstrap4.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.8/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+    <script src="/AdminTemplate/dist/js/jquery.validate.min.js"></script>
+    <!-- Toastr -->
+    <script src="/AdminTemplate/dist/js/toastr.min.js"></script>
+    <!-- Custom Toastr JS-->
+    <script src="/AdminTemplate/dist/js/customize/ToastCustom.js"></script>
+    <!-- Custom Capitalize JS-->
+    <script src="/AdminTemplate/dist/js/customize/CapitalizeCustom.js"></script>
+    <!-- Custom SwalAert JS-->
+    <script src="/AdminTemplate/dist/js/customize/SwalAlertCustom.js"></script>
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
+            initDataTable();
+            $('[data-widget="pushmenu"]').on('click', function () {
+                setTimeout(function () {
+                    var table = $('#example').DataTable();
+                    table.columns.adjust().draw(); // Sütunları yeniden boyutlandır ve yeniden çiz
+                }, 300); // Animasyon tamamlandıktan sonra
+            });
+            //Kayıt İşlemi
+            $('#KaydetSehirButton').click(saveSehir);
+            // Düzenle Modal'ı
+            $(document).one('click', '.btn-edit', function (event) {
+                event.preventDefault(); // Tekrar tetiklenmesini engelle
+                let id = $(this).data('id');
+                if (id) {
+                    editSehir(id);
+                }
+            });
+            // Modal kapandığında yapılacak işlemler
+            $(".modal").on("hidden.bs.modal", function() {
+                $('.modal').each(function() {
+                    let modal = $(this);
+                    let form = modal.find('form');
+                    // Eğer form varsa, formu sıfırla
+                    if (form.length) {
+                        form[0].reset();
+                    }
+                    // Hata mesajlarını temizle
+                    modal.find('span.text-danger').text('');
+                });
+                // Overlay (arka plan) elemanını gizle
+                $('.overlay').hide();
+            });
+            $(document).on('click', '.btn-delete', function (event) {
+                event.preventDefault(); // Sayfanın yeniden yüklenmesini engelle
+                let sehirID = $(this).data('id'); // Silinecek şehirin ID'sini al
+                $.ajax({
+                    url: `/Admin/Sehir/GetSehirById/${sehirID}`,
+                    type: 'GET',
+                    success: function (response) {
+                        if (response.success) {
+                            const sehirData = response.data;
+                            $('#deleteModal #SehirID').val(sehirData.sehirID);
+                            $('#deleteModal #sehirAdi').text(sehirData.sehirAdi); // Durum adını modalda göster
+                            $('#deleteModal').modal('show'); // Modalı aç
+                        } else {
+                            showToast('Silinecek veri bulunamadı.', 'Hata!', 'topRight', 3500, 'bg-danger', true);
+                        }
+                    },
+                    error: function () {
+                        showToast('Silme işlemi için veri getirilemedi. Lütfen tekrar deneyiniz.', 'Hata!', 'topRight', 3500, 'bg-danger', true);
+                    }
+                });
+            });
+            $(document).on('click', '.btn-showinfo', function (event) {
+                event.preventDefault(); // Sayfanın yeniden yüklenmesini engelle
+                let id = $(this).data('id');
+                if (id) {
+                    showInfoSehir(id);
+                }                 
+            });
+            // Düzenle Kaydet Butonu
+            $('#GuncelleSehirButton').click(saveUpdatedSehir);
+            // Sil Modal'ı
+            $('#SilSehirButton').click(deleteSehir);
+        });
+        function initDataTable() {
             $('#example').DataTable({
                 "fixedHeader": true,
                 "responsive": true,
@@ -150,11 +362,11 @@
                                                 exportOptions: {
                                                     columns: ':visible:not(:eq(4))'
                                                 },
-                                                customize: function(doc) {
+                                                customize: function (doc) {
                                                     // Tablonun başlıklarını ve içeriğini ortala
                                                     doc.styles.tableHeader.alignment = 'center';
-                                                    doc.content[1].table.body.forEach(function(row) {
-                                                        row.forEach(function(cell) {
+                                                    doc.content[1].table.body.forEach(function (row) {
+                                                        row.forEach(function (cell) {
                                                             cell.alignment = 'center';
                                                         });
                                                     });
@@ -172,7 +384,7 @@
                                 },
                                 {
                                     extend: 'colvis',
-                                    columns: function(idx, data, node) {
+                                    columns: function (idx, data, node) {
                                         return [0].indexOf(idx) === -1;
                                     },
                                     text: '<i class="fas fa-columns mr-1"></i> Sütun Görünürlüğü'
@@ -195,7 +407,152 @@
                     }
                 ]
             });
-        });
-    </script>
+        }
+        function saveSehir() {
+            $('#createModal span.text-danger').text('');
+            $('#createModal .overlay').show();
+            var formData = $('#SehirEkleForm').serialize(); // Form verilerini serialize et
+            $.ajax({
+                url: '/Admin/Sehir/EkleSehir', // Hedef URL
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        $('#createModal').modal('hide');
+                        reloadTable();
+                        showToast(response.message, 'Bilgi Mesajı', 'topRight', 3000, 'bg-success', true);
+                    }
+                    else {
+                        // Hataları göster
+                        for (let key in response.errors) {
+                            $(`[name="${key}"]`).next('.text-danger').text(response.errors[key][0]);
+                        }
+                        $('.modal .overlay').hide();
+                    }
+                }
+            });
+        }
+        function saveUpdatedSehir() {
+            var formData = $('#SehirGuncelleForm').serialize(); // Form verilerini al
+            $.ajax({
+                url: '/Admin/Sehir/GuncelleSehir',
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        $('#editModal').modal('hide'); // Modalı kapat
+                        reloadTable(); // Tabloyu yeniden yükle
+                        showToast(response.message, 'Bilgi Mesajı', 'topRight', 3000, 'bg-success', true);
+                    }
+                    else {
+                        // Hataları göster
+                        for (let key in response.errors) {
+                            $(`[name="${key}"]`).next('.text-danger').text(response.errors[key][0]);
+                        }
+                        $('.modal .overlay').hide();
+                    }
+                }
+            });
+        }
+        function deleteSehir() {
+            $('#deleteModal .overlay').show();
+            var formData = $('#SehirSilForm').serialize(); // Form verilerini al
+            $.ajax({
+                url: '/Admin/Sehir/SilSehir', // Silme işlemi için endpoint
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        $('#deleteModal').modal('hide'); // Modalı kapat
+                        reloadTable(); // Tabloyu yeniden yükle
+                        showToast(response.message, 'Bilgi Mesajı', 'topRight', 3000, 'bg-success', true);
+                    }
+                    else {
+                        $('#deleteModal').modal('hide');
+                        showToast(response.message, 'Hata Mesajı', 'topRight', 5000, 'bg-danger', true);
+                    }
+                },
+                error: function (xhr) {
+                    handleError(xhr); // Hata durumunu yönet
+                }
+            });
+        }
+        function editSehir(id) {
+           // event.preventDefault();
+            $.ajax({
+                url: `/Admin/Sehir/GetSehirById/${id}`,
+                type: 'GET',
+                success: function (response) {
+                    if (response.success) {
+                        const data = response.data;
+                        $('#editModal #SehirID').val(data.sehirID);
+                        $('#editModal #sehirAdi').val(data.sehirAdi);
+                        $('#editModal #sehirKodu').val(data.sehirKodu);
+                        // Durum listesindeki seçili durumu güncelle
+                        $('#editModal #durumlar option').each(function () {
+                            const optionValue = $(this).val();
+                            if (optionValue == data.durumId) {
+                                $(this).prop('selected', true);
+                            } else {
+                                $(this).prop('selected', false);
+                            }
+                        });
+                        // $('#editModal #aktifMi').prop('checked', data.aktifMi).bootstrapToggle('destroy').bootstrapToggle();
+                        $('#editModal .overlay').hide();
+                        $('#editModal').modal('show');
+                    } 
+                    else {
+                        showToast('Seçili olan kayıt gösterilemiyor! Lütfen sayfayı yenileyip tekrar deneyiniz.', 'Hata', 'topRight', 5000, 'bg-danger', true);
+                        $('.modal .overlay').hide();
+                    }
+                },
+                error: function () {
+                    showSwalAlert('Hata!', 'Beklenmeyen bir hata oluştu!', 'error', 5000, true, true);
+                }
+            });
+        }
+        function showInfoSehir(id) {
+            $.ajax({
+                url: `/Admin/Sehir/GetirSafahatBilgi/${id}`, 
+                type: 'GET',
+                success: function (response) {
+                    $("#auditTrailModal").find(".modal-body").html(response);
+                    $('#auditTrailModal').modal('show');
+                },
+                error: function () {
+                    showToast('Safahat bilgileri getirilemedi. Lütfen tekrar deneyiniz.', 'Hata!', 'topRight', 3500, 'bg-danger', true);
+                }
+            });
+        }
+        function reloadTable() {
+            // Eski tabloyu kaldır
+            if ($.fn.DataTable.isDataTable('#example')) {
+                $('#example').DataTable().destroy();
+                $('#example').empty(); // DOM'u temizle
+            }
 
+            // Tabloyu yeniden yükle
+            $('#SehirTablosu').load('/Admin/Sehir #SehirTablosu', function(response, status, xhr) {
+                if (status === "success") {
+                    initDataTable(); // DataTable başlat
+                } else if (status === "error") {
+                    console.error("Tablo yüklenirken hata oluştu:", xhr.status, xhr.statusText);
+                    showToast("Tablo yüklenemedi. Lütfen sayfayı yenileyin.", "Hata", "topRight", 5000, "bg-danger", true);
+                }
+            });
+        }
+        function handleError(xhr) {
+            $('.modal .overlay').hide();
+            if (xhr.responseJSON && xhr.responseJSON.errors) {
+                for (let key in xhr.responseJSON.errors) {
+                    let errorElement = $(`[name='${key}']`).next('.text-danger');
+                    errorElement.text(xhr.responseJSON.errors[key][0]);
+                }
+            }
+            else {
+                $('.modal').modal('hide'); // Tüm açık modalları kapatır
+                showSwalAlert('Hata!', 'Beklenmeyen bir hata oluştu. Lütfen yaptığınız işlemi tekrar deneyiniz. Hatanın devam etmesi durumunda Bilgi İşlem Birimine bildiriniz.', 'error', 6500, true, true);
+            }
+        }
+    </script>
 }

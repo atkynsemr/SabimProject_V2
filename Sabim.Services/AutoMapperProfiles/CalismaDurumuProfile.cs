@@ -8,6 +8,8 @@ namespace Sabim.Services.AutoMapperProfiles
     {
         public CalismaDurumuProfile()
         {
+            CreateMap<CalismaDurumu,CreateCalismaDurumuDto>().ReverseMap();
+            CreateMap<CalismaDurumu, UpdateCalismaDurumuDto>().ReverseMap();
             CreateMap<CalismaDurumu, ResultCalismaDurumuDto>().ReverseMap();
             CreateMap<CalismaDurumu, ResultCalismaDurumuWithPersonelCountDto>()
                 .ForMember(dest => dest.PersonelSayisi, opt => opt.MapFrom(src => (ushort)src.Personels.Count))

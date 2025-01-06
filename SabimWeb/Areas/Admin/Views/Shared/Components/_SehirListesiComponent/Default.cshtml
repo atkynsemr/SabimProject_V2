@@ -1,0 +1,21 @@
+﻿@using Sabim.Domain.DTOs.SehirDtos
+@model List<ResultSehirWithKurumCountDto>
+<tbody class="text-heading">
+    @foreach (var sehir in Model)
+    {
+        <tr>
+            <td>@sehir.SehirAdi</td>
+            <td class="text-center">@sehir.SehirKodu</td>
+            <td class="text-center"><i class="fa fa-building mr-1"></i>@sehir.KurumSayisi</td>
+            <td>
+                @Html.Raw(IconHelper.GetStatusNameIcon(sehir.DurumAdi))
+                <span class="badge badge-lg @BadgeHelper.GetBadgeClass(sehir.DurumId)"> @sehir.DurumAdi</span>
+            </td>
+            <td>
+                @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-showinfo", "", IconHelper.GetInfoIcon(), "Göster", "showInfoSehir", sehir.SehirID.ToString()))
+                @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-edit", "", IconHelper.GetEditIcon(), "Düzenle", "editSehir", sehir.SehirID.ToString()))
+                @Html.Raw(IconHelper.CreateLink("btn btn-icon btn-delete", "", IconHelper.GetDeleteIcon(), "Sil", "deleteSehir", sehir.SehirID.ToString()))
+            </td>
+        </tr>
+    }
+</tbody>

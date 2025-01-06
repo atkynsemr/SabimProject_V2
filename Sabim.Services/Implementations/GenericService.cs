@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Sabim.Domain.Entities;
+﻿using Sabim.Domain.DTOs.HelperDtos;
 using Sabim.Infrastructure.Persistence.Repository.Contracts;
 using Sabim.Services.Contracts;
 using System.Linq.Expressions;
@@ -15,14 +14,19 @@ namespace Sabim.Services.Implementations
             _repository = repository;
         }
 
-        public Task TAddAsync(T entity)
+        public Task<string> TAddAsync(T entity)
         {
-            throw new NotImplementedException();
+            return _repository.AddAsync(entity);
         }
 
-        public Task TDeleteAsync(int id)
+        public bool TIsAny(Expression<Func<T, bool>> predicate, short? excludeId = null)
         {
-            throw new NotImplementedException();
+            return _repository.IsAny(predicate,excludeId);
+        }
+
+        public Task<string> TDeleteAsync(short id)
+        {
+            return _repository.DeleteAsync(id);
         }
 
         public IQueryable<T> TFindAll(bool trackChanges)
@@ -51,14 +55,19 @@ namespace Sabim.Services.Implementations
            return _repository.FindByConditionAsync(expression, trackChanges);
         }
 
-        public Task<T> TGetByIdAsync(int id)
+        public Task<T> TGetByIdAsync(int id, bool trackChanges)
         {
-            throw new NotImplementedException();
+             return _repository.GetByIdAsync(id,trackChanges);
         }
 
-        public Task TUpdateAsync(T entity)
+        public Task<string> TUpdateAsync(T entity)
         {
-            throw new NotImplementedException();
+            return _repository.UpdateAsync(entity);
+        }
+
+        public Task<AuditTrailDto?> TGetAuditTrailWithDetailsAsync<TKey>(TKey id)
+        {
+            return _repository.GetAuditTrailWithDetailsAsync(id);
         }
     }
 }

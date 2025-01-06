@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Sabim.Domain.DTOs.AppUserDtos;
@@ -25,8 +26,10 @@ namespace Sabim.Web.Controllers
             _roleManager = roleManager;
             _authenticationHelper = new AuthenticationHelper(new HttpContextAccessor(),_userManager,_roleManager);
         }
+        [AllowAnonymous,HttpGet]
         public IActionResult Login([FromQuery(Name = "ReturnUrl")] string returnUrl = "/")
         {
+            ViewBag.SifreMessage = TempData["Message"];
             ClaimsPrincipal claimUser = HttpContext.User;
             if (claimUser.Identity.IsAuthenticated)
             {
@@ -48,7 +51,7 @@ namespace Sabim.Web.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
-        [HttpPost]
+        [AllowAnonymous, HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login([FromForm] LoginAppUserDto loginDto)
         {
@@ -72,7 +75,7 @@ namespace Sabim.Web.Controllers
                 if (string.IsNullOrEmpty(redirectUrl))
                 {
                     // Eğer rol tanımlı değilse, hata sayfasına yönlendir
-                    return RedirectToAction("Error", "Home");
+                    return RedirectToAction("Index", "Error");
                 }
                 return Redirect(redirectUrl); // İlgili yönlendirmeyi yapıyoruz
             }
@@ -82,20 +85,35 @@ namespace Sabim.Web.Controllers
                 return View(loginDto);
             }
         }
-        [HttpPost]
+        [AllowAnonymous, HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync();
-            HttpContext.Session.Clear();
-            HttpContext.Response.Cookies.Delete(".AspNetCore.Identity.Application");
-            HttpContext.Response.Cookies.Delete("SabimWEBCookie");
+            try
+            {
+                // Kullanıcıyı oturumdan çıkış yaptır
+                await HttpContext.SignOutAsync();
+
+                // Session'ı temizle
+                HttpContext.Session.Clear();
+
+                // Çerezleri temizle
+                HttpContext.Response.Cookies.Delete(".AspNetCore.Session");
+                HttpContext.Response.Cookies.Delete(".AspNetCore.Identity.Application");
+                HttpContext.Response.Cookies.Delete("SabimWEBCookie");
+            }
+            catch (Exception ex)
+            {
+                var username = User.Identity.IsAuthenticated ? User.Identity.Name : "Unknown User";
+                // Hata durumunda loglama yapılabilir
+                _manager.LoggerService.LogError($"Area:'/' - Controller:Account - Action: Logout - User: {username} - Hata: {ex.Message}");
+                // Kullanıcıyı hata sayfasına yönlendirebilirsiniz
+                return RedirectToAction("500", "Error");
+            }
+
+            // Çıkış sonrası giriş sayfasına yönlendir
             return RedirectToAction("Login", "Account");
         }
-        [HttpGet]
-        public IActionResult AccessDenied(string returnUrl = null)
-        {
-            return View();
-        }
+
     }
 }

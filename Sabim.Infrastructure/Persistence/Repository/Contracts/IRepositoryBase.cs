@@ -1,4 +1,4 @@
-﻿using Sabim.Domain.Entities;
+﻿using Sabim.Domain.DTOs.HelperDtos;
 using System.Linq.Expressions;
 
 namespace Sabim.Infrastructure.Persistence.Repository.Contracts
@@ -8,11 +8,13 @@ namespace Sabim.Infrastructure.Persistence.Repository.Contracts
             IQueryable<T> FindAll(bool trackChanges);
             Task<T?> FindByConditionAsync(Expression<Func<T, bool>> expression, bool trackChanges);
             Task<ICollection<T>> FindAllByConditionAsync(Expression<Func<T, bool>> expression, bool trackChanges);
-            Task<T> GetByIdAsync(int id);
-            Task AddAsync(T entity);
-            Task UpdateAsync(T entity);
-            Task DeleteAsync(int id);
+            Task<T> GetByIdAsync<TKey>(TKey id, bool trackChanges);
+            Task<string> AddAsync(T entity);
+            Task<string> UpdateAsync(T entity);
+            Task<string> DeleteAsync<TKey>(TKey id);
             Task<List<T>> FindAllAsync(bool trackChanges);
             Task<List<T>> FindAllAsyncWithEntities(bool trackChanges, params Expression<Func<T, object>>[] childrens);
+            bool IsAny(Expression<Func<T, bool>> predicate, short? excludeId = null);
+            Task<AuditTrailDto?> GetAuditTrailWithDetailsAsync<TKey>(TKey id);
     }
 }

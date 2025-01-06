@@ -1,0 +1,31 @@
+﻿@using Sabim.Domain.DTOs.CalismaDurumuDtos
+@model List<ResultGorevlendirilmeTuruWithPersonelCountDto>
+<tbody class="text-heading">
+    @foreach (var gorevlendirilmeTuru in Model)
+    {
+        <tr>
+            <td>@gorevlendirilmeTuru.GorevlendirilmeTuruAdi</td>
+            <td class="text-center">
+                <input type="checkbox" class="large-checkbox mr-3" disabled @(gorevlendirilmeTuru.KurumPersonelListesineDahilMi ? "checked" : "")>
+                @if (gorevlendirilmeTuru.KurumPersonelListesineDahilMi)
+                {
+                    <span class="text-success">Gösteriliyor</span>
+                }
+                else
+                {
+                    <span class="text-danger">Gizleniyor</span>
+                }
+            </td>
+            <td class="text-center"><i class="fas fa-user mr-1 text-secondary"></i>@gorevlendirilmeTuru.PersonelSayisi</td>
+            <td>
+                @Html.Raw(IconHelper.GetStatusNameIcon(gorevlendirilmeTuru.DurumAdi))
+                <span class="badge badge-lg @BadgeHelper.GetBadgeClass(gorevlendirilmeTuru.DurumId)"> @gorevlendirilmeTuru.DurumAdi</span>
+            </td>
+            <td>
+                @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-showinfo", "", IconHelper.GetInfoIcon(), "Göster", "showInfoGorevlendirilmeTuru", gorevlendirilmeTuru.GorevlendirilmeTuruID.ToString()))
+                @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-edit", "", IconHelper.GetEditIcon(), "Düzenle", "editGorevlendirilmeTuru", gorevlendirilmeTuru.GorevlendirilmeTuruID.ToString()))
+                @Html.Raw(IconHelper.CreateLink("btn btn-icon btn-delete", "", IconHelper.GetDeleteIcon(), "Sil", "deleteGorevlendirilmeTuru", gorevlendirilmeTuru.GorevlendirilmeTuruID.ToString()))
+            </td>
+        </tr>
+    }
+</tbody>

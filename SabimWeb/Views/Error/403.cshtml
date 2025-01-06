@@ -1,0 +1,960 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>403 Access Denied</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/AdminTemplate/plugins/fontawesome/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans|Nova+Mono" rel="stylesheet">
+    <link href="https://www.w3schools.com/w3css/4/w3.css" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: red;
+        }
+
+        h6 {
+            color: red;
+            text-decoration: underline;
+        }
+
+        body {
+            align-items: center;
+            background: linear-gradient(33deg, #323b42, #121317);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            color: white;
+        }
+
+        main {
+            --unit: 0.2em;
+            --error-color: red;
+            --error-color-dark: #721e1e;
+        }
+
+        .fence {
+            -webkit-animation: fenceAnimation 10s infinite ease-out;
+            animation: fenceAnimation 10s infinite ease-out;
+            height: calc(100 * var(--unit));
+            perspective: calc(250 * var(--unit));
+            perspective-origin: 50% 50%;
+            position: relative;
+            width: calc(100 * var(--unit));
+        }
+
+
+        .fence__container {
+            -webkit-animation: fenceAnimation 10s infinite ease-out;
+            animation: fenceAnimation 10s infinite ease-out;
+            height: inherit;
+            left: 0;
+            position: absolute;
+            top: 0;
+            transform: rotate3d(1, -0.3, 0, -10deg);
+            transform-style: preserve-3d;
+            width: inherit;
+        }
+
+            .fence__container > * {
+                left: 0;
+                position: absolute;
+                top: 50%;
+                transform-style: preserve-3d;
+            }
+
+        .base {
+            left: calc(11.43 * var(--unit));
+            transform: translate3D(-50%, calc(34.28 * var(--unit)), 0);
+        }
+
+            .base .side--top {
+                filter: brightness(1);
+            }
+
+            .base .side--bottom {
+                filter: brightness(0);
+            }
+
+            .base .side--right, .base .side--left {
+                filter: brightness(0.6);
+            }
+
+            .base .side--front, .base .side--back {
+                filter: brightness(0.7);
+            }
+
+        .light {
+            -webkit-animation: lightContainer infinite 5s ease-in-out;
+            animation: lightContainer infinite 5s ease-in-out;
+            left: calc(11.43 * var(--unit));
+            transform: translate3D(-50%, calc(-4.29 * var(--unit)), 0);
+        }
+
+            .light::before {
+                -webkit-animation: lightShadow 5s ease infinite;
+                animation: lightShadow 5s ease infinite;
+                content: "";
+                height: 0;
+                position: absolute;
+                width: 0;
+                transform: translate(-50%, -50%);
+                top: 50%;
+                left: 50%;
+                box-shadow: 0 0 calc(9.43 * var(--unit)) calc(5.71 * var(--unit)) red, 0 0 calc(1 * var(--unit)) calc(2 * var(--unit)) red;
+                transform-style: unset;
+            }
+
+        .light-rotation {
+            all: inherit;
+            -webkit-animation: lightrotation infinite 5s linear;
+            animation: lightrotation infinite 5s linear;
+            left: 0;
+            position: relative;
+        }
+
+        .light .side {
+            background: red;
+            filter: blur(1px);
+        }
+
+        .pole {
+            left: calc(11.43 * var(--unit));
+            transform: translate3D(-50%, 0, 0);
+        }
+
+            .pole .side {
+                background: var(--error-color-dark);
+                border: calc(1 * var(--unit)) solid #fff;
+            }
+
+            .pole .side--top {
+                border: none;
+                background: radial-gradient(#d72323, #ff8a8a 80%);
+                filter: brightness(1);
+            }
+
+            .pole .side--bottom {
+                filter: brightness(0);
+            }
+
+            .pole .side--right, .pole .side--left {
+                filter: brightness(0.7);
+            }
+
+            .pole .side--front, .pole .side--back {
+                filter: brightness(0.9);
+            }
+
+        .bar {
+            -webkit-animation: fallingBar 10s infinite ease-out;
+            animation: fallingBar 10s infinite ease-out;
+            transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-20deg);
+            transform-origin: calc(11.43 * var(--unit)) 0;
+        }
+
+            .bar .side--front, .bar .side--back {
+                background-image: repeating-linear-gradient(45deg, transparent, transparent calc(5.71 * var(--unit)), #ffffff calc(5.71 * var(--unit)), #ffffff calc(11.42 * var(--unit)));
+                background-color: var(--error-color);
+            }
+
+            .bar .side--left {
+                background-color: var(--error-color);
+            }
+
+            .bar .side--top {
+                filter: brightness(0.95);
+            }
+
+            .bar .side--bottom {
+                filter: brightness(0.7);
+            }
+
+        .cube {
+            height: calc(var(--cube-height) * var(--unit));
+            position: relative;
+            transform-style: preserve-3d;
+            width: calc(var(--cube-width) * var(--unit));
+        }
+
+        .side {
+            background: #fff;
+            box-sizing: border-box;
+            height: inherit;
+            position: absolute;
+            width: inherit;
+        }
+
+        .side--front {
+            transform: translateZ(calc((var(--cube-depth) / 2) * var(--unit)));
+        }
+
+        .side--back {
+            transform: translateZ(calc((var(--cube-depth) / 2) * var(--unit) * -1));
+        }
+
+        .side--right {
+            transform: rotateY(90deg) translateZ(calc((var(--cube-width) / 2) * var(--unit))) scaleX(calc(var(--cube-depth) / var(--cube-width)));
+        }
+
+        .side--left {
+            transform: rotateY(-90deg) translateZ(calc((var(--cube-width) / 2) * var(--unit))) scaleX(calc(var(--cube-depth) / var(--cube-width)));
+        }
+
+        .side--top {
+            transform: rotateX(90deg) translateZ(calc((var(--cube-height) / 2) * var(--unit))) scaleY(calc(var(--cube-depth) / var(--cube-height)));
+        }
+
+        .side--bottom {
+            transform: rotateX(-90deg) translateZ(calc((var(--cube-height) / 2) * var(--unit))) scaleY(calc(var(--cube-depth) / var(--cube-height)));
+        }
+        code{
+            color:red; 
+            background-color:transparent;
+        }
+
+        @@-webkit-keyframes fenceAnimation {
+            0%, 60%, 100% {
+                perspective: calc(500 * var(--unit));
+                perspective-origin: 0 0;
+                transform: scale(1);
+            }
+
+            45%, 50% {
+                perspective: calc(150 * var(--unit));
+                perspective-origin: 50% 50%;
+                transform: scale(1.01);
+            }
+        }
+
+        @@keyframes fenceAnimation {
+            0%, 60%, 100% {
+                perspective: calc(500 * var(--unit));
+                perspective-origin: 0 0;
+                transform: scale(1);
+            }
+
+            45%, 50% {
+                perspective: calc(150 * var(--unit));
+                perspective-origin: 50% 50%;
+                transform: scale(1.01);
+            }
+        }
+
+        @@-webkit-keyframes lightContainer {
+            0%, 100% {
+                transform: translate3D(-50%, calc(-4.29 * var(--unit)), 0);
+            }
+
+            50% {
+                transform: translate3D(-50%, calc(-5.71 * var(--unit)), 0);
+            }
+        }
+
+        @@keyframes lightContainer {
+            0%, 100% {
+                transform: translate3D(-50%, calc(-4.29 * var(--unit)), 0);
+            }
+
+            50% {
+                transform: translate3D(-50%, calc(-5.71 * var(--unit)), 0);
+            }
+        }
+
+        @@-webkit-keyframes lightShadow {
+            12.5%, 37.5%, 62.5%, 87.5% {
+                transform: scaleX(1);
+            }
+
+            0%, 25%, 50%, 75%, 100% {
+                transform: scaleX(0.95);
+            }
+        }
+
+        @@keyframes lightShadow {
+            12.5%, 37.5%, 62.5%, 87.5% {
+                transform: scaleX(1);
+            }
+
+            0%, 25%, 50%, 75%, 100% {
+                transform: scaleX(0.95);
+            }
+        }
+
+        @@-webkit-keyframes lightrotation {
+            0% {
+                transform: rotateY(0deg);
+            }
+
+            100% {
+                transform: rotateY(1turn);
+            }
+        }
+
+        @@keyframes lightrotation {
+            0% {
+                transform: rotateY(0deg);
+            }
+
+            100% {
+                transform: rotateY(1turn);
+            }
+        }
+
+        @@-webkit-keyframes fallingBar {
+            0%, 90%, 100% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(0deg);
+            }
+
+            45%, 50% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-20deg);
+            }
+
+            50.2% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-19.95deg);
+            }
+
+            50.3% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-19.8deg);
+            }
+
+            50.5% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-19.56deg);
+            }
+
+            50.6% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-19.22deg);
+            }
+
+            50.8% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-18.77deg);
+            }
+
+            51.0% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-18.23deg);
+            }
+
+            51.1% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-17.6deg);
+            }
+
+            51.3% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-16.86deg);
+            }
+
+            51.5% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-16.03deg);
+            }
+
+            51.6% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-15.09deg);
+            }
+
+            51.8% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-14.06deg);
+            }
+
+            51.9% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-12.94deg);
+            }
+
+            52.1% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-11.71deg);
+            }
+
+            52.3% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-10.39deg);
+            }
+
+            52.4% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-8.964deg);
+            }
+
+            52.6% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-7.443deg);
+            }
+
+            52.7% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-5.825deg);
+            }
+
+            52.9% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-4.108deg);
+            }
+
+            53.1% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-2.293deg);
+            }
+
+            53.2% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-0.38deg);
+            }
+
+            53.3% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(0deg);
+            }
+
+            53.4% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(0deg);
+            }
+
+            53.6% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-1.139deg);
+            }
+
+            53.7% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-2.181deg);
+            }
+
+            53.9% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-3.124deg);
+            }
+
+            54.1% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-3.969deg);
+            }
+
+            54.2% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-4.716deg);
+            }
+
+            54.4% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-5.365deg);
+            }
+
+            54.5% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-5.916deg);
+            }
+
+            54.7% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-6.369deg);
+            }
+
+            54.9% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-6.724deg);
+            }
+
+            55.0% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-6.98deg);
+            }
+
+            55.2% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-7.139deg);
+            }
+
+            55.4% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-7.199deg);
+            }
+
+            55.5% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-7.162deg);
+            }
+
+            55.7% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-7.026deg);
+            }
+
+            55.8% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-6.792deg);
+            }
+
+            56.0% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-6.46deg);
+            }
+
+            56.2% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-6.03deg);
+            }
+
+            56.3% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-5.502deg);
+            }
+
+            56.5% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-4.875deg);
+            }
+
+            56.6% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-4.151deg);
+            }
+
+            56.8% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-3.328deg);
+            }
+
+            57.0% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-2.408deg);
+            }
+
+            57.1% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-1.389deg);
+            }
+
+            57.3% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-0.2723deg);
+            }
+
+            57.3% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(0deg);
+            }
+
+            57.5% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(0deg);
+            }
+
+            57.7% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-0.6641deg);
+            }
+
+            57.8% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-1.23deg);
+            }
+
+            58.0% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-1.698deg);
+            }
+
+            58.1% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-2.068deg);
+            }
+
+            58.3% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-2.339deg);
+            }
+
+            58.5% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-2.513deg);
+            }
+
+            58.6% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-2.588deg);
+            }
+
+            58.8% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-2.566deg);
+            }
+
+            58.9% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-2.445deg);
+            }
+
+            59.1% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-2.226deg);
+            }
+
+            59.3% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-1.909deg);
+            }
+
+            59.4% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-1.494deg);
+            }
+
+            59.6% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-0.9812deg);
+            }
+
+            59.8% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-0.37deg);
+            }
+
+            59.8% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(0deg);
+            }
+
+            60.0% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(0deg);
+            }
+        }
+
+        @@keyframes fallingBar {
+            0%, 90%, 100% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(0deg);
+            }
+
+            45%, 50% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-20deg);
+            }
+
+            50.2% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-19.95deg);
+            }
+
+            50.3% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-19.8deg);
+            }
+
+            50.5% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-19.56deg);
+            }
+
+            50.6% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-19.22deg);
+            }
+
+            50.8% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-18.77deg);
+            }
+
+            51.0% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-18.23deg);
+            }
+
+            51.1% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-17.6deg);
+            }
+
+            51.3% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-16.86deg);
+            }
+
+            51.5% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-16.03deg);
+            }
+
+            51.6% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-15.09deg);
+            }
+
+            51.8% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-14.06deg);
+            }
+
+            51.9% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-12.94deg);
+            }
+
+            52.1% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-11.71deg);
+            }
+
+            52.3% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-10.39deg);
+            }
+
+            52.4% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-8.964deg);
+            }
+
+            52.6% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-7.443deg);
+            }
+
+            52.7% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-5.825deg);
+            }
+
+            52.9% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-4.108deg);
+            }
+
+            53.1% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-2.293deg);
+            }
+
+            53.2% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-0.38deg);
+            }
+
+            53.3% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(0deg);
+            }
+
+            53.4% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(0deg);
+            }
+
+            53.6% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-1.139deg);
+            }
+
+            53.7% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-2.181deg);
+            }
+
+            53.9% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-3.124deg);
+            }
+
+            54.1% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-3.969deg);
+            }
+
+            54.2% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-4.716deg);
+            }
+
+            54.4% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-5.365deg);
+            }
+
+            54.5% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-5.916deg);
+            }
+
+            54.7% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-6.369deg);
+            }
+
+            54.9% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-6.724deg);
+            }
+
+            55.0% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-6.98deg);
+            }
+
+            55.2% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-7.139deg);
+            }
+
+            55.4% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-7.199deg);
+            }
+
+            55.5% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-7.162deg);
+            }
+
+            55.7% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-7.026deg);
+            }
+
+            55.8% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-6.792deg);
+            }
+
+            56.0% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-6.46deg);
+            }
+
+            56.2% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-6.03deg);
+            }
+
+            56.3% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-5.502deg);
+            }
+
+            56.5% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-4.875deg);
+            }
+
+            56.6% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-4.151deg);
+            }
+
+            56.8% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-3.328deg);
+            }
+
+            57.0% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-2.408deg);
+            }
+
+            57.1% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-1.389deg);
+            }
+
+            57.3% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-0.2723deg);
+            }
+
+            57.3% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(0deg);
+            }
+
+            57.5% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(0deg);
+            }
+
+            57.7% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-0.6641deg);
+            }
+
+            57.8% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-1.23deg);
+            }
+
+            58.0% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-1.698deg);
+            }
+
+            58.1% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-2.068deg);
+            }
+
+            58.3% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-2.339deg);
+            }
+
+            58.5% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-2.513deg);
+            }
+
+            58.6% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-2.588deg);
+            }
+
+            58.8% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-2.566deg);
+            }
+
+            58.9% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-2.445deg);
+            }
+
+            59.1% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-2.226deg);
+            }
+
+            59.3% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-1.909deg);
+            }
+
+            59.4% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-1.494deg);
+            }
+
+            59.6% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-0.9812deg);
+            }
+
+            59.8% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-0.37deg);
+            }
+
+            59.8% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(0deg);
+            }
+
+            60.0% {
+                transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(0deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <main style="margin-top:-35rem;">
+        <div class="fence">
+            <div class="fence__container">
+                <div class="base">
+                    <div class="cube" style="--cube-height:1.14; --cube-width:8.57; --cube-depth:8.57;">
+                        <div class="side side--front"></div>
+                        <div class="side side--back"></div>
+                        <div class="side side--right"></div>
+                        <div class="side side--left"></div>
+                        <div class="side side--top"></div>
+                        <div class="side side--bottom"></div>
+                    </div>
+                </div>
+                <div class="pole">
+                    <div class="cube" style="--cube-height:34.28; --cube-width:5.7; --cube-depth:4.29;">
+                        <div class="side side--front"></div>
+                        <div class="side side--back"></div>
+                        <div class="side side--right"></div>
+                        <div class="side side--left"></div>
+                        <div class="side side--top"></div>
+                        <div class="side side--bottom"></div>
+                    </div>
+                </div>
+                <div class="light">
+                    <div class="light-rotation">
+                        <div class="cube" style="--cube-height:2.85; --cube-width:2.85; --cube-depth:2.85;">
+                            <div class="side side--front"></div>
+                            <div class="side side--back"></div>
+                            <div class="side side--right"></div>
+                            <div class="side side--left"></div>
+                            <div class="side side--top"></div>
+                            <div class="side side--bottom"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bar">
+                    <div class="cube" style="--cube-height:2.85; --cube-width:100; --cube-depth:2.85;">
+                        <div class="side side--front"></div>
+                        <div class="side side--back"></div>
+                        <div class="side side--right"></div>
+                        <div class="side side--left"></div>
+                        <div class="side side--top"></div>
+                        <div class="side side--bottom"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="w3-display-middle">
+            <h1 class="w3-jumbo w3-animate-top w3-center"><code>Erişim Engellendi</code></h1>
+            <hr class="w3-border-white w3-animate-left" style="margin:auto; width:50%">
+            <h3 class="w3-center w3-animate-right my-4">🚫 Bu sayfayı görüntüleme izniniz yok.</h3>
+            <h6 class="w3-center w3-animate-zoom">
+                <a href="/Account/Login" class="btn btn-success" style="font-size:1.25rem;"><i class="fa fa-home" aria-hidden="true"></i> Anasayfaya git</a>
+            </h6>
+        </div>
+    </main>
+    <script>
+        "use strict";
+        // USED TO CALCULATE THE BOUNCE TRANSITION
+
+        console.clear()
+        var h0 = 20; 		// base height, m
+        var v = 0; 		// current velocity, m/s
+        var g = 9.81;	// gravity, m/s/s
+        var t = 0;		// time spend
+        var dt = 0.1;	// time between each step
+        var rho = 0.6;	// coefficient of restitution
+        var tau = 0.10;		// contact time to bounce
+
+        var hmax = h0;		// the max height of the bounce
+        var h = h0;			// the current height
+        var hstop = 1;   	// stop when hmax < hstop
+        var freefall = true;	// state: freefall or in contact, if the element is falling or not
+        var t_last = Math.sqrt(2 * h0 / g) * -1; // time we would have launched to get to h0 at t=0
+        var vmax = Math.sqrt(2 * hmax * g);
+
+        var H = [];
+        var T = [];
+        var i = 0;
+
+        while (hmax > hstop) {
+            if (freefall) {
+                var hnew = h + v * dt - 0.5 * g * dt * dt;
+                if (hnew < 0) {
+                    t = t_last + 2 * Math.sqrt(2 * hmax / g)
+                    freefall = false
+                    t_last = t + tau
+                    h = 0
+                } else {
+                    t = t + dt
+                    v = (v - g * dt)
+                    h = hnew
+                }
+            } else {
+                t = t + tau;
+                vmax = vmax * rho;
+                v = vmax;
+                freefall = true;
+                h = 0;
+            }
+            hmax = 0.5 * vmax * vmax / g
+            H.push(h);
+            T.push(t);
+            i++;
+        }
+
+        // Transform the values as transition element
+        T = T.map((_t, i) => {
+            var animationPercentage = 10;
+            var percent = (_t / t * 100 * animationPercentage / 100) + 50
+            return `${percent.toPrecision(3)}%{
+                    transform: translate3D(0, calc(4.29 * var(--unit)), 0) rotateZ(-${H[i].toPrecision(4)}deg)}`
+        })
+    </script>
+</body>
+</html>

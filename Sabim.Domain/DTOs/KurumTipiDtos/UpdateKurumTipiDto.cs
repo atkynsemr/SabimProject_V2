@@ -3,5 +3,7 @@
     public record UpdateKurumTipiDto:KurumTipiBaseDto
     {
         public short KurumTipiID { get; init; }
+        public short? GuncelleyenPersonelId { get; set; }
+        public DateTime? GuncellenmeTarihi { get; set; }
     }
 }

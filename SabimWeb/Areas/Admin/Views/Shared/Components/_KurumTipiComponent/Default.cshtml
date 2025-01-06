@@ -1,0 +1,24 @@
+﻿@using Sabim.Domain.DTOs.KurumTipiDtos
+@model List<ResultKurumTipiWithKurumCountDto>
+<tbody class="text-heading">
+    @foreach (var kurumTipi in Model)
+    {
+        <tr>
+            <td>@kurumTipi.KurumTipiAdi</td>
+            <td class="text-center"><i class="fas fa-user mr-1 text-secondary"></i>@kurumTipi.KurumSayisi</td>
+            <td class="text-center">
+                <div class="d-flex align-items-center justify-content-center">
+                @Html.Raw(IconHelper.GetStatusNameIcon(kurumTipi.DurumAdi))
+                <span class="badge badge-lg @BadgeHelper.GetBadgeClass(kurumTipi.DurumId)"> @kurumTipi.DurumAdi</span>
+                </div>
+            </td>
+            <td class="text-center">
+                <div class="d-flex align-items-center justify-content-center">
+                @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-showinfo", "", IconHelper.GetInfoIcon(), "Göster", "showInfoKurumTipi", kurumTipi.KurumTipiID.ToString()))
+                @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-edit", "", IconHelper.GetEditIcon(), "Düzenle", "editKurumTipi", kurumTipi.KurumTipiID.ToString()))
+                @Html.Raw(IconHelper.CreateLink("btn btn-icon btn-delete", "", IconHelper.GetDeleteIcon(), "Sil", "deleteKurumTipi", kurumTipi.KurumTipiID.ToString()))
+                </div>
+            </td>
+        </tr>
+    }
+</tbody>

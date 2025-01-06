@@ -10,7 +10,7 @@ namespace Sabim.Infrastructure.Persistence.Configurations
         {
             builder.HasKey(d => d.DurumID);
             builder.Property(d => d.DurumID).HasColumnType("SMALLINT").ValueGeneratedOnAdd().IsRequired();
-            builder.Property(d => d.DurumAdi).HasMaxLength(30).IsRequired().IsUnicode();
+            builder.Property(d => d.DurumAdi).HasMaxLength(30).IsRequired().UseCollation("SQL_Latin1_General_CP1_CI_AS");
             builder.HasIndex(d => d.DurumAdi).IsUnique();
             builder.Property(d =>d.AktifMi).HasDefaultValue(true);
             builder.HasData(

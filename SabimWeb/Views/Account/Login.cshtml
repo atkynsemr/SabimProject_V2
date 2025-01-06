@@ -13,8 +13,11 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
     <link href="/AdminTemplate/plugins/fontawesome/css/all.min.css" rel="stylesheet" />
+    <!-- Toastr CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="/AdminTemplate/dist/css/adminlte.min.css">
+    <!-- Custom style-->
     <link rel="stylesheet" href="/AdminTemplate/dist/css/CustomCss.css">
 </head>
 <body class="hold-transition login-page">
@@ -30,7 +33,7 @@
                     @Html.AntiForgeryToken()
                     <input type="hidden" asp-for="ReturnUrl" />
                     <div class="input-group form-group mb-0">
-                        <input type="text" asp-for="UserName" class="form-control" id="InputLoginUser" placeholder="Kullanıcı Adı">
+                        <input type="text" asp-for="UserName" class="form-control" id="InputLoginUser" placeholder="Kullanıcı Adı" maxlength="15">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-user"></span>
@@ -41,7 +44,7 @@
                         <span asp-validation-for="UserName" class="text-danger"></span>
                     </div>
                     <div class="input-group form-group mb-0 mt-3">
-                        <input type="password" asp-for="Password" class="form-control" id="InputLoginPassword" placeholder="Parola">
+                        <input type="password" asp-for="Password" class="form-control" id="InputLoginPassword" placeholder="Parola" maxlength="10">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-lock"></span>
@@ -68,7 +71,7 @@
                     </div>
                 </form>
                 <p class="mb-1">
-                    <a href="forgot-password-v2.html" class="text-secondary font-weight-bolder"><i class="fa fa-envelope mr-2"></i>Şifremi Unuttum</a>
+                    <a asp-area="" asp-controller="Mail" asp-action="SifremiUnuttum" class="text-secondary font-weight-bolder"><i class="fa fa-envelope mr-2"></i>Şifremi Unuttum</a>
                 </p>
             </div>
             <!-- /.card-body -->
@@ -85,8 +88,11 @@
     <!-- jquery-validation -->
     <script src="/AdminTemplate/plugins/jquery-validation/jquery.validate.min.js"></script>
     <script src="/AdminTemplate/plugins/jquery-validation/additional-methods.min.js"></script>
+    <!-- Toastr JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <!-- Page specific script -->
-    <script src="/AdminTemplate/dist/js/custom.js"></script>
-
+    <script src="/AdminTemplate/dist/js/customize/LoginCustom.js"></script>
+    @if (!string.IsNullOrEmpty(ViewBag.Message)){ @ToastrHelper.Toastr(Html, ViewBag.Message, "Hata", "error")}
+    @if (!string.IsNullOrEmpty(ViewBag.SifreMessage)){@ToastrHelper.Toastr(Html, ViewBag.SifreMessage, "Bilgi", "success")}
 </body>
 </html>

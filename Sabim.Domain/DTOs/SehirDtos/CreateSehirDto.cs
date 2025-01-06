@@ -2,5 +2,7 @@
 {
     public record CreateSehirDto:SehirBaseDto
     {
+        public short? OlusturanPersonelId { get; set; }
+        public DateTime? OlusturulmaTarihi { get; set; }
     }
 }

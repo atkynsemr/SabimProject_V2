@@ -8,6 +8,8 @@ namespace Sabim.Services.AutoMapperProfiles
     {
         public CinsiyetProfile()
         {
+            CreateMap<Cinsiyet, CreateCinsiyetDto>().ReverseMap();
+            CreateMap<Cinsiyet, UpdateCinsiyetDto>().ReverseMap();
             CreateMap<Cinsiyet, ResultCinsiyetDto>().ReverseMap();
             CreateMap<Cinsiyet, ResultCinsiyetWithPersonelCountDto>()
                 .ForMember(dest => dest.PersonelSayisi, opt => opt.MapFrom(src => (ushort)src.Personels.Count))

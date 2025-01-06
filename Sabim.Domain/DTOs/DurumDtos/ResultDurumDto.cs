@@ -3,5 +3,6 @@
     public record ResultDurumDto :DurumBaseDto
     {
         public short DurumID { get; init; }
+        public bool Selected { get; init; }
     }
 }

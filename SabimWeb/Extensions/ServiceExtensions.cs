@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Sabim.Domain.Entities;
+using Sabim.Infrastructure.Helper;
 using Sabim.Infrastructure.Identity.Configurations;
 using Sabim.Infrastructure.Persistence.Context;
 using Sabim.Infrastructure.Persistence.Repository.Contracts;
@@ -103,6 +104,8 @@ namespace Sabim.Web.Extensions
             services.AddScoped<IAppUserService, AppUserService>();
             services.AddScoped<ISidebarMenuService, SidebarMenuService>();
             services.AddScoped<IEkranService, EkranService>();
+            services.AddScoped<IEmailService, EmailService>();
+            services.AddSingleton<ILoggerService, LoggerService>();
         }
         public static void ConfigureServiceManager(this IServiceCollection services)
         {
@@ -134,24 +137,24 @@ namespace Sabim.Web.Extensions
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
             {
                 options.LoginPath = new PathString("/Account/Login");
-                options.AccessDeniedPath = new PathString("/Account/AccessDenied");
                 options.Cookie.Name = "SabimWEBCookie";
-                options.SlidingExpiration = true; // Dinamik süreyle çakışmayı önler
+                options.SlidingExpiration = true; 
                 options.Cookie.HttpOnly = true;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.None;
                 options.Cookie.SameSite = SameSiteMode.Lax;
-                options.ExpireTimeSpan = TimeSpan.FromHours(4);
+                options.ExpireTimeSpan = TimeSpan.FromDays(2);
             });
             services.ConfigureApplicationCookie(options =>
             {
-                options.ExpireTimeSpan = TimeSpan.FromHours(4);
+                options.AccessDeniedPath = new PathString("/Error/403");
+                options.ExpireTimeSpan = TimeSpan.FromDays(2);
             });
         }
         public static void ConfigureSession(this IServiceCollection services)
         {
             services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromHours(4); // Oturum süresi
+                options.IdleTimeout = TimeSpan.FromHours(8); // Oturum süresi
                 options.Cookie.HttpOnly = true; // Güvenlik için
                 options.Cookie.IsEssential = true; // GDPR için
             });
@@ -175,5 +178,16 @@ namespace Sabim.Web.Extensions
             services.AddFluentValidationAutoValidation(); // Bu, ModelState ile entegrasyonu sağlar
             services.AddFluentValidationClientsideAdapters(); // İstemci tarafı adaptörlerini ekler
         }
+        public static void ConfigureMailSettings(this IServiceCollection services,IConfiguration configuration)
+        {
+            services.Configure<MailSettings>(configuration.GetSection("EmailSettings"));
+            // EmailHelper ve EmailService'i ekleyin
+            services.AddSingleton<EmailHelper>(provider =>
+            {
+                var mailSettings = provider.GetRequiredService<IOptions<MailSettings>>().Value;
+                return new EmailHelper(mailSettings);
+            });
+        }
+
     }
 }

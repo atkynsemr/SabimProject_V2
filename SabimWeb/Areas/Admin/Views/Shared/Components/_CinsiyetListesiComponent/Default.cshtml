@@ -1,0 +1,23 @@
+﻿@using Sabim.Domain.DTOs.CinsiyetDtos
+@model List<ResultCinsiyetWithPersonelCountDto>
+<tbody class="text-heading">
+    @foreach (var cinsiyet in Model)
+    {
+        <tr>
+            <td>@cinsiyet.CinsiyetAdi</td>
+            <td class="text-center">
+                <i class="fa-solid fa-person-half-dress"></i>
+                @Html.Raw(IconHelper.GetGenderIcon(cinsiyet.CinsiyetAdi))@cinsiyet.PersonelSayisi
+                </td>
+            <td>
+                @Html.Raw(IconHelper.GetStatusNameIcon(cinsiyet.DurumAdi))
+                <span class="badge badge-lg @BadgeHelper.GetBadgeClass(cinsiyet.DurumId)"> @cinsiyet.DurumAdi</span>
+            </td>
+            <td>
+                @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-showinfo", "", IconHelper.GetInfoIcon(), "Göster", "showInfoCinsiyet", cinsiyet.CinsiyetID.ToString()))
+                @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-edit", "", IconHelper.GetEditIcon(), "Düzenle", "editCinsiyet", cinsiyet.CinsiyetID.ToString()))
+                @Html.Raw(IconHelper.CreateLink("btn btn-icon btn-delete", "", IconHelper.GetDeleteIcon(), "Sil", "deleteCinsiyet", cinsiyet.CinsiyetID.ToString()))
+            </td>
+        </tr>
+    }
+</tbody>

@@ -4,6 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>1675a640-5247-4c0c-9e5f-1f07750637d1</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -31,6 +32,10 @@
 
   <ItemGroup>
     <Content Remove="wwwroot\AdminTemplate\dist\js\custom.js" />
+    <Content Remove="wwwroot\AdminTemplate\dist\js\customize\CapitalizeCustom.js" />
+    <Content Remove="wwwroot\AdminTemplate\dist\js\customize\LoginCustom.js" />
+    <Content Remove="wwwroot\AdminTemplate\dist\js\customize\SwalAlertCustom.js" />
+    <Content Remove="wwwroot\AdminTemplate\dist\js\customize\ToastCustom.js" />
   </ItemGroup>
 
   <ItemGroup>
@@ -51,6 +56,10 @@
     <None Include="wwwroot\AdminTemplate\dist\css\adminlte.min.css.map" />
     <None Include="wwwroot\AdminTemplate\dist\js\adminlte.min.js" />
     <None Include="wwwroot\AdminTemplate\dist\js\custom.js" />
+    <None Include="wwwroot\AdminTemplate\dist\js\customize\CapitalizeCustom.js" />
+    <None Include="wwwroot\AdminTemplate\dist\js\customize\SwalAlertCustom.js" />
+    <None Include="wwwroot\AdminTemplate\dist\js\customize\ToastCustom.js" />
+    <None Include="wwwroot\AdminTemplate\dist\js\customize\LoginCustom.js" />
     <None Include="wwwroot\AdminTemplate\plugins\bootstrap\js\bootstrap.bundle.min.js" />
     <None Include="wwwroot\AdminTemplate\dist\js\demo.js" />
     <None Include="wwwroot\AdminTemplate\plugins\fontawesome\webfonts\fa-brands-400.svg" />

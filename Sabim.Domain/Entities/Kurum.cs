@@ -9,6 +9,6 @@
         public KurumTipi KurumTipi { get; set; }
         public Sehir Sehir { get; set; }
         //Navigation property
-        public virtual ICollection<Personel> Personels { get; set; } = new List<Personel>();
+        public ICollection<Personel> Personels { get; set; } = new List<Personel>();
     }
 }

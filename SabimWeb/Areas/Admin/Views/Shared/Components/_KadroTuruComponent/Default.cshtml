@@ -1,0 +1,20 @@
+﻿@using Sabim.Domain.DTOs.KadroTuruDtos
+@model List<ResultKadroTuruWithPersonelCountDto>
+<tbody class="text-heading">
+    @foreach (var kadroTuru in Model)
+    {
+        <tr>
+            <td>@kadroTuru.KadroTuruAdi</td>
+            <td class="text-center"><i class="fas fa-user mr-1 text-secondary"></i>@kadroTuru.PersonelSayisi</td>
+            <td>
+                @Html.Raw(IconHelper.GetStatusNameIcon(kadroTuru.DurumAdi))
+                <span class="badge badge-lg @BadgeHelper.GetBadgeClass(kadroTuru.DurumId)"> @kadroTuru.DurumAdi</span>
+            </td>
+            <td>
+                @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-showinfo", "", IconHelper.GetInfoIcon(), "Göster", "showInfoKadroTuru", kadroTuru.KadroTuruID.ToString()))
+                @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-edit", "", IconHelper.GetEditIcon(), "Düzenle", "editKadroTuru", kadroTuru.KadroTuruID.ToString()))
+                @Html.Raw(IconHelper.CreateLink("btn btn-icon btn-delete", "", IconHelper.GetDeleteIcon(), "Sil", "deleteKadroTuru", kadroTuru.KadroTuruID.ToString()))
+            </td>
+        </tr>
+    }
+</tbody>

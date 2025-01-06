@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sabim.Services.Contracts;
-using Sabim.Web.Filters;
 using SabimWeb.Models;
 using System.Diagnostics;
 
@@ -35,6 +34,12 @@ namespace SabimWeb.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+        [HttpGet]
+        public IActionResult InvokeAuditTrail(int id)
+        {
+            // ViewComponent'i çaðýr ve dönen sonucu View olarak döndür
+            return ViewComponent("AuditTrail", new { id });
         }
     }
 }

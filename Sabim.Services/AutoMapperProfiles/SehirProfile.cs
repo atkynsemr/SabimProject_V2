@@ -13,6 +13,8 @@ namespace Sabim.Services.AutoMapperProfiles
                 .ForMember(dest => dest.KurumSayisi, opt => opt.MapFrom(src => (ushort)src.Kurums.Count()))
                 .ForMember(dest => dest.DurumAdi, opt => opt.MapFrom(src => src.Durum.DurumAdi))
                 .ReverseMap();
+            CreateMap<Sehir, CreateSehirDto>().ReverseMap();
+            CreateMap<Sehir, UpdateSehirDto>().ReverseMap();
         }
     }
 }

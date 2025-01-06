@@ -1,0 +1,34 @@
+﻿@using Sabim.Domain.DTOs.CalismaDurumuDtos
+@model List<ResultCalismaDurumuWithPersonelCountDto>
+<tbody class="text-heading">
+    @foreach (var calismaDurumu in Model)
+    {
+        <tr>
+            <td>@calismaDurumu.CalismaDurumAdi</td>
+            <td class="text-center"><input type="checkbox" class="large-checkbox mr-3" disabled @(calismaDurumu.KurumPersonelListesineDahilMi ? "checked" : "")>
+                @if (calismaDurumu.KurumPersonelListesineDahilMi)
+                {
+                    <span class="text-success">Gösteriliyor</span>
+                }
+                else
+                {
+                    <span class="text-danger">Gizleniyor</span>
+                }
+            </td>
+            <td class="text-center"><i class="fas fa-user mr-1 text-secondary"></i>@calismaDurumu.PersonelSayisi</td>
+            <td class="text-center">
+                <div class="d-flex align-items-center justify-content-center">
+                @Html.Raw(IconHelper.GetStatusNameIcon(calismaDurumu.DurumAdi))
+                <span class="badge badge-lg @BadgeHelper.GetBadgeClass(calismaDurumu.DurumId)"> @calismaDurumu.DurumAdi</span>
+                </div>
+            </td>
+            <td class="text-center">
+                <div class="d-flex align-items-center justify-content-center">
+                @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-showinfo", "", IconHelper.GetInfoIcon(), "Göster", "showInfoCalismaDurumu", calismaDurumu.CalismaDurumuID.ToString()))
+                @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-edit", "", IconHelper.GetEditIcon(), "Düzenle", "editCalismaDurumu", calismaDurumu.CalismaDurumuID.ToString()))
+                @Html.Raw(IconHelper.CreateLink("btn btn-icon btn-delete", "", IconHelper.GetDeleteIcon(), "Sil", "deleteCalismaDurumu", calismaDurumu.CalismaDurumuID.ToString()))
+                </div>
+            </td>
+        </tr>
+    }
+</tbody>

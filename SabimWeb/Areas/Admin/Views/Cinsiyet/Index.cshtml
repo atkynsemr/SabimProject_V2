@@ -1,57 +1,184 @@
-﻿@{
+﻿@model Sabim.Web.ViewModels.CinsiyetViewModel
+@{
     ViewData["Title"] = "Tanımlamalar / Cinsiyet";
 }
 @section StyleCss {
     <link rel="stylesheet" href="/AdminTemplate/plugins/bootstrap/css/bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.3/css/responsive.bootstrap4.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.1.2/css/buttons.bootstrap4.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/searchpanes/2.3.3/css/searchPanes.bootstrap4.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/select/2.1.0/css/select.bootstrap4.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/colreorder/2.0.4/css/colReorder.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/4.0.1/css/fixedHeader.bootstrap4.css">
     <link rel="stylesheet" href="/AdminTemplate/dist/css/CustomCss.css">
-
 }
+<!-- Cinsiyet Safahat Modal Başlangıç-->
+<div class="modal fade" id="auditTrailModal" @* tabindex="-1" role="dialog" *@ aria-labelledby="auditTrailModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-secondary">
+                <h5 class="modal-title" id="auditTrailModalLabel">Safahat Bilgileri</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!--Veriler Yüklenecek-->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ./Cinsiyet Safahat Modal Başlangıç-->
+<!-- Cinsiyet Ekleme Modal Başlangıç-->
+<div class="modal fade" id="createModal" @* tabindex="-1" role="dialog" *@ aria-labelledby="createModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="overlay" style="display: none;">
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                    <div class="spinner-border text-light" role="status">
+                        <span class="sr-only">Lütfen Bekleyiniz...</span>
+                    </div>
+                    <div>
+                        <span class="text-center text-white">Lütfen Bekleyiniz...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-header primary">
+                <h5 class="modal-title" id="createModalLabel">Cinsiyet Ekle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Form Başlangıcı -->
+                <form id="CinsiyetEkleForm">
+                    @Html.AntiForgeryToken()
+                    <div class="form-group">
+                        <label for="CinsiyetAdi">Cinsiyet Adı</label>
+                        <input type="text" class="form-control capitalize-input" id="cinsiyetAdi" name="CinsiyetAdi" asp-for="YeniCinsiyet.CinsiyetAdi" placeholder="Cinsiyet Adı Giriniz" maxlength="15" required />
+                        <span asp-validation-for="YeniCinsiyet.CinsiyetAdi" name="CinsiyetAdi" class="text-danger"></span>
+                    </div>
+                    <input type="hidden" id="DurumId" name="DurumId" asp-for="YeniCinsiyet.DurumId" value="1" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" id="KaydetCinsiyetButton">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ./Cinsiyet Ekleme Modal Bitiş-->
+<!-- Cinsiyet Düzenleme Modal Başlangıç-->
+<div class="modal fade" id="editModal" @* tabindex="-1" role="dialog" *@ aria-labelledby="editModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="overlay">
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                    <div class="spinner-border text-light" role="status">
+                        <span class="sr-only">Lütfen Bekleyiniz...</span>
+                    </div>
+                    <div>
+                        <span class="text-center text-white">Lütfen Bekleyiniz...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-header warning">
+                <h5 class="modal-title" id="editModalLabel">Cinsiyet Düzenle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Form Başlangıcı -->
+                <form id="CinsiyetGuncelleForm">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="CinsiyetID" id="CinsiyetID" asp-for="GuncelleCinsiyet.CinsiyetID" />
+                    <div class="form-group">
+                        <label for="DurumAdi">Cinsiyet Adı</label>
+                        <input type="text" class="form-control capitalize-input" name="CinsiyetAdi" id="cinsiyetAdi" asp-for="GuncelleCinsiyet.CinsiyetAdi" placeholder="Cinsiyet Adı Giriniz" maxlength="15" required />
+                        <span asp-validation-for="GuncelleCinsiyet.CinsiyetAdi" name="CinsiyetAdi" class="text-danger"></span>
+                    </div>
+                    @await Component.InvokeAsync("_DurumListesiGenelComponent")
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-warning" id="GuncelleCinsiyetButton">Güncelle</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ./Cinsiyet Düzenleme Modal Bitiş-->
+<!-- Cinsiyet Silme Modal Başlangıç-->
+<div class="modal fade" id="deleteModal" @* tabindex="-1" role="dialog" *@ aria-labelledby="deleteModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="overlay" style="display: none;">
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                    <div class="spinner-border text-light" role="status">
+                        <span class="sr-only">Lütfen Bekleyiniz...</span>
+                    </div>
+                    <div>
+                        <span class="text-center text-white">Lütfen Bekleyiniz...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-header danger">
+                <h5 class="modal-title" id="deleteModalLabel">Cinsiyet Sil</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Form Başlangıcı -->
+                <form id="CinsiyetSilForm">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="CinsiyetID" id="CinsiyetID" />
+                    <p id="cinsiyetAdiLabel">Cinsiyet Adı: <strong id="cinsiyetAdi"></strong> silinecektir. Onaylıyor musunuz?</p>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-danger" id="SilCinsiyetButton">Sil</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ./Cinsiyet Silme Modal Bitiş-->
 <div class="card">
     <div class="card-header text-right">
-        <button type="button" class="btn btn-outline-primary btn-flat my-2"><i class="fa fa-plus-circle mr-1"></i> Yeni Cinsiyet</button>
+        @Html.Raw(IconHelper.CreateButton("btn btn-outline-primary btn-flat my-2", "Yeni Cinsiyet", IconHelper.GetAddIcon(), "Yeni Cinsiyet Ekle", "createModal"))
     </div>
     <div class="card-body mt-2">
-        <table id="example" class="table table-bordered table-hover display text-center mt-3" style="width:100%">
-            <thead>
-                <tr>
-                    <th>Cinsiyet Adı</th>
-                    <th class ="text-center">Cinsiyete Göre Personel Sayısı</th>
-                    <th>Durum</th>
-                    <th>İşlemler</th>
-                </tr>
-            </thead>
-            <tbody class="text-heading">
-                @foreach (ResultCinsiyetWithPersonelCountDto cinsiyet in Model)
-                {
+        <div id="CinsiyetTablosu">
+            <table id="example" class="table table-bordered table-hover display text-center mt-3" style="width:100%">
+                <thead>
                     <tr>
-                        <td>@cinsiyet.CinsiyetAdi</td>
-                        <td class="text-center"><i class="fas fa-user mr-1 text-secondary"></i>@cinsiyet.PersonelSayisi</td>
-                        <td><span class="badge badge-lg @BadgeHelper.GetBadgeClass(cinsiyet.DurumId)"> @cinsiyet.DurumAdi</span></td>
-                        <td>
-                            <a href="#" class="btn btn-icon"><i class="fas fa-edit text-primary" title="Cinsiyet Düzenle" aria-hidden="true"></i></a>
-                            <a href="#" class="btn btn-icon"><i class="far fa-trash-alt text-danger" title="Cinsiyet Sil" aria-hidden="true"></i></a>
-                        </td>
+                        <th>Cinsiyet Adı</th>
+                        <th class="text-center">Cinsiyete Göre Personel Sayısı</th>
+                        <th>Durum</th>
+                        <th>İşlemler</th>
                     </tr>
-                }
-            </tbody>
-            <tfoot>
-                <tr>
-                    <th>Cinsiyet Adı</th>
-                    <th class="text-center">Cinsiyete Göre Personel Sayısı</th>
-                    <th>Durum</th>
-                    <th>İşlemler</th>
-                </tr>
-            </tfoot>
-        </table>
+                </thead>
+                @await Component.InvokeAsync("_CinsiyetListesiComponent")
+                <tfoot>
+                    <tr>
+                        <th>Cinsiyet Adı</th>
+                        <th class="text-center">Cinsiyete Göre Personel Sayısı</th>
+                        <th>Durum</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
     </div>
 </div>
 @section Scripts {
-
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap4.js"></script>
     <script src="https://cdn.datatables.net/buttons/3.1.2/js/dataTables.buttons.js"></script>
@@ -68,10 +195,87 @@
     <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.colVis.min.js"></script>
     <script src="https://cdn.datatables.net/colreorder/2.0.4/js/dataTables.colReorder.js"></script>
     <script src="https://cdn.datatables.net/colreorder/2.0.4/js/colReorder.bootstrap4.js"></script>
-
+    <script src="https://cdn.datatables.net/responsive/3.0.3/js/dataTables.responsive.js"></script>
+    <script src="https://cdn.datatables.net/responsive/3.0.3/js/responsive.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/fixedheader/4.0.1/js/dataTables.fixedHeader.js"></script>
+    <script src="https://cdn.datatables.net/fixedheader/4.0.1/js/fixedHeader.bootstrap4.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.8/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+    <script src="/AdminTemplate/dist/js/jquery.validate.min.js"></script>
+    <!-- Toastr -->
+    <script src="/AdminTemplate/dist/js/toastr.min.js"></script>
+    <!-- Custom Toastr JS-->
+    <script src="/AdminTemplate/dist/js/customize/ToastCustom.js"></script>
+    <!-- Custom Capitalize JS-->
+    <script src="/AdminTemplate/dist/js/customize/CapitalizeCustom.js"></script>
+    <!-- Custom SwalAert JS-->
+    <script src="/AdminTemplate/dist/js/customize/SwalAlertCustom.js"></script>
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
+            initDataTable();
+            $('[data-widget="pushmenu"]').on('click', function () {
+                setTimeout(function () {
+                    var table = $('#example').DataTable();
+                    table.columns.adjust().draw(); // Sütunları yeniden boyutlandır ve yeniden çiz
+                }, 300); // Animasyon tamamlandıktan sonra
+            });
+            //Kayıt İşlemi
+            $('#KaydetCinsiyetButton').click(saveCinsiyet);
+            // Düzenle Modal'ı
+            $(document).one('click', '.btn-edit', function (event) {
+                event.preventDefault(); // Tekrar tetiklenmesini engelle
+                let id = $(this).data('id');
+                if (id) {
+                    editCinsiyet(id);
+                }
+            });
+            $(".modal").on("hidden.bs.modal", function () {
+                $('.modal').each(function () {
+                    let modal = $(this);
+                    let form = modal.find('form');
+                    if (form.length) {
+                        form[0].reset();
+                    }
+                    modal.find('span.text-danger').text('');
+                });
+                $('.overlay').hide();
+            });
+            $(document).on('click', '.btn-delete', function (event) {
+                event.preventDefault(); // Sayfanın yeniden yüklenmesini engelle
+                let cinsiyetID = $(this).data('id'); // Silinecek şehirin ID'sini al
+                $.ajax({
+                    url: `/Admin/Cinsiyet/GetCinsiyetById/${cinsiyetID}`,
+                    type: 'GET',
+                    success: function (response) {
+                        if (response.success) {
+                            const cinsiyetData = response.data;
+                            $('#deleteModal #CinsiyetID').val(cinsiyetData.cinsiyetID);
+                            $('#deleteModal #cinsiyetAdi').text(cinsiyetData.cinsiyetAdi);
+                            $('#deleteModal').modal('show'); // Modalı aç
+                        } else {
+                            showToast('Silinecek veri bulunamadı.', 'Hata!', 'topRight', 3500, 'bg-danger', true);
+                        }
+                    },
+                    error: function () {
+                        showToast('Silme işlemi için veri getirilemedi. Lütfen tekrar deneyiniz.', 'Hata!', 'topRight', 3500, 'bg-danger', true);
+                    }
+                });
+            });
+            $(document).on('click', '.btn-showinfo', function (event) {
+                event.preventDefault(); // Sayfanın yeniden yüklenmesini engelle
+                let id = $(this).data('id');
+                if (id) {
+                    showInfoCinsiyet(id);
+                }
+            });
+            // Düzenle Kaydet Butonu
+            $('#GuncelleCinsiyetButton').click(saveUpdatedCinsiyet);
+            // // Sil Modal'ı
+            $('#SilCinsiyetButton').click(deleteCinsiyet);
+        });
+        function initDataTable() {
             $('#example').DataTable({
+                "fixedHeader": true,
                 "responsive": true,
                 "lengthChange": false,
                 "autoWidth": false,
@@ -132,20 +336,20 @@
                                                 extend: 'excel',
                                                 text: '<i class="fas fa-file-excel mr-1"></i> Excel',
                                                 exportOptions: {
-                                                    columns: ':visible:not(:eq(4))'
+                                                    columns: ':visible:not(:eq(3))'
                                                 }
                                             },
                                             {
                                                 extend: 'pdf',
                                                 text: '<i class="fas fa-file-pdf mr-1"></i> PDF',
                                                 exportOptions: {
-                                                    columns: ':visible:not(:eq(4))'
+                                                    columns: ':visible:not(:eq(3))'
                                                 },
-                                                customize: function(doc) {
+                                                customize: function (doc) {
                                                     // Tablonun başlıklarını ve içeriğini ortala
                                                     doc.styles.tableHeader.alignment = 'center';
-                                                    doc.content[1].table.body.forEach(function(row) {
-                                                        row.forEach(function(cell) {
+                                                    doc.content[1].table.body.forEach(function (row) {
+                                                        row.forEach(function (cell) {
                                                             cell.alignment = 'center';
                                                         });
                                                     });
@@ -156,14 +360,14 @@
                                                 extend: 'print',
                                                 text: '<i class="fas fa-print mr-1"></i> Yazdır',
                                                 exportOptions: {
-                                                    columns: ':visible:not(:eq(4))'
+                                                    columns: ':visible:not(:eq(3))'
                                                 }
                                             }
                                         ]
                                 },
                                 {
                                     extend: 'colvis',
-                                    columns: function(idx, data, node) {
+                                    columns: function (idx, data, node) {
                                         return [0].indexOf(idx) === -1;
                                     },
                                     text: '<i class="fas fa-columns mr-1"></i> Sütun Görünürlüğü'
@@ -186,7 +390,152 @@
                     }
                 ]
             });
-        });
+        }
+        function saveCinsiyet() {
+            $('#createModal span.text-danger').text('');
+            $('#createModal .overlay').show();
+            var formData = $('#CinsiyetEkleForm').serialize(); // Form verilerini serialize et
+            $.ajax({
+                url: '/Admin/Cinsiyet/EkleCinsiyet', // Hedef URL
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        $('#createModal').modal('hide');
+                        reloadTable();
+                        showToast(response.message, 'Bilgi Mesajı', 'topRight', 3000, 'bg-success', true);
+                    }
+                    else {
+                        // Beklenmeyen bir hata oluştu
+                        showToast(response.message, 'Hata Mesajı', 'topRight', 5000, 'bg-danger', true);
+                    }
+                },
+                error: function (xhr) {
+                    //$('#createModal .overlay').hide(); // Overlay'i gizle
+                    handleError(xhr); // Hata durumunu yönet
+                }
+            });
+        }
+        function saveUpdatedCinsiyet() {
+            var formData = $('#CinsiyetGuncelleForm').serialize(); // Form verilerini al
+            $.ajax({
+                url: '/Admin/Cinsiyet/GuncelleCinsiyet',
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        $('#editModal').modal('hide'); // Modalı kapat
+                        reloadTable(); // Tabloyu yeniden yükle
+                        showToast(response.message, 'Bilgi Mesajı', 'topRight', 3000, 'bg-success', true);
+                    } else {
+                        // Hata varsa, hataları göster
+                        showToast(response.message, 'Hata Mesajı', 'topRight', 5000, 'bg-danger', true);
+                    }
+                },
+                error: function (xhr) {
+                    handleError(xhr);
+                }
+            });
+        }
+        function deleteCinsiyet() {
+            $('#deleteModal .overlay').show();
+            var formData = $('#CinsiyetSilForm').serialize(); // Form verilerini al
+            $.ajax({
+                url: '/Admin/Cinsiyet/SilCinsiyet', // Silme işlemi için endpoint
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        $('#deleteModal').modal('hide'); // Modalı kapat
+                        reloadTable(); // Tabloyu yeniden yükle
+                        showToast(response.message, 'Bilgi Mesajı', 'topRight', 3000, 'bg-success', true);
+                    }
+                    else {
+                        $('#deleteModal').modal('hide');
+                        showToast(response.message, 'Hata Mesajı', 'topRight', 5000, 'bg-danger', true);
+                    }
+                },
+                error: function (xhr) {
+                    handleError(xhr); // Hata durumunu yönet
+                }
+            });
+        }
+        function editCinsiyet(id) {
+            event.preventDefault();
+            $.ajax({
+                url: `/Admin/Cinsiyet/GetCinsiyetById/${id}`,
+                type: 'GET',
+                success: function (response) {
+                    if (response.success) {
+                        const data = response.data;
+                        $('#editModal #CinsiyetID').val(data.cinsiyetID);
+                        $('#editModal #cinsiyetAdi').val(data.cinsiyetAdi);
+                        // Durum listesindeki seçili durumu güncelle
+                        $('#editModal #durumlar option').each(function () {
+                            const optionValue = $(this).val();
+                            if (optionValue == data.durumId) {
+                                $(this).prop('selected', true);
+                            } else {
+                                $(this).prop('selected', false);
+                            }
+                        });
+                        // $('#editModal #aktifMi').prop('checked', data.aktifMi).bootstrapToggle('destroy').bootstrapToggle();
+                        $('#editModal .overlay').hide();
+                        $('#editModal').modal('show');
+                    } else {
+                        showToast('Güncelleme için veri getirilemedi! Lütfen tekrar deneyiniz.', 'Hata!', 'topRight', 3500, 'bg-danger', true);
+                    }
+                },
+                error: function () {
+                    showSwalAlert('Hata!', 'Beklenmeyen bir hata oluştu!', 'error', 5000, true, true);
+                }
+            });
+        }
+        function showInfoCinsiyet(id) {
+            $.ajax({
+                url: `/Admin/Cinsiyet/GetirSafahatBilgi/${id}`,
+                type: 'GET',
+                success: function (response) {
+                    $("#auditTrailModal").find(".modal-body").html(response);
+                    $('#auditTrailModal').modal('show');
+                },
+                error: function () {
+                    showToast('Safahat bilgileri getirilemedi. Lütfen tekrar deneyiniz.', 'Hata!', 'topRight', 3500, 'bg-danger', true);
+                }
+            });
+        }
+        function reloadTable() {
+            // Eski tabloyu kaldır
+            if ($.fn.DataTable.isDataTable('#example')) {
+                $('#example').DataTable().clear().destroy();
+            }
+            // Tablo içeriğini yükle
+            $('#CinsiyetTablosu').load('/Admin/Cinsiyet #CinsiyetTablosu', function(response, status, xhr) {
+                if (status === "error") {
+                    console.error("Tablo yüklenirken hata oluştu: ", xhr.status, xhr.statusText);
+                    window.location.reload();
+                } else {
+                    initDataTable(); // Tabloyu yeniden başlat
+                }
+            });
+            //$.fn.dataTable.ext.errMode = 'none'; // Hata mesajlarını gizler
+            $('#example').on('error.dt', function(e, settings, techNote, message) {
+                console.error("Hata Mesajı:", message);
+                console.log("Ayrıntılar:", techNote, e);
+            });
+        }
+        function handleError(xhr) {
+            $('.modal .overlay').hide();
+            if (xhr.responseJSON && xhr.responseJSON.errors) {
+                for (let key in xhr.responseJSON.errors) {
+                    let errorElement = $(`[name='${key}']`).next('.text-danger');
+                    errorElement.text(xhr.responseJSON.errors[key][0]);
+                }
+            }
+            else {
+                $('.modal').modal('hide'); // Tüm açık modalları kapatır
+                showSwalAlert('Hata!', 'Beklenmeyen bir hata oluştu. Lütfen yaptığınız işlemi tekrar deneyiniz. Hatanın devam etmesi durumunda Bilgi İşlem Birimine bildiriniz.', 'error', 6500, true, true);
+            }
+        }
     </script>
-
 }

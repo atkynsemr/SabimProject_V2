@@ -1,0 +1,20 @@
+﻿@using Sabim.Domain.DTOs.KanGrubuDtos
+@model List<ResultKanGrubuWithPersonelCountDto>
+<tbody class="text-heading">
+    @foreach (var kanGrubu in Model)
+    {
+        <tr>
+            <td><i class="fas fa-tint mr-1 text-danger"></i>@kanGrubu.KanGrubuAdi</td>
+            <td class="text-center"><i class="fas fa-user mr-1 text-secondary"></i>@kanGrubu.PersonelSayisi</td>
+            <td>
+                @Html.Raw(IconHelper.GetStatusNameIcon(kanGrubu.DurumAdi))
+                <span class="badge badge-lg @BadgeHelper.GetBadgeClass(kanGrubu.DurumId)"> @kanGrubu.DurumAdi</span>
+            </td>
+            <td>
+                @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-showinfo", "", IconHelper.GetInfoIcon(), "Göster", "showInfoKanGrubu", kanGrubu.KanGrubuID.ToString()))
+                @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-edit", "", IconHelper.GetEditIcon(), "Düzenle", "editKanGrubu", kanGrubu.KanGrubuID.ToString()))
+                @Html.Raw(IconHelper.CreateLink("btn btn-icon btn-delete", "", IconHelper.GetDeleteIcon(), "Sil", "deleteKanGrubu", kanGrubu.KanGrubuID.ToString()))
+            </td>
+        </tr>
+    }
+</tbody>

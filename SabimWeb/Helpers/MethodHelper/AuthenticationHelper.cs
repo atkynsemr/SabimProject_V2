@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using Newtonsoft.Json;
 using Sabim.Domain.Entities;
 using System.Security.Claims;
 
@@ -52,6 +53,11 @@ namespace Sabim.Web.Helpers.MethodHelper
             // Rolleri claim olarak ekle
             claims.AddRange(roleClaims);
 
+            if (roleClaims.Any())
+            {
+                _httpContextAccessor.HttpContext.Session.SetString("RoleClaims", JsonConvert.SerializeObject(claims));
+            }
+
             // ClaimsIdentity oluştur
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
@@ -59,8 +65,14 @@ namespace Sabim.Web.Helpers.MethodHelper
             var authProperties = new AuthenticationProperties
             {
                 IsPersistent = rememberMe,
-                ExpiresUtc = rememberMe ? DateTimeOffset.UtcNow.AddDays(5) : DateTimeOffset.UtcNow.AddHours(4)
+                ExpiresUtc = rememberMe ? DateTimeOffset.UtcNow.AddDays(2) : (DateTimeOffset?)null
             };
+
+            // Identity.Application çerezi için giriş
+            await _httpContextAccessor.HttpContext.SignInAsync(
+                IdentityConstants.ApplicationScheme,
+                new ClaimsPrincipal(claimsIdentity),
+                authProperties);
 
             // Kullanıcıyı oturum açtır
             await _httpContextAccessor.HttpContext.SignInAsync(

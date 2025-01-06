@@ -16,7 +16,7 @@ namespace Sabim.Services.Validators.AppUserValidators
 
             RuleFor(x => x.Password)
                 .NotEmpty().WithMessage("Şifre gereklidir.")
-                .MinimumLength(5).WithMessage("Şifre en az 5 karakter uzunluğunda olmalıdır.")
+                .MinimumLength(5).WithMessage("Şifre en az 5 karakter olmalıdır.")
                 .MaximumLength(10).WithMessage("Şifre en fazla 10 karakter olabilir.");
         }
     }

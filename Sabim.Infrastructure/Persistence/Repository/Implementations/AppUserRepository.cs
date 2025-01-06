@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Sabim.Domain.Constants;
@@ -8,7 +6,6 @@ using Sabim.Domain.DTOs.AppUserDtos;
 using Sabim.Domain.Entities;
 using Sabim.Infrastructure.Persistence.Context;
 using Sabim.Infrastructure.Persistence.Repository.Contracts;
-using System.Security.Claims;
 
 namespace Sabim.Infrastructure.Persistence.Repository.Implementations
 {
@@ -17,17 +14,19 @@ namespace Sabim.Infrastructure.Persistence.Repository.Implementations
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<AppRole> _roleManager;
         private readonly SignInManager<AppUser> _signInManager;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         public AppUserRepository(SabimDbContext context, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IHttpContextAccessor httpContextAccessor, RoleManager<AppRole> roleManager) : base(context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _httpContextAccessor = httpContextAccessor;
             _roleManager = roleManager;
         }
         public async Task<AppUser> FindByEmailAsync(string email)
         {
             return await _userManager.FindByEmailAsync(email);
+        }
+        public async Task<AppUser> FindByUserIdAsync(int id)
+        {
+            return await _userManager.Users.FirstOrDefaultAsync(u => u.Id == id);
         }
         public async Task<bool> CheckPasswordAsync(AppUser user, string password)
         {
@@ -47,7 +46,7 @@ namespace Sabim.Infrastructure.Persistence.Repository.Implementations
             }
             if (user.DurumId != 1)
             {
-                return (false, user.Durum.DurumAdi.ToString(),null);
+                return (false, $"Hesap Durumu: {user.Durum.DurumAdi.ToString()}. Hata olduğunu düşünüyorsanız Bilgi İşlem Birimi ile irtibat kurunuz.", null);
             }
             // Şifreyi doğrula
             var isPasswordValid = await _userManager.CheckPasswordAsync(user, loginDto.Password);
@@ -67,39 +66,30 @@ namespace Sabim.Infrastructure.Persistence.Repository.Implementations
             {
                 return (false, SignInMessages.RoleNotAssigned,null);
             }
-            // RoleManager üzerinden role claim'lerini al
-            //var roleClaims = new List<Claim>();
-            //foreach (var role in roles)
-            //{
-            //    var appRole = await _roleManager.FindByNameAsync(role);
-            //    if (appRole != null)
-            //    {
-            //        var claimss = await _roleManager.GetClaimsAsync(appRole);
-            //        roleClaims.AddRange(claimss.Select(c => new Claim(c.Type, c.Value)));
-            //    }
-            //}
-            //// Kullanıcı bilgileri ile claim'leri oluştur
-            //var claims = new List<Claim>
-            //{
-            //    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            //    new Claim(ClaimTypes.Name, user.UserName),
-            //    new Claim(ClaimTypes.Email, user.Email)
-            //};
-            //// Rolleri claim olarak ekle
-            //claims.AddRange(roleClaims);
-            //var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            //// AuthProperties oluştur
-            //var authProperties = new AuthenticationProperties
-            //{
-            //    IsPersistent = loginDto.RememberMe,
-            //    ExpiresUtc = loginDto.RememberMe ? DateTimeOffset.UtcNow.AddDays(5) : DateTimeOffset.UtcNow.AddMinutes(5)
-            //};
             return (true, SignInMessages.Succesed,user);
         }
         public async Task SignOutAsync()
         {
             await _signInManager.SignOutAsync();
         }
-       
+        public async Task<string> SavePasswordResetTokenAsync(AppUser user, string provider, string name)
+        {
+            var resetCode = new Random().Next(100000, 999999).ToString();
+            await _userManager.SetAuthenticationTokenAsync(user, provider, name, resetCode);
+            return resetCode;
+
+        }
+        public async Task<IdentityResult> ResetUserPasswordAsync(AppUser user, string token, string newPassword)
+        {
+            var resetPassword = await _userManager.ResetPasswordAsync(user,token,newPassword);
+            user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, newPassword);
+            var result = await _userManager.UpdateAsync(user);
+            // Eğer şifre sıfırlama başarılıysa token'ı kaldır
+            if (result.Succeeded)
+            {
+                await _userManager.RemoveAuthenticationTokenAsync(user, "PasswordReset", "ResetCode");
+            }
+            return result;
+        }
     }
 }

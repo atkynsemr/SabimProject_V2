@@ -62,3 +62,55 @@ div.dt-container div.dt-length select {
     justify-content: center;
 }
 
+.field-validation-error:before {
+    font-family: 'Font Awesome 5 Free';
+    content: "\f06a"; /* Font Awesome "exclamation-triangle" ikonu */
+    font-weight: 600; /* <-- add this */
+    color: red; /* İkon rengi */
+    margin-right: 5px; /* İkon ve mesaj arasında boşluk */
+}
+
+.modal-header.primary {
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #337ab7;
+}
+
+.modal-header.warning {
+    color: #fff;
+    background-color: #fd7e14;
+    border-color: #fd7e14;
+}
+
+.modal-header.danger {
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.modal-header.primary .close {
+    color: ghostwhite;
+}
+
+.btn-warning {
+    color: #fff;
+    background-color: #fd7e14;
+}
+
+.btn-warning:hover, .btn-warning:focus, .btn-warning.selected, .btn-warning:active {
+    color: #fff !important;
+    background-color: #e66a13 !important; /* Koyulaştırılmış renk */
+}
+
+/* Chrome, Safari, Edge */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+

@@ -1,0 +1,12 @@
+﻿@using Sabim.Domain.DTOs.SehirDtos
+@model List<ResultSehirDto>
+
+<div class="form-group">
+    <label for="SehirAdi">Bulunduğu Şehir</label>
+    <select class="form-control" id="sehirler" name="SehirID" style="width: 100%;">
+        @foreach (var sehir in Model)
+        {
+            <option value="@sehir.SehirID" selected="@sehir.Selected">@sehir.SehirAdi</option>
+        }
+    </select>
+</div>
