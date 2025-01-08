@@ -173,6 +173,10 @@ namespace Sabim.Web.Extensions
         }
         public static void ConfigureAddValidators(this IServiceCollection services)
         {
+            services.AddControllers(options =>
+            {
+                options.ModelValidatorProviders.Clear(); // Data Annotations doğrulayıcılarını devre dışı bırakır
+            });
             services.AddValidatorsFromAssemblyContaining<LoginDtoValidator>();
             // Eğer Validation otomatik çalışsın istiyorsanız (ValidatorFactory kullanarak):
             services.AddFluentValidationAutoValidation(); // Bu, ModelState ile entegrasyonu sağlar

@@ -8,11 +8,13 @@ namespace Sabim.Services.AutoMapperProfiles
     {
         public BirimProfile()
         {
-            CreateMap<Birim,ResultBirimWithKisimCount>()
-                .ForMember(dest => dest.BolumId, opt=> opt.MapFrom(src => src.BolumId))
+            CreateMap<Birim, CreateBirimDto>().ReverseMap();
+            CreateMap<Birim, UpdateBirimDto>().ReverseMap();
+            CreateMap<Birim, ResultBirimDto>().ReverseMap();
+            CreateMap<Birim, ResultBirimWithKisimCountDto>()
                 .ForMember(dest => dest.BolumAdi, opt => opt.MapFrom(src => src.Bolum.BolumAdi))
                 .ForMember(dest => dest.DurumAdi, opt=> opt.MapFrom(src => src.Durum.DurumAdi))
-                .ForMember(dest => dest.KisimSayisi, opt => opt.MapFrom(src => src.Kisims.Count))
+                .ForMember(dest => dest.KisimSayisi, opt => opt.MapFrom(src => (ushort)src.Kisims.Count))
                 .ReverseMap();
         }
     }

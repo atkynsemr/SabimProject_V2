@@ -21,7 +21,7 @@ namespace Sabim.Services.Implementations
         public async Task<List<ResultKurumWithPersonelCountDto>> TGetAllKurumWithPersonelCountAsync(bool trackChanges)
         {
            var kurums = await _repositoryManager.Kurum.GetAllKurumWithPersonelCountAsync(trackChanges);
-            return kurums;
+           return kurums;
         }
     }
 }

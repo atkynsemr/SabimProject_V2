@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sabim.Domain.Constants;
 using Sabim.Domain.DTOs.KurumDtos;
-using Sabim.Domain.DTOs.KurumDtos;
 using Sabim.Domain.Entities;
 using Sabim.Services.Contracts;
 using Sabim.Web.Helpers.MethodHelper;
@@ -77,7 +76,6 @@ namespace Sabim.Web.Areas.Admin.Controllers
                 return Json(new { success = false });
             }
         }
-        [HttpGet]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> GuncelleKurum([FromForm] UpdateKurumDto updateKurumDto)
@@ -147,7 +145,7 @@ namespace Sabim.Web.Areas.Admin.Controllers
                 case OperationStatus.GlobalError:
                 default:
                     var username = User.Identity.IsAuthenticated ? User.Identity.Name : "Unknown User";
-                    _manager.LoggerService.LogError($"Area:Admin - Controller:Kurum - Action: SilKurum - User: {username} - Hata: Kurum Tipi ID : {KurumID} Silinemedi!");
+                    _manager.LoggerService.LogError($"Area:Admin - Controller:Kurum - Action: SilKurum - User: {username} - Hata: Kurum ID : {KurumID} Silinemedi!");
                     return Json(new { success = false, message = "Silme işlemi sırasında bir hata oluştu. Lütfen tekrar deneyin." });
             }
         }

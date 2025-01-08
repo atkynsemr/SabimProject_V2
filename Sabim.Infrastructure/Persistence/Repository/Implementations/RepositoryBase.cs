@@ -263,7 +263,6 @@ namespace Sabim.Infrastructure.Persistence.Repository.Implementations
                 return OperationStatus.GlobalError;
             }
         }
-
         public bool IsAny(Expression<Func<T, bool>> predicate, short? excludeId = null)
         {
             var query = Entity.AsQueryable();

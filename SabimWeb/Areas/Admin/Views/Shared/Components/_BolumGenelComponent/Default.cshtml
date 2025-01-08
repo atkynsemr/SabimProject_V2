@@ -1,0 +1,12 @@
+﻿@using Sabim.Domain.DTOs.BolumDtos
+@model List<ResultBolumDto>
+
+<div class="form-group">
+    <label for="BolumAdi">Bağlı Olduğu Bölüm</label>
+    <select class="form-control" id="bolumler" name="BolumID" style="width: 100%;">
+        @foreach (var bolum in Model)
+        {
+            <option value="@bolum.BolumID" selected="@bolum.Selected">@bolum.BolumAdi</option>
+        }
+    </select>
+</div>

@@ -10,6 +10,7 @@ namespace Sabim.Services.Validators.KurumValidators
         public UpdateKurumDtoValidator(IServiceManager manager)
         {
             _manager = manager;
+            RuleFor(x => x.KurumID).NotEmpty().WithMessage("Kurum ID boş değer alamaz.");
             RuleFor(x => x.KurumAdi)
                .NotEmpty().WithMessage("Kurum Adı boş bırakılamaz.")
                .MaximumLength(100).WithMessage("Kurum Adı en fazla 100 karakter olmalıdır.")
