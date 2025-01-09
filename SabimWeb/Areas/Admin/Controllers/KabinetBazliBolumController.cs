@@ -18,7 +18,7 @@ namespace Sabim.Web.Areas.Admin.Controllers
         public async Task<IActionResult> Index()
         {
             var result = await _manager.KabinetBazliBolumService.TFindAllAsyncWithEntities(false,e => e.Kisims, equals => equals.Durum );
-            var KabinetBazliBolumler = _mapper.Map<List<ResultKabinetBazliBolumWithKisimCount>>(result);
+            var KabinetBazliBolumler = _mapper.Map<List<ResultKabinetBazliBolumWithKisimCountDto>>(result);
             return View(KabinetBazliBolumler);
         }
     }

@@ -17,4 +17,8 @@
     <ProjectReference Include="..\Sabim.Infrastructure\Sabim.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Validators\KabinetBazliBolumValidators\" />
+  </ItemGroup>
+
 </Project>

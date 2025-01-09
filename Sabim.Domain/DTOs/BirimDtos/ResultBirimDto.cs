@@ -3,5 +3,6 @@
     public record ResultBirimDto : BirimBaseDto
     {
         public short BirimID { get; init; }
+        public bool Selected { get; init; }
     }
 }

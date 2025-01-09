@@ -7,7 +7,6 @@ namespace Sabim.Services.Validators.BirimValidators
     public class CreateBirimDtoValidator : AbstractValidator<CreateBirimDto>
     {
         private readonly IServiceManager _manager;
-
         public CreateBirimDtoValidator(IServiceManager manager)
         {
             _manager = manager;

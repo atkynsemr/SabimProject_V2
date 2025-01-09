@@ -7,6 +7,6 @@
         public short BolumId { get; set; }
         //Navigation property
         public Bolum Bolum { get; set; }
-        public ICollection<Kisim> Kisims { get; set; }
+        public ICollection<Kisim> Kisims { get; set; } = new List<Kisim>();
     }
 }

@@ -1,0 +1,27 @@
+﻿@using Sabim.Domain.DTOs.KisimDtos
+@model List<ResultKisimWithPersonelCountDto>
+<tbody class="text-heading">
+    @foreach (var kisim in Model)
+    {
+        <tr>
+            <td>@kisim.BirimAdi</td>
+            <td>@kisim.KisimAdi</td>
+            <td>@kisim.Aciklama</td>
+            <td>@kisim.DahiliTelefon</td>
+            <td class="text-center"><i class="fas fa-user mr-1 text-secondary"></i>@kisim.PersonelSayisi</td>
+            <td class="text-center">
+                <div class="d-flex align-items-center justify-content-center">
+                    @Html.Raw(IconHelper.GetStatusNameIcon(kisim.DurumAdi))
+                    <span class="badge badge-lg @BadgeHelper.GetBadgeClass(kisim.DurumId)"> @kisim.DurumAdi</span>
+                </div>
+            </td>
+            <td class="text-center">
+                <div class="d-flex align-items-center justify-content-center">
+                    @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-showinfo", "", IconHelper.GetInfoIcon(), "Göster", "showInfoKisim", kisim.KisimID.ToString()))
+                    @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-edit", "", IconHelper.GetEditIcon(), "Düzenle", "editKisim", kisim.KisimID.ToString()))
+                    @Html.Raw(IconHelper.CreateLink("btn btn-icon btn-delete", "", IconHelper.GetDeleteIcon(), "Sil", "deleteKisim", kisim.KisimID.ToString()))
+                </div>
+            </td>
+        </tr>
+    }
+</tbody>

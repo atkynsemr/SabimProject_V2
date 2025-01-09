@@ -8,9 +8,12 @@ namespace Sabim.Services.AutoMapperProfiles
     {
         public KabinetBazliBolumProfile()
         {
-            CreateMap<KabinetBazliBolum, ResultKabinetBazliBolumWithKisimCount>()
+            CreateMap<KabinetBazliBolum , CreateKabinetBazliBolumDto>().ReverseMap();
+            CreateMap<KabinetBazliBolum, UpdateKabinetBazliBolumDto>().ReverseMap();
+            CreateMap<KabinetBazliBolum, ResultKabinetBazliBolumDto>().ReverseMap();
+            CreateMap<KabinetBazliBolum, ResultKabinetBazliBolumWithKisimCountDto>()
               .ForMember(dest => dest.DurumAdi, opt => opt.MapFrom(src => src.Durum.DurumAdi))
-              .ForMember(dest => dest.KisimSayisi, opt => opt.MapFrom(src => src.Kisims.Count))
+              .ForMember(dest => dest.KisimSayisi, opt => opt.MapFrom(src =>(ushort) src.Kisims.Count))
               .ReverseMap();
         }
     }
