@@ -15,7 +15,6 @@ namespace Sabim.Web.Areas.Admin.ViewComponents.SehirViewComponents
         public async Task<IViewComponentResult> InvokeAsync(int? selectedSehirId = null)
         {
             var sehirler = await _manager.SehirService.TFindAllAsync(false);
-
             // Alfabetik sıralama
             var sehirDtoList = sehirler
                 .OrderBy(s => s.SehirAdi)
@@ -26,7 +25,6 @@ namespace Sabim.Web.Areas.Admin.ViewComponents.SehirViewComponents
                     Selected = selectedSehirId.HasValue && selectedSehirId.Value == s.SehirID
                 })
                 .ToList();
-
             return View(sehirDtoList);
         }
     }

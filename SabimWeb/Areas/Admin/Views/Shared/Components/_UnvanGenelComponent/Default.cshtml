@@ -1,0 +1,19 @@
+﻿@using Sabim.Domain.DTOs.UnvanDtos
+@model List<ResultUnvanDto>
+
+<div class="form-group">
+    <label for="UnvanAdi">Unvanlar</label>
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fa fa-graduation-cap"></i></span>
+        </div>
+        <select class="form-control" id="unvanlar" name="UnvanID">
+            @foreach (var unvan in Model)
+            {
+                <option value="@unvan.UnvanID" data-oncelik="@unvan.OncelikSirasi" selected="@unvan.Selected">@unvan.UnvanAdi</option>
+            }
+        </select>
+    </div>
+</div>
+
+

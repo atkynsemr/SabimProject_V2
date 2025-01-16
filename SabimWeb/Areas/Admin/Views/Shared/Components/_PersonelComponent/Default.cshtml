@@ -1,0 +1,37 @@
+﻿@using Sabim.Domain.DTOs.PersonelDtos
+@model List<ResultPersonelDto>
+
+<tbody class="text-heading">
+    @foreach (var personel in Model)
+    {
+        <tr>
+            <td>@personel.OncelikSirasi</td>
+            <td>@personel.AdSoyad</td>
+            <td class="text-center">@personel.SicilNumarasi</td>
+            <td>@personel.KimlikNo</td>
+            <td>@personel.UnvanAdi</td>
+            <td>@personel.DereceKademe</td>
+            <td>@personel.DogumYeriYili</td>
+            <td>@personel.CinsiyetAdi</td>
+            <td>@personel.KanGrubuAdi</td>
+            <td>@personel.CepTelefonu</td>
+            <td>@personel.KurumAdi</td>
+            <td>@personel.KadroTuruAdi</td>
+            <td>@personel.CalismaDurumAdi</td>
+            <td>@personel.GorevlendirilmeTuruAdi</td>
+            <td class="text-center">
+                <div class="d-flex align-items-center justify-content-center">
+                    @Html.Raw(IconHelper.GetStatusNameIcon(personel.DurumAdi))
+                    <span class="badge badge-lg @BadgeHelper.GetBadgeClass(personel.DurumId)"> @personel.DurumAdi</span>
+                </div>
+            </td>
+            <td class="text-center">
+                <div class="d-flex align-items-center justify-content-center">
+                    @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-showinfo", "", IconHelper.GetInfoIcon(), "Göster", "showInfoPersonel", personel.PersonelID.ToString()))
+                    @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-edit", "", IconHelper.GetEditIcon(), "Düzenle", "editPersonel", personel.PersonelID.ToString()))
+                    @Html.Raw(IconHelper.CreateLink("btn btn-icon btn-delete", "", IconHelper.GetDeleteIcon(), "Sil", "deletePersonel", personel.PersonelID.ToString()))
+                </div>
+            </td>
+        </tr>
+    }
+</tbody>

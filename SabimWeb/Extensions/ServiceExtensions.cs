@@ -138,16 +138,18 @@ namespace Sabim.Web.Extensions
             {
                 options.LoginPath = new PathString("/Account/Login");
                 options.Cookie.Name = "SabimWEBCookie";
-                options.SlidingExpiration = true; 
                 options.Cookie.HttpOnly = true;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.None;
                 options.Cookie.SameSite = SameSiteMode.Lax;
-                options.ExpireTimeSpan = TimeSpan.FromDays(2);
+                options.SlidingExpiration = true;
+
+                // Kullanıcı "Beni Hatırla" seçmemişse varsayılan süre 4 saat
+                options.ExpireTimeSpan = TimeSpan.FromHours(4);
             });
             services.ConfigureApplicationCookie(options =>
             {
                 options.AccessDeniedPath = new PathString("/Error/403");
-                options.ExpireTimeSpan = TimeSpan.FromDays(2);
+                options.ExpireTimeSpan = TimeSpan.FromDays(2); // Beni Hatırla durumu için maksimum süre
             });
         }
         public static void ConfigureSession(this IServiceCollection services)

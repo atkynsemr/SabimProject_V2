@@ -1,0 +1,17 @@
+﻿@using Sabim.Domain.DTOs.CinsiyetDtos
+@model List<ResultCinsiyetDto>
+
+<div class="form-group">
+    <label for="CinsiyetAdi">Cinsiyetler</label>
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fas fa-restroom"></i></span>
+        </div>
+        <select class="form-control" id="cinsiyetler" name="CinsiyetID">
+            @foreach (var cinsiyet in Model)
+            {
+                <option value="@cinsiyet.CinsiyetID" selected="@cinsiyet.Selected">@cinsiyet.CinsiyetAdi</option>
+            }
+        </select>
+    </div>
+</div>

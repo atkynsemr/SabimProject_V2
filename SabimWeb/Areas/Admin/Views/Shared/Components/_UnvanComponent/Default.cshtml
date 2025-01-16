@@ -1,0 +1,25 @@
+﻿@using Sabim.Domain.DTOs.UnvanDtos
+@model List<ResultUnvanWithPersonelCountDto>
+<tbody class="text-heading">
+    @foreach (var unvan in Model)
+    {
+        <tr>
+            <td>@unvan.UnvanAdi</td>
+            <td class="text-center">@unvan.OncelikSirasi</td>
+            <td class="text-center"><i class="fas fa-user mr-1 text-secondary"></i>@unvan.PersonelSayisi</td>
+            <td class="text-center">
+                <div class="d-flex align-items-center justify-content-center">
+                    @Html.Raw(IconHelper.GetStatusNameIcon(unvan.DurumAdi))
+                    <span class="badge badge-lg @BadgeHelper.GetBadgeClass(unvan.DurumId)"> @unvan.DurumAdi</span>
+                </div>
+            </td>
+            <td class="text-center">
+                <div class="d-flex align-items-center justify-content-center">
+                    @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-showinfo", "", IconHelper.GetInfoIcon(), "Göster", "showInfoUnvan", unvan.UnvanID.ToString()))
+                    @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-edit", "", IconHelper.GetEditIcon(), "Düzenle", "editUnvan", unvan.UnvanID.ToString()))
+                    @Html.Raw(IconHelper.CreateLink("btn btn-icon btn-delete", "", IconHelper.GetDeleteIcon(), "Sil", "deleteUnvan", unvan.UnvanID.ToString()))
+                </div>
+            </td>
+        </tr>
+    }
+</tbody>

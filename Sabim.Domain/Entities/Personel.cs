@@ -17,6 +17,7 @@
         public DateTime? BuradaGoreveBaslamaTarihi { get; set; }
         public string? KimlikNo { get; set; } = String.Empty;
         public DateTime? BuradanAyrilmaTarihi { get; set; }
+        public DateTime? BirinciSinifaAyrilmaTarihi { get; set; }
         public string? AracPlakasi { get; set; } = String.Empty;
         public short UnvanId { get; set; }
         public short GorevlendirilmeTuruId { get; set; }
@@ -31,7 +32,7 @@
         public Kurum Kurum {  get; set; }
         public KadroTuru KadroTuru {  get; set; }
         public CalismaDurumu CalismaDurumu {  get; set; }
-        public virtual AppUser AppUser { get; set; }
-        public virtual ICollection<PersonelGorevlendirilme> PersonelGorevlendirilmes { get; set; } = new List<PersonelGorevlendirilme>();
+        public AppUser AppUser { get; set; }
+        public ICollection<PersonelGorevlendirilme> PersonelGorevlendirilmes { get; set; } = new List<PersonelGorevlendirilme>();
     }
 }

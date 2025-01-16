@@ -15,6 +15,7 @@ namespace Sabim.Services.AutoMapperProfiles
                 .ForMember(dest => dest.BirimAdi, opt => opt.MapFrom(src => src.Birim.BirimAdi))
                 .ForMember(dest => dest.DurumAdi, opt => opt.MapFrom(src => src.Durum.DurumAdi))
                 .ForMember(dest => dest.PersonelSayisi, opt => opt.MapFrom(src => (ushort)src.PersonelGorevlendirilmes.Count))
+                .ForMember(dest => dest.KabinetBazliBolumAdi, opt => opt.MapFrom(src => src.KabinetBazliBolum.KabinetBazliBolumAdi))
                 .ReverseMap();
         }
     }

@@ -6,5 +6,6 @@ namespace Sabim.Infrastructure.Persistence.Repository.Contracts
     public interface IUnvanRepository :IRepositoryBase<Unvan>
     {
         Task<List<ResultUnvanWithPersonelCountDto>> GetAllUnvanWithPersonelCountAsync(bool trackChanges);
+        Task<string> ChangeOncelikSirasi(byte oncelikSirasi, short? UnvanID);
     }
 }

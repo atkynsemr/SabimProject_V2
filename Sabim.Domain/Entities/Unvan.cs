@@ -6,6 +6,6 @@
         public string UnvanAdi { get; set; }
         public byte OncelikSirasi { get; set; }
         //Navigation property
-        public virtual ICollection<Personel> Personels { get; set; } = new List<Personel>();
+        public ICollection<Personel> Personels { get; set; } = new List<Personel>();
     }
 }

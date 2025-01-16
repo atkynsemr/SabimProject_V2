@@ -14,6 +14,11 @@ namespace Sabim.Services.Implementations
             _repositoryManager = repositoryManager;
         }
 
+        public Task<string> TChangeOncelikSirasi(byte oncelikSirasi, short? UnvanID)
+        {
+            return _repositoryManager.Unvan.ChangeOncelikSirasi(oncelikSirasi, UnvanID);            
+        }
+
         public async Task<List<ResultUnvanWithPersonelCountDto>> TGetAllUnvanWithPersonelCountAsync(bool trackChanges)
         {
            var unvans= await _repositoryManager.Unvan.GetAllUnvanWithPersonelCountAsync(trackChanges);

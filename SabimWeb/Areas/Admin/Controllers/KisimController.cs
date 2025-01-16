@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sabim.Domain.Constants;
+using Sabim.Domain.DTOs.BirimDtos;
 using Sabim.Domain.DTOs.KisimDtos;
 using Sabim.Domain.Entities;
 using Sabim.Services.Contracts;
@@ -57,6 +58,59 @@ namespace Sabim.Web.Areas.Admin.Controllers
             }
         }
         [HttpGet]
+        public async Task<IActionResult> GetKisimById([FromRoute] int id)
+        {
+            try
+            {
+                var kisim = await _manager.KisimService.TGetByIdAsync(id, false);
+                if (kisim == null)
+                {
+                    return Json(new { success = false });
+                }
+                return Json(new { success = true, data = kisim });
+            }
+            catch (Exception ex)
+            {
+                var username = User.Identity.IsAuthenticated ? User.Identity.Name : "Unknown User";
+                _manager.LoggerService.LogError($"Area:Admin - Controller:Kisim - Action: GetKisimById - User: {username} - Hata: {ex.Message}");
+                return Json(new { success = false });
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> GuncelleKisim([FromForm] UpdateKisimDto updateKisimDto)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            if (!ModelState.IsValid)
+            {
+                var errors = ValidationHelper.GetModelErrors(ModelState);
+                return Json(new { success = false, errors });
+            }
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var mevcutKisim = await _manager.KisimService.TGetByIdAsync(updateKisimDto.KisimID, false);
+            if (mevcutKisim == null)
+            {
+                return Json(new { success = false, message = "Kayıt Bulunamadı!" });
+            }
+            _mapper.Map(updateKisimDto, mevcutKisim);
+            mevcutKisim.GuncelleyenPersonelId = Convert.ToInt16(userId);
+            mevcutKisim.GuncellenmeTarihi = DateTime.Now;
+            var status = await _manager.KisimService.TUpdateAsync(mevcutKisim);
+            switch (status)
+            {
+                case OperationStatus.Success:
+                    return Json(new { success = true, message = "Kısım başarılı bir şekilde güncellendi." });
+                case OperationStatus.GlobalError:
+                default:
+                    var username = User.Identity.IsAuthenticated ? User.Identity.Name : "Unknown User";
+                    _manager.LoggerService.LogError($"Area:Admin - Controller:Kisim - Action: GuncelleKisim - User: {username} - Hata: Kısım  ID : {updateKisimDto.KisimID} Güncellenemedi!");
+                    return Json(new { success = false, message = "Güncelleme işlemi sırasında bir hata oluştu. Lütfen tekrar deneyin." });
+            }
+        }
+        [HttpGet]
         public async Task<IActionResult> GetirSafahatBilgi([FromRoute] int id)
         {
             try
@@ -73,6 +127,26 @@ namespace Sabim.Web.Areas.Admin.Controllers
                 var username = User.Identity.IsAuthenticated ? User.Identity.Name : "Unknown User";
                 _manager.LoggerService.LogError($"Area:Admin - Controller:Kisim - Action: GetirSafahatBilgi - User: {username} - Hata: {ex.Message}");
                 return Json(new { success = false });
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SilKisim(short KisimID)
+        {
+            var status = _manager.KisimService.TDeleteAsync(KisimID).Result;
+            switch (status)
+            {
+                case OperationStatus.Success:
+                    return Json(new { success = true, message = "Kısım başarılı bir şekilde silindi." });
+                case OperationStatus.NotFound:
+                    return Json(new { success = false, message = "Kayıt bulunamadığı için silme işlemi gerçekleştirilemez!" });
+                case OperationStatus.ForeignKeyConflict:
+                    return Json(new { success = false, message = "Bu kısım başka bir tabloda kullanıldığı için silinemez!" });
+                case OperationStatus.GlobalError:
+                default:
+                    var username = User.Identity.IsAuthenticated ? User.Identity.Name : "Unknown User";
+                    _manager.LoggerService.LogError($"Area:Admin - Controller:Kisim - Action: SilKisim - User: {username} - Hata: Kısım ID : {KisimID} Silinemedi!");
+                    return Json(new { success = false, message = "Silme işlemi sırasında bir hata oluştu. Lütfen tekrar deneyin." });
             }
         }
     }

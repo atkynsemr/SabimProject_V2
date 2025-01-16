@@ -2,7 +2,7 @@
 
 namespace Sabim.Web.ViewModels
 {
-    public class KisimViewModal
+    public class KisimViewModel
     {
         public CreateKisimDto YeniKisim { get; set; }
         public UpdateKisimDto GuncelleKisim { get; set; }

@@ -8,6 +8,8 @@ namespace Sabim.Services.AutoMapperProfiles
     {
         public UnvanProfile()
         {
+            CreateMap<Unvan, CreateUnvanDto>().ReverseMap();
+            CreateMap<Unvan, UpdateUnvanDto>().ReverseMap();
             CreateMap<Unvan, ResultUnvanDto>().ReverseMap();
             CreateMap<Unvan, ResultUnvanWithPersonelCountDto>()
                 .ForMember(dest => dest.PersonelSayisi, opt => opt.MapFrom(src => (ushort)src.Personels.Count))

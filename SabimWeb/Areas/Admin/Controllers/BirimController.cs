@@ -62,12 +62,12 @@ namespace Sabim.Web.Areas.Admin.Controllers
         {
             try
             {
-                var Birim = await _manager.BirimService.TGetByIdAsync(id, false);
-                if (Birim == null)
+                var birim = await _manager.BirimService.TGetByIdAsync(id, false);
+                if (birim == null)
                 {
                     return Json(new { success = false });
                 }
-                return Json(new { success = true, data = Birim });
+                return Json(new { success = true, data = birim });
             }
             catch (Exception ex)
             {
@@ -149,5 +149,6 @@ namespace Sabim.Web.Areas.Admin.Controllers
                     return Json(new { success = false, message = "Silme işlemi sırasında bir hata oluştu. Lütfen tekrar deneyin." });
             }
         }
+    
     }
 }

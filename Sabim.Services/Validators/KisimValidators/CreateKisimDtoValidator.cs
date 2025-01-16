@@ -8,7 +8,6 @@ namespace Sabim.Services.Validators.KisimValidators
     public class CreateKisimDtoValidator : AbstractValidator<CreateKisimDto>
     {
         private readonly IServiceManager _manager;
-
         public CreateKisimDtoValidator(IServiceManager manager)
         {
             _manager = manager;

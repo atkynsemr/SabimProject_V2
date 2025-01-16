@@ -1,60 +1,215 @@
-﻿@{
+﻿@model Sabim.Web.ViewModels.UnvanViewModel
+@{
     ViewData["Title"] = "Tanımlamalar / Ünvan";
 }
 @section StyleCss {
     <link rel="stylesheet" href="/AdminTemplate/plugins/bootstrap/css/bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.3/css/responsive.bootstrap4.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.1.2/css/buttons.bootstrap4.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/searchpanes/2.3.3/css/searchPanes.bootstrap4.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/select/2.1.0/css/select.bootstrap4.css">    
+    <link rel="stylesheet" href="https://cdn.datatables.net/select/2.1.0/css/select.bootstrap4.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/colreorder/2.0.4/css/colReorder.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/4.0.1/css/fixedHeader.bootstrap4.css">
     <link rel="stylesheet" href="/AdminTemplate/dist/css/CustomCss.css">
-
 }
+<!-- Ünvan Safahat Modal Başlangıç-->
+<div class="modal fade" id="auditTrailModal" tabindex="-1" role="dialog" aria-labelledby="auditTrailModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-secondary">
+                <h5 class="modal-title" id="auditTrailModalLabel">Safahat Bilgileri</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!--Veriler Yüklenecek-->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ./Ünvan Safahat Modal Başlangıç-->
+<!-- Ünvan Ekleme Modal Başlangıç-->
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="overlay" style="display: none;">
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                    <div class="spinner-border text-light" role="status">
+                        <span class="sr-only">Lütfen Bekleyiniz...</span>
+                    </div>
+                    <div>
+                        <span class="text-center text-white">Lütfen Bekleyiniz...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-header primary">
+                <h5 class="modal-title" id="createModalLabel">Ünvan Ekle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Form Başlangıcı -->
+                <form id="UnvanEkleForm">
+                    @Html.AntiForgeryToken()
+                    <div class="form-group">
+                        <label for="UnvanAdi">Ünvan Adı</label>
+                        <input type="text" class="form-control capitalize-input" id="UnvanAdi" name="UnvanAdi" asp-for="YeniUnvan.UnvanAdi" placeholder="Ünvan Adı Giriniz" maxlength="60" required />
+                        <span asp-validation-for="YeniUnvan.UnvanAdi" name="UnvanAdi" class="text-danger"></span>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label for="">Öncelik Sırası</label>
+                                <select class="custom-select form-control-border border-width-2" name="OncelikDurumu" id="OncelikDurumu" asp-for="YeniUnvan.OncelikDurumu">
+                                    <option value="0">Öncelikli</option>
+                                    <option value="1">Denk</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-9" id="unvanEkleComponent">
+                            @await Component.InvokeAsync("_UnvanGenelComponent")
+                        </div>
+                    </div>
+                    <input type="hidden" id="DurumId" name="DurumId" asp-for="YeniUnvan.DurumId" value="1" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" id="KaydetUnvanButton">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ./Ünvan Ekleme Modal Bitiş-->
+<!-- Ünvan Düzenleme Modal Başlangıç-->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="overlay">
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                    <div class="spinner-border text-light" role="status">
+                        <span class="sr-only">Lütfen Bekleyiniz...</span>
+                    </div>
+                    <div>
+                        <span class="text-center text-white">Lütfen Bekleyiniz...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-header warning">
+                <h5 class="modal-title" id="editModalLabel">Ünvan Düzenle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Form Başlangıcı -->
+                <form id="UnvanGuncelleForm">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="UnvanID" id="UnvanID" asp-for="GuncelleUnvan.UnvanID" />
+                    <div class="form-group">
+                        <label for="UnvanAdi">Unvan Adı</label>
+                        <input type="text" class="form-control capitalize-input" id="unvanAdi" name="UnvanAdi" asp-for="GuncelleUnvan.UnvanAdi" placeholder="Ünvan Adı Giriniz" maxlength="60" required />
+                        <span asp-validation-for="GuncelleUnvan.UnvanAdi" name="UnvanAdi" class="text-danger"></span>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label for="">Öncelik Sırası</label>
+                                <select class="custom-select form-control-border border-width-2" name="OncelikDurumu" id="OncelikDurumu" asp-for="GuncelleUnvan.OncelikDurumu">
+                                    <option value="0">Öncelikli</option>
+                                    <option value="1">Denk</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-9" id="unvanGuncelleComponent">
+                            @await Component.InvokeAsync("_UnvanGenelComponent")
+                        </div>
+                    </div>
+                    @await Component.InvokeAsync("_DurumListesiGenelComponent")
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-warning" id="GuncelleUnvanButton">Güncelle</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ./Ünvan Düzenleme Modal Bitiş-->
+<!-- Ünvan Silme Modal Başlangıç-->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="deleteModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="overlay" style="display: none;">
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                    <div class="spinner-border text-light" role="status">
+                        <span class="sr-only">Lütfen Bekleyiniz...</span>
+                    </div>
+                    <div>
+                        <span class="text-center text-white">Lütfen Bekleyiniz...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-header danger">
+                <h5 class="modal-title" id="deleteModalLabel">Ünvan Sil</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Form Başlangıcı -->
+                <form id="UnvanSilForm">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="UnvanID" id="UnvanID" />
+                    <p id="UnvanAdiLabel">Unvan Adı: <strong id="unvanAdi"></strong> silinecektir. Onaylıyor musunuz?</p>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-danger" id="SilUnvanButton">Sil</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ./Ünvan Silme Modal Başlangıç-->
+
 <div class="card">
     <div class="card-header text-right">
-        <button type="button" class="btn btn-outline-primary btn-flat my-2"><i class="fa fa-plus-circle mr-1"></i> Yeni Ünvan</button>
+        @Html.Raw(IconHelper.CreateButton("btn btn-outline-primary btn-flat my-2", "Yeni Ünvan", IconHelper.GetAddIcon(), "Yeni Ünvan Ekle", "createModal"))
     </div>
     <div class="card-body mt-2">
-        <table id="example" class="table table-bordered table-hover display text-center mt-3" style="width:100%">
-            <thead>
-                <tr>
-                    <th>Ünvan Adı</th>
-                    <th class="text-center">Öncelik Sırası</th>
-                    <th class="text-center">Ünvana Sahip Personel Sayısı</th>
-                    <th>Durum</th>
-                    <th>İşlemler</th>
-                </tr>
-            </thead>
-            <tbody class="text-heading">
-                @foreach (ResultUnvanWithPersonelCountDto unvan in Model)
-                {
+        <div id="UnvanTablosu">
+            <table id="example" class="table table-bordered table-hover display text-center mt-3" style="width:100%">
+                <thead>
                     <tr>
-                        <td>@unvan.UnvanAdi</td>
-                        <td class="text-center">@unvan.OncelikSirasi</td>
-                        <td class="text-center"><i class="fas fa-user mr-1 text-secondary"></i>@unvan.PersonelSayisi</td>
-                        <td><span class="badge badge-lg @BadgeHelper.GetBadgeClass(unvan.DurumId)"> @unvan.DurumAdi</span></td>
-                        <td>
-                            <a href="#" class="btn btn-icon"><i class="fas fa-edit text-primary" title="Ünvan Düzenle" aria-hidden="true"></i></a>
-                            <a href="#" class="btn btn-icon"><i class="far fa-trash-alt text-danger" title="Ünvan Sil" aria-hidden="true"></i></a>
-                        </td>
+                        <th>Ünvan Adı</th>
+                        <th class="text-center">Öncelik Sırası</th>
+                        <th class="text-center">Ünvana Sahip Personel Sayısı</th>
+                        <th>Durum</th>
+                        <th>İşlemler</th>
                     </tr>
-                }
-            </tbody>
-            <tfoot>
-                <tr>
-                    <th>Ünvan Adı</th>
-                    <th class="text-center">Öncelik Sırası</th>
-                    <th class="text-center">Ünvana Sahip Personel Sayısı</th>
-                    <th>Durum</th>
-                    <th>İşlemler</th>
-                </tr>
-            </tfoot>
-        </table>
+                </thead>
+                @await Component.InvokeAsync("_UnvanComponent")
+                <tfoot>
+                    <tr>
+                        <th>Ünvan Adı</th>
+                        <th class="text-center">Öncelik Sırası</th>
+                        <th class="text-center">Ünvana Sahip Personel Sayısı</th>
+                        <th>Durum</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
     </div>
 </div>
 @section Scripts {
-
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap4.js"></script>
     <script src="https://cdn.datatables.net/buttons/3.1.2/js/dataTables.buttons.js"></script>
@@ -63,6 +218,7 @@
     <script src="https://cdn.datatables.net/searchpanes/2.3.3/js/searchPanes.bootstrap4.js"></script>
     <script src="https://cdn.datatables.net/select/2.1.0/js/dataTables.select.js"></script>
     <script src="https://cdn.datatables.net/select/2.1.0/js/select.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/select/2.1.0/js/select.dataTables.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
@@ -71,16 +227,93 @@
     <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.colVis.min.js"></script>
     <script src="https://cdn.datatables.net/colreorder/2.0.4/js/dataTables.colReorder.js"></script>
     <script src="https://cdn.datatables.net/colreorder/2.0.4/js/colReorder.bootstrap4.js"></script>
-
+    <script src="https://cdn.datatables.net/responsive/3.0.3/js/dataTables.responsive.js"></script>
+    <script src="https://cdn.datatables.net/responsive/3.0.3/js/responsive.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/fixedheader/4.0.1/js/dataTables.fixedHeader.js"></script>
+    <script src="https://cdn.datatables.net/fixedheader/4.0.1/js/fixedHeader.bootstrap4.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.8/dist/sweetalert2.all.min.js"></script>
+    <!-- Toastr -->
+    <script src="/AdminTemplate/dist/js/toastr.min.js"></script>
+    <!-- Custom Toastr JS-->
+    <script src="/AdminTemplate/dist/js/customize/ToastCustom.js"></script>
+    <!-- Custom Capitalize JS-->
+    <script src="/AdminTemplate/dist/js/customize/CapitalizeCustom.js"></script>
+    <!-- Custom SwalAert JS-->
+    <script src="/AdminTemplate/dist/js/customize/SwalAlertCustom.js"></script>
     <script>
         $(document).ready(function () {
+            initDataTable();
+            //Kayıt İşlemi
+            $('#KaydetUnvanButton').click(saveUnvan);
+            $(".modal").on("hidden.bs.modal", function () {
+                $('.modal').each(function () {
+                    let modal = $(this);
+                    let form = modal.find('form');
+                    // Eğer form varsa, formu sıfırla
+                    if (form.length) {
+                        form[0].reset();
+                    }
+                    // Hata mesajlarını temizle
+                    modal.find('span.text-danger').text('');
+                });
+                // Overlay (arka plan) elemanını gizle
+                $('.overlay').hide();
+            });
+            $('[data-widget="pushmenu"]').on('click', function () {
+                setTimeout(function () {
+                    var table = $('#example').DataTable();
+                    table.columns.adjust().draw(); // Sütunları yeniden boyutlandır ve yeniden çiz
+                }, 300); // Animasyon tamamlandıktan sonra
+            });
+            $(document).one('click', '.btn-edit', function (event) {
+                event.preventDefault(); // Tekrar tetiklenmesini engelle
+                let id = $(this).data('id');
+                if (id) {
+                    editUnvan(id);
+                }
+            });
+            $(document).on('click', '.btn-delete', function(event) {
+                event.preventDefault(); // Sayfanın yeniden yüklenmesini engelle
+                let UnvanID = $(this).data('id'); // Silinecek şehirin ID'sini al
+                $.ajax({
+                    url: `/Admin/Unvan/GetUnvanById/${UnvanID}`,
+                    type: 'GET',
+                    success: function(response) {
+                        if (response.success) {
+                            const UnvanData = response.data;
+                            $('#deleteModal #UnvanID').val(UnvanData.unvanID);
+                            $('#deleteModal #unvanAdi').text(UnvanData.unvanAdi);
+                            $('#deleteModal').modal('show'); // Modalı aç
+                        } else {
+                            showToast('Silinecek veri bulunamadı.', 'Hata!', 'topRight', 3500, 'bg-danger', true);
+                        }
+                    },
+                    error: function() {
+                        showToast('Silme işlemi için veri getirilemedi. Lütfen tekrar deneyiniz.', 'Hata!', 'topRight', 3500, 'bg-danger', true);
+                    }
+                });
+            });
+            $(document).on('click', '.btn-showinfo', function (event) {
+                event.preventDefault(); // Sayfanın yeniden yüklenmesini engelle
+                let id = $(this).data('id');
+                if (id) {
+                    showInfoUnvan(id);
+                }
+            });
+            // Düzenle Kaydet Butonu
+            $('#GuncelleUnvanButton').click(saveUpdatedUnvan);
+            // Sil Modal'ı
+            $('#SilUnvanButton').click(deleteUnvan);
+        });
+        function initDataTable() {
             $('#example').DataTable({
+                "fixedHeader": true,
                 "responsive": true,
                 "lengthChange": false,
                 "autoWidth": false,
                 "lengthChange": true,
                 "pageLength": 25,
-                "order": [[1, 'asc']],
+                "order": [1, 'asc'],
                 "language": {
                     "searchPanes": {
                         "emptyPanes": 'Filtreleme Paneli Bulunamadı',
@@ -110,74 +343,124 @@
                 },
                 colReorder: true,
                 layout: {
-                    topStart: 
+                    topStart:
                     {
-                        buttons: 
-                        [
+                        buttons:
+                            [
                                 {
                                     extend: 'searchPanes',
                                     text: '<i class="fa fa-filter mr-1"></i>Filtreleme Paneli',
                                     config: {
-                                        cascadePanes: true ,
+                                        cascadePanes: true,
                                         layout: 'columns-2',
                                         orderable: false,
                                         initCollapsed: true
                                     }
                                 },
+                                {
+                                    extend: 'collection',
+                                    text: '<i class="fas fa-upload mr-1"></i> Aktar',
+                                    buttons:
+                                        [
+                                            {
+                                                extend: 'excel',
+                                                text: '<i class="fas fa-file-excel mr-1"></i> Excel',
+                                                exportOptions: {
+                                                    columns: function (idx, data, node) {
+                                                        var table = $(node).closest('table').DataTable();
+                                                        var columnHeader = $(node).closest('table').find('thead th').eq(idx).text().trim();
 
+                                                        var excludedColumns = ['İşlemler']; // Dışarıda bırakmak istediğiniz sütun adları
 
-                            {
-                                extend: 'collection',
-                                text: '<i class="fas fa-upload mr-1"></i> Aktar',
-                                buttons: 
-                                [
-                                    {
-                                        extend: 'excel',
-                                        text: '<i class="fas fa-file-excel mr-1"></i> Excel',
-                                        exportOptions: {
-                                            columns: ':visible:not(:eq(4))'
-                                        }
-                                    },
-                                    {
-                                        extend: 'pdf',
-                                        text: '<i class="fas fa-file-pdf mr-1"></i> PDF',
-                                        exportOptions: {
-                                            columns: ':visible:not(:eq(4))'
-                                        },
-                                        customize: function (doc) {
-                                            // Tablonun başlıklarını ve içeriğini ortala
-                                            doc.styles.tableHeader.alignment = 'center';
-                                            doc.content[1].table.body.forEach(function (row) {
-                                                row.forEach(function (cell) {
-                                                    cell.alignment = 'center';
-                                                });
-                                            });
+                                                        if (excludedColumns.includes(columnHeader)) {
+                                                            return false;
+                                                        }
+                                                        return $(node).is(':visible');
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                extend: 'pdf',
+                                                text: '<i class="fas fa-file-pdf mr-1"></i> PDF',
+                                                exportOptions: {
+                                                    columns: function (idx, data, node) {
+                                                        var table = $(node).closest('table').DataTable();
+                                                        var columnHeader = $(node).closest('table').find('thead th').eq(idx).text().trim();
+
+                                                        var excludedColumns = ['İşlemler']; // Dışarıda bırakmak istediğiniz sütun adları
+
+                                                        if (excludedColumns.includes(columnHeader)) {
+                                                            return false;
+                                                        }
+                                                        return $(node).is(':visible');
+                                                    }
+                                                },
+                                                customize: function (doc) {
+                                                    // Tablonun başlıklarını ve içeriğini ortala
+                                                    doc.styles.tableHeader.alignment = 'center';
+                                                    doc.content[1].table.body.forEach(function (row) {
+                                                        row.forEach(function (cell) {
+                                                            cell.alignment = 'center';
+                                                        });
+                                                    });
                                                     doc.content[1].table.widths = new Array(doc.content[1].table.body[0].length).fill('*');
-                                        }
-                                    },
-                                    {
-                                        extend: 'print',
-                                        text: '<i class="fas fa-print mr-1"></i> Yazdır',
-                                        exportOptions: {
-                                            columns: ':visible:not(:eq(4))'
-                                        }
-                                    }
-                                ]
-                            },
+                                                }
+                                            },
+                                            {
+                                                extend: 'print',
+                                                text: '<i class="fas fa-print mr-1"></i> Yazdır',
+                                                exportOptions: {
+                                                    columns: function (idx, data, node) {
+                                                        var table = $(node).closest('table').DataTable();
+                                                        var columnHeader = $(node).closest('table').find('thead th').eq(idx).text().trim();
+
+                                                        var excludedColumns = ['İşlemler']; // Dışarıda bırakmak istediğiniz sütun adları
+
+                                                        if (excludedColumns.includes(columnHeader)) {
+                                                            return false;
+                                                        }
+                                                        return $(node).is(':visible');
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                },
                                 {
                                     extend: 'colvis',
                                     columns: function (idx, data, node) {
-                                        return [0].indexOf(idx) === -1;
+                                        var table = $(node).closest('table').DataTable();
+                                        var columnHeader = table.column(idx).header();
+
+                                        // Header varsa, innerText'e ulaş
+                                        if (columnHeader) {
+                                            var columnHeaderText = columnHeader.textContent.trim(); // innerText yerine textContent kullanabilirsiniz
+                                            // Hariç tutulacak sütun adları
+                                            var excludedHeaders = ['Ünvan Adı'];
+
+                                            // Eğer sütun gizliyse ya da sütun adı hariç tutulanlar arasında değilse, devam et
+                                            return table.column(idx).visible() && !excludedHeaders.includes(columnHeaderText);
+                                        } else {
+                                            // Eğer header bulunamazsa, false döndür
+                                            return false;
+                                        }
                                     },
                                     text: '<i class="fas fa-columns mr-1"></i> Sütun Görünürlüğü'
                                 }
-                        ]
+                            ]
                     }
                 },
                 columnDefs: [
                     {
                         searchPanes: {
-                            show: true
+                            show: true,
+                            dtOpts: {
+                                select: {
+                                    style: 'multi'
+                                },
+                                //paging: false,
+                                //pagingType: 'numbers',
+                                searching: true,
+                            }
                         },
                         targets: [0, 3]
                     },
@@ -189,7 +472,183 @@
                     }
                 ]
             });
-        });
+        }
+        function saveUnvan() {
+            $('#createModal span.text-danger').text('');
+            $('#createModal .overlay').show();
+            // Seçili olan option'un data-oncelik değerini al
+            var selectedOncelikSirasi = $('#unvanlar option:selected').data('oncelik');
+            // Form verilerini serialize et
+            var formData = $('#UnvanEkleForm').serializeArray(); // Serialize işlemini array olarak yap
+            // OncelikSirasi değerini forma ekle
+            formData.push({ name: 'OncelikSirasi', value: selectedOncelikSirasi });
+            $.ajax({
+                url: '/Admin/Unvan/EkleUnvan', // Hedef URL
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        $('#createModal').modal('hide');
+                        reloadTable();
+                        showToast(response.message, 'Bilgi Mesajı', 'topRight', 2500, 'bg-success', true);
+                    }
+                    else {
+                        // Hataları göster
+                        for (let key in response.errors) {
+                            $(`[name="${key}"]`).next('.text-danger').text(response.errors[key][0]);
+                        }
+                        $('.modal .overlay').hide();
+                    }
+                }
+            });
+        }
+        function editUnvan(id) {
+            // event.preventDefault();
+            $.ajax({
+                url: `/Admin/Unvan/GetUnvanById/${id}`,
+                type: 'GET',
+                success: function (response) {
+                    if (response.success) {
+                        const data = response.data;
+                        $('#editModal #UnvanID').val(data.unvanID);
+                        $('#editModal #unvanAdi').val(data.unvanAdi);
+                        // Durum listesindeki seçili durumu güncelle
+                        $('#editModal #durumlar option').each(function () {
+                            const optionValue = $(this).val();
+                            if (optionValue == data.durumId) {
+                                $(this).prop('selected', true);
+                            } else {
+                                $(this).prop('selected', false);
+                            }
+                        });
+                        $('#editModal #unvanlar option').each(function () {
+                            const optionValue = $(this).val();
+                            if (optionValue == data.unvanID) {
+                                $(this).prop('selected', true);
+                            } else {
+                                $(this).prop('selected', false);
+                            }
+                        });
+                        $("#editModal #OncelikDurumu option").eq(1).prop('selected', true);
+
+                        $('#editModal .overlay').hide();
+                        $('#editModal').modal('show');
+                    }
+                    else {
+                        showToast('Seçili olan kayıt gösterilemiyor! Lütfen sayfayı yenileyip tekrar deneyiniz.', 'Hata', 'topRight', 3500, 'bg-danger', true);
+                        $('.modal .overlay').hide();
+                    }
+                },
+                error: function () {
+                    showSwalAlert('Hata!', 'Beklenmeyen bir hata oluştu!', 'error', 3500, true, true);
+                }
+            });
+        }
+        function saveUpdatedUnvan() {
+            var selectedOncelikSirasi = $('#editModal #unvanlar option:selected').data('oncelik');
+            var seciliUnvanId = $('#editModal #unvanlar option:selected').val();
+            var formData = $('#UnvanGuncelleForm').serializeArray();
+            formData.push({ name: 'OncelikSirasi', value: selectedOncelikSirasi });
+            formData.push({ name: 'SeciliUnvanId', value: seciliUnvanId }); 
+            $.ajax({
+                url: '/Admin/Unvan/GuncelleUnvan',
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        $('#editModal').modal('hide'); // Modalı kapat
+                        reloadTable(); // Tabloyu yeniden yükle
+                        showToast(response.message, 'Bilgi Mesajı', 'topRight', 2500, 'bg-success', true);
+                    }
+                    else {
+                        // Hataları göster
+                        for (let key in response.errors) {
+                            $(`[name="${key}"]`).next('.text-danger').text(response.errors[key][0]);
+                        }
+                        $('.modal .overlay').hide();
+                    }
+                }
+            });
+        }
+        function deleteUnvan() {
+            $('#deleteModal .overlay').show();
+            var formData = $('#UnvanSilForm').serialize(); // Form verilerini al
+            $.ajax({
+                url: '/Admin/Unvan/SilUnvan', // Silme işlemi için endpoint
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    if (response.success) {
+                        $('#deleteModal').modal('hide'); // Modalı kapat
+                        reloadTable(); // Tabloyu yeniden yükle
+                        showToast(response.message, 'Bilgi Mesajı', 'topRight', 2500, 'bg-success', true);
+                    }
+                    else {
+                        $('#deleteModal').modal('hide');
+                        showToast(response.message, 'Hata Mesajı', 'topRight', 3500, 'bg-danger', true);
+                    }
+                },
+                error: function(xhr) {
+                    handleError(xhr); // Hata durumunu yönet
+                }
+            });
+        }
+        function showInfoUnvan(id) {
+            $.ajax({
+                url: `/Admin/Unvan/GetirSafahatBilgi/${id}`,
+                type: 'GET',
+                success: function (response) {
+                    $("#auditTrailModal").find(".modal-body").html(response);
+                    $('#auditTrailModal').modal('show');
+                },
+                error: function () {
+                    showToast('Safahat bilgileri getirilemedi. Lütfen tekrar deneyiniz.', 'Hata!', 'topRight', 3500, 'bg-danger', true);
+                }
+            });
+        }
+        function reloadComponent(componentSelector, url) {
+            $(componentSelector).load(url, function (response, status, xhr) {
+                if (status === "error") {
+                    setTimeout(function () {
+                        window.location.reload(); // Sayfayı yeniden yükle
+                    }, 1500);
+                }
+            });
+        }
+        function reloadTable() {
+            // Eski tabloyu kaldır
+            if ($.fn.DataTable.isDataTable('#example')) {
+                $('#example').DataTable().destroy();
+                $('#example').empty(); // DOM'u temizle
+            }
+            // Tabloyu yeniden yükle
+            $('#UnvanTablosu').load('/Admin/Unvan #UnvanTablosu', function (response, status, xhr) {
+                if (status === "success") {
+                    initDataTable(); // DataTable başlat
+                } else if (status === "error") {
+                    setTimeout(function () {
+                        window.location.reload(); // Sayfayı yeniden yükle
+                    }, 1500); // Toast mesajının bitişine göre zamanla
+                   // showToast("Tablo yüklenemedi. Lütfen sayfayı yenileyin.", "Hata", "topRight", 3500, "bg-danger", true);
+                }
+            });
+            // ViewComponent'leri yenile
+            reloadComponent("#createModal #unvanEkleComponent", '/Admin/Unvan/GetUnvanComponent');
+            reloadComponent("#editModal #unvanGuncelleComponent", '/Admin/Unvan/GetUnvanComponent');
+        }
+        function handleError(xhr) {
+            $('.modal .overlay').hide();
+            if (xhr.responseJSON && xhr.responseJSON.errors) {
+                for (let key in xhr.responseJSON.errors) {
+                    let errorElement = $(`[name='${key}']`).next('.text-danger');
+                    errorElement.text(xhr.responseJSON.errors[key][0]);
+                }
+            }
+            else {
+                $('.modal').modal('hide'); // Tüm açık modalları kapatır
+                showSwalAlert('Hata!', 'Beklenmeyen bir hata oluştu. Lütfen yaptığınız işlemi tekrar deneyiniz. Hatanın devam etmesi durumunda Bilgi İşlem Unvanine bildiriniz.', 'error', 6500, true, true);
+            }
+        }
     </script>
 
 }

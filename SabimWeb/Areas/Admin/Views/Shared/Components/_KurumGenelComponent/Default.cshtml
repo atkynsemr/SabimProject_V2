@@ -1,0 +1,17 @@
+﻿@using Sabim.Domain.DTOs.KurumDtos
+@model List<ResultKurumDto>
+
+<div class="form-group">
+    <label for="KurumAdi">Kurumlar</label>
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fa fa-building"></i></span>
+        </div>
+        <select class="form-control" id="kurumlar" name="KurumID">
+            @foreach (var kurum in Model)
+            {
+                <option value="@kurum.KurumID" selected="@kurum.Selected">@kurum.KurumAdi</option>
+            }
+        </select>
+    </div>
+</div>

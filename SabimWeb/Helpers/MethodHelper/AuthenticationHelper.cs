@@ -65,14 +65,16 @@ namespace Sabim.Web.Helpers.MethodHelper
             var authProperties = new AuthenticationProperties
             {
                 IsPersistent = rememberMe,
-                ExpiresUtc = rememberMe ? DateTimeOffset.UtcNow.AddDays(2) : (DateTimeOffset?)null
+                ExpiresUtc = rememberMe
+                        ? DateTimeOffset.UtcNow.AddDays(2)  // Beni Hatırla: 2 Gün
+                        : DateTimeOffset.UtcNow.AddHours(4) // Beni Hatırla Yok: 4 Saat
             };
 
             // Identity.Application çerezi için giriş
-            await _httpContextAccessor.HttpContext.SignInAsync(
-                IdentityConstants.ApplicationScheme,
-                new ClaimsPrincipal(claimsIdentity),
-                authProperties);
+            //await _httpContextAccessor.HttpContext.SignInAsync(
+            //    IdentityConstants.ApplicationScheme,
+            //    new ClaimsPrincipal(claimsIdentity),
+            //    authProperties);
 
             // Kullanıcıyı oturum açtır
             await _httpContextAccessor.HttpContext.SignInAsync(

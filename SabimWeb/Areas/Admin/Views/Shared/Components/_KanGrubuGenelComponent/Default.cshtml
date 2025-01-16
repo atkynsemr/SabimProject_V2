@@ -1,0 +1,19 @@
+﻿@using Sabim.Domain.DTOs.KanGrubuDtos
+@model List<ResultKanGrubuDto>
+
+<div class="form-group">
+    <label for="KanGrubuAdi">Kan Grupları</label>
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fas fa-tint"></i></span>
+        </div>
+        <select class="form-control" id="kanGruplari" name="KanGrubuID" >
+            @foreach (var kanGrubu in Model)
+            {
+                <option value="@kanGrubu.KanGrubuID" selected="@kanGrubu.Selected">@kanGrubu.KanGrubuAdi</option>
+            }
+        </select>
+    </div>
+</div>
+
+

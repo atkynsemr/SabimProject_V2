@@ -49,16 +49,17 @@ namespace Sabim.Infrastructure.Persistence.Repository.Implementations
                 return (false, $"Hesap Durumu: {user.Durum.DurumAdi.ToString()}. Hata olduğunu düşünüyorsanız Bilgi İşlem Birimi ile irtibat kurunuz.", null);
             }
             // Şifreyi doğrula
-            var isPasswordValid = await _userManager.CheckPasswordAsync(user, loginDto.Password);
-            if (!isPasswordValid)
-            {
-                return (false, SignInMessages.InvalidPassword,null);
-            }
+            //var isPasswordValid = await _userManager.CheckPasswordAsync(user, loginDto.Password);
+            //if (!isPasswordValid)
+            //{
+            //    return (false, SignInMessages.InvalidPassword,null);
+            //}
             // Kullanıcıyı oturum açtır
             var signInResult = await _signInManager.PasswordSignInAsync(user, loginDto.Password, loginDto.RememberMe, lockoutOnFailure: false);
             if (!signInResult.Succeeded)
             {
-                return (false, SignInMessages.SignInFailed,null);
+                //return (false, SignInMessages.SignInFailed,null);
+                return (false, SignInMessages.InvalidPassword, null);
             }
             // Kullanıcının rollerini al
             var roles = await _userManager.GetRolesAsync(user);

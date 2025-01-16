@@ -3,5 +3,6 @@
     public record ResultUnvanDto : UnvanBaseDto
     {
         public short UnvanID { get; init; }
+        public bool Selected { get; init; }
     }
 }
