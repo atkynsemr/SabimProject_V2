@@ -25,5 +25,6 @@
         IEkranService EkranService { get; }
         IEmailService EmailService { get; }
         ILoggerService LoggerService { get; }
+        ISavciCalisilanKatipService SavciCalisilanKatipService { get; }
     }
 }

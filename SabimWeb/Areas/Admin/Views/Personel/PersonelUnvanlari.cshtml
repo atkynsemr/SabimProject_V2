@@ -1,0 +1,729 @@
+﻿@model Sabim.Web.ViewModels.PersonelUnvanGecmisiViewModel
+@{
+    ViewData["Title"] = "Personel Unvanları";
+}
+@section StyleCss {
+    <link rel="stylesheet" href="/AdminTemplate/plugins/bootstrap/css/bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.3/css/responsive.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.1.2/css/buttons.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/searchpanes/2.3.3/css/searchPanes.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/select/2.1.0/css/select.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/colreorder/2.0.4/css/colReorder.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/4.0.1/css/fixedHeader.bootstrap4.css">
+    <link rel="stylesheet" href="/AdminTemplate/dist/css/CustomCss.css">
+}
+<!-- Personel Unvan Ekleme Modal Başlangıç-->
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel">
+    <div class="modal-dialog mw-100 w-75" role="document">
+        <div class="modal-content">
+            <div class="overlay" style="display: none;">
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                    <div class="spinner-border text-light" role="status">
+                        <span class="sr-only">Lütfen Bekleyiniz...</span>
+                    </div>
+                    <div>
+                        <span class="text-center text-white">Lütfen Bekleyiniz...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-header primary">
+                <h5 class="modal-title" id="createModalLabel">Personel Unvan Ekle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Form Başlangıcı -->
+                <form id="PersonelUnvanEkleForm">
+                    @Html.AntiForgeryToken()
+                    <div class="form-group">
+                        @await Component.InvokeAsync("_UnvanGenelComponent", new { deger = "create" })
+                        <div class="form-group">
+                            <label>Unvana Sahip Olduğu Tarih</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                                <input type="text" class="form-control" id="CreateUnvanaSahipOlduguTarih" name="UnvanaSahipOlduguTarih" asp-for="YeniPersonelUnvan.UnvanaSahipOlduguTarih" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask />
+                                <span asp-validation-for="YeniPersonelUnvan.UnvanaSahipOlduguTarih" name="UnvanaSahipOlduguTarih" class="col-sm-12 text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Unvan Değişiklik Tarih</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                                <input type="text" class="form-control" id="CreateUnvanDegisimTarihi" name="UnvanDegisimTarihi" asp-for="YeniPersonelUnvan.UnvanDegisimTarihi" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask />
+                                <span asp-validation-for="YeniPersonelUnvan.UnvanDegisimTarihi" name="UnvanDegisimTarihi" class="col-sm-12 text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="DurumId" name="DurumId" asp-for="YeniPersonelUnvan.DurumId" value="1" />
+                    <input type="hidden" id="PersonelId" name="PersonelId" asp-for="YeniPersonelUnvan.PersonelId" value="@Model.ListelePersonelUnvan.PersonelID" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" id="KaydetPersonelGecmisUnvanButton">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ./Personel Unvan Ekleme Modal Bitiş-->
+<!-- Personel Unvan Düzenleme Modal Başlangıç-->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel">
+    <div class="modal-dialog mw-100 w-75" role="document">
+        <div class="modal-content">
+            <div class="overlay">
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                    <div class="spinner-border text-light" role="status">
+                        <span class="sr-only">Lütfen Bekleyiniz...</span>
+                    </div>
+                    <div>
+                        <span class="text-center text-white">Lütfen Bekleyiniz...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-header warning">
+                <h5 class="modal-title" id="editModalLabel">Personel Unvan Düzenle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Form Başlangıcı -->
+                <form id="PersonelUnvanGuncelleForm">
+                    @Html.AntiForgeryToken()
+                    <div class="form-group">
+                        @await Component.InvokeAsync("_UnvanGenelComponent", new { deger = "update" })
+                        <div class="form-group">
+                            <label>Unvana Sahip Olduğu Tarih</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                                <input type="text" class="form-control" id="UpdateUnvanaSahipOlduguTarih" name="UnvanaSahipOlduguTarih" asp-for="GuncellePersonelUnvan.UnvanaSahipOlduguTarih" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask />
+                                <span asp-validation-for="GuncellePersonelUnvan.UnvanaSahipOlduguTarih" name="UnvanaSahipOlduguTarih" class="col-sm-12 text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Unvan Değişiklik Tarih</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                                <input type="text" class="form-control" id="UpdateUnvanDegisimTarihi" name="UnvanDegisimTarihi" asp-for="GuncellePersonelUnvan.UnvanDegisimTarihi" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask />
+                                <span asp-validation-for="GuncellePersonelUnvan.UnvanDegisimTarihi" name="UnvanDegisimTarihi" class="col-sm-12 text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="DurumId" name="DurumId" asp-for="YeniPersonelUnvan.DurumId" value="1" />
+                    <input type="hidden" id="PersonelId" name="PersonelId" asp-for="YeniPersonelUnvan.PersonelId" value="@Model.ListelePersonelUnvan.PersonelID" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-warning" id="GuncellePersonelButton">Güncelle</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ./Personel Unvan Düzenleme Modal Bitiş-->
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card card-primary card-outline">
+            <div class="card-body box-profile">
+                <div class="text-center">
+                    <img class="profile-user-img img-fluid img-circle" src="https://demos.themeselection.com/sneat-bootstrap-html-admin-template/assets/img/avatars/1.png" alt="User profile picture">
+                </div>
+                <h3 id="PersonelAdiSoyadi" class="profile-username text-center">@Model.ListelePersonelUnvan.AdSoyad</h3>
+                <p class="text-muted text-center">@Model.ListelePersonelUnvan.UnvanAdi</p>
+                <ul class="list-group list-group-unbordered mb-3">
+                    <li class="list-group-item">
+                        <b>Sicil Numarası</b> <a class="float-right">@Model.ListelePersonelUnvan.SicilNumarasi</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Çalışma Durumu</b> <a class="float-right">@Model.ListelePersonelUnvan.CalismaDurumAdi</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Kadro Yeri</b> <a class="float-right">@Model.ListelePersonelUnvan.KurumAdi</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </div>
+    <!-- /.col -->
+    <div class="col-md-9">
+        <div class="card">
+            <div class="d-flex card-header">
+                <a asp-area="Admin" asp-controller="Personel" asp-action="Index" class="btn btn-outline-dark btn-flat my-2">
+                    <i class="fa fa-arrow-circle-left mr-1"></i> Personeller Sayfasına Dön
+                </a>
+                @Html.Raw(IconHelper.CreateButton("btn btn-outline-primary btn-flat my-2 ml-auto", "Yeni Personel Unvan", IconHelper.GetAddIcon(), "Yeni Personel Unvanı Ekle", "createModal"))
+            </div>
+            <div class="card-body mt-2">
+                <div id="PersonelUnvanGecmisiTablosu">
+                    <table id="example" class="table table-striped table-bordered table-hover display text-center mt-3" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Unvan Adı</th>
+                                <th>Unvana Sahip Olduğu Tarihi</th>
+                                <th>Unvan Değişiklik Tarihi</th>
+                                <th>Durum</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        @await Component.InvokeAsync("_PersonelUnvanGecmisiComponent", new { PersonelID = Model.ListelePersonelUnvan.PersonelID, deger = "result" })
+                        <tfoot>
+                            <tr>
+                                <th>Unvan Adı</th>
+                                <th>Unvana Sahip Olduğu Tarihi</th>
+                                <th>Unvan Değişiklik Tarihi</th>
+                                <th>Durum</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- /.card -->
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/dataTables.buttons.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/searchpanes/2.3.3/js/dataTables.searchPanes.js"></script>
+    <script src="https://cdn.datatables.net/searchpanes/2.3.3/js/searchPanes.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/select/2.1.0/js/dataTables.select.js"></script>
+    <script src="https://cdn.datatables.net/select/2.1.0/js/select.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/select/2.1.0/js/select.dataTables.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.colVis.min.js"></script>
+    <script src="https://cdn.datatables.net/colreorder/2.0.4/js/dataTables.colReorder.js"></script>
+    <script src="https://cdn.datatables.net/colreorder/2.0.4/js/colReorder.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/responsive/3.0.3/js/dataTables.responsive.js"></script>
+    <script src="https://cdn.datatables.net/responsive/3.0.3/js/responsive.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/fixedheader/4.0.1/js/dataTables.fixedHeader.js"></script>
+    <script src="https://cdn.datatables.net/fixedheader/4.0.1/js/fixedHeader.bootstrap4.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.8/dist/sweetalert2.all.min.js"></script>
+    <!-- Toastr -->
+    <script src="/AdminTemplate/dist/js/toastr.min.js"></script>
+    <!-- Custom Toastr JS-->
+    <script src="/AdminTemplate/dist/js/customize/ToastCustom.js"></script>
+    <!-- Custom Capitalize JS-->
+    <script src="/AdminTemplate/dist/js/customize/CapitalizeCustom.js"></script>
+    <!-- Custom SwalAert JS-->
+    <script src="/AdminTemplate/dist/js/customize/SwalAlertCustom.js"></script>
+    <!-- InputMask -->
+    <script src="/AdminTemplate/plugins/jquery/jquery.inputmask.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            initDataTable();
+            //Kayıt İşlemi
+            $('#KaydetPersonelGecmisUnvanButton').click(savePersonelGecmisUnvan);
+            $(".modal").on("hidden.bs.modal", function () {
+                $('.modal').each(function () {
+                    let modal = $(this);
+                    let form = modal.find('form');
+                    // Eğer form varsa, formu sıfırla
+                    if (form.length) {
+                        form[0].reset();
+                    }
+                    // Hata mesajlarını temizle
+                    modal.find('span.text-danger').text('');
+                });
+                $('#createModal .nav-pills .nav-link').removeClass('active'); // Tüm tab'ları deaktif yap
+                $('#createModal .tab-content .tab-pane').removeClass('active'); // Tüm içerik alanlarını deaktif yap
+                // İlk tab'ı aktif yap
+                $('#createModal .nav-pills .nav-link:first').addClass('active');
+                $('#createModal .tab-content .tab-pane:first').addClass('active');
+                $('#createKurumlar').val(784);
+                // Overlay (arka plan) elemanını gizle
+                $('.overlay').hide();
+            });
+            $('[data-widget="pushmenu"]').on('click', function () {
+                setTimeout(function () {
+                    var table = $('#example').DataTable();
+                    table.columns.adjust().draw(); // Sütunları yeniden boyutlandır ve yeniden çiz
+                }, 400); // Animasyon tamamlandıktan sonra
+            });
+            $(document).one('click', '.btn-edit', function (event) {
+                event.preventDefault(); // Tekrar tetiklenmesini engelle
+                let id = $(this).data('id');
+                if (id) {
+                    editPersonel(id);
+                }
+            });
+            $(document).on('click', '.btn-showinfo', function (event) {
+                event.preventDefault(); // Sayfanın yeniden yüklenmesini engelle
+                let id = $(this).data('id');
+                if (id) {
+                    showInfoPersonel(id);
+                }
+            });
+            $(document).on('click', '.btn-delete', function (event) {
+                event.preventDefault(); // Sayfanın yeniden yüklenmesini engelle
+                let PersonelID = $(this).data('id');
+                $.ajax({
+                    url: `/Admin/Personel/GetPersonelById/${PersonelID}`,
+                    type: 'GET',
+                    success: function (response) {
+                        if (response.success) {
+                            const personelData = response.data;
+                            $('#deleteModal #DeletePersonelID').val(personelData.personelID);
+                            $('#deleteModal #PersonelAdSoyad').text(personelData.adSoyad + " (" + personelData.sicilNumarasi + ")");
+                            $('#deleteModal').modal('show'); // Modalı aç
+                        } else {
+                            showToast('Silinecek veri bulunamadı.', 'Hata!', 'topRight', 3500, 'bg-danger', true);
+                        }
+                    },
+                    error: function () {
+                        showToast('Silme işlemi için veri getirilemedi. Lütfen tekrar deneyiniz.', 'Hata!', 'topRight', 3500, 'bg-danger', true);
+                    }
+                });
+            });
+            $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' });
+            $('[data-mask]').inputmask();
+            // Düzenle Kaydet Butonu
+            $('#GuncellePersonelButton').click(saveUpdatedPersonel);
+            // Sil Modal'ı
+            $('#SilPersonelButton').click(deletePersonel);
+        });
+        function initDataTable() {
+            var personelAdiSoyadi = $("#PersonelAdiSoyadi").text().trim();
+            $('#example').DataTable({
+                "scrollX": true,
+                "fixedHeader": true,
+                "responsive": false,
+                "lengthChange": false,
+                "autoWidth": false,
+                "lengthChange": true,
+                "pageLength": 15,
+                "order": [1, 'asc'],
+                "language": {
+                    "searchPanes": {
+                        "emptyPanes": 'Filtreleme Paneli Bulunamadı',
+                        "title": {
+                            _: 'Seçili Alan - %d',
+                            0: ''
+                        },
+                        "collapseMessage": 'Tümünü Kapat',
+                        "showMessage": 'Hepsini Göster',
+                        "clearMessage": 'Hepsini Temizle',
+                        "collapse": { 0: 'Filtreleme Paneli', _: 'Filtreleme Paneli (%d)' }
+                    },
+                    "sProcessing": "İşleniyor...",
+                    "sLengthMenu": "_MENU_",
+                    "sZeroRecords": "Eşleşen Kayıt Bulunmadı",
+                    "sInfo": "Toplam _TOTAL_ kayıttan _START_ - _END_ arası gösteriliyor",
+                    "sInfoEmpty": "Kayıt Yok",
+                    "emptyTable": "Tabloda veri bulunmamaktadır",
+                    "sInfoFiltered": "(toplam _MAX_ kayıttan filtrelendi)",
+                    "sSearch": "",
+                    "searchPlaceholder": 'Arama Yapınız...',
+                    "oPaginate": {
+                        "sFirst": "İlk",
+                        "sPrevious": "Önceki",
+                        "sNext": "Sonraki",
+                        "sLast": "Son"
+                    }
+                },
+                colReorder: true,
+                layout: {
+                    topStart:
+                    {
+                        buttons:
+                            [
+                                {
+                                    extend: 'searchPanes',
+                                    text: '<i class="fa fa-filter mr-1"></i>Filtreleme Paneli',
+                                    config: {
+                                        cascadePanes: true,
+                                        layout: 'columns-2',
+                                        orderable: false,
+                                        initCollapsed: true
+                                    }
+                                },
+                                {
+                                    extend: 'collection',
+                                    text: '<i class="fas fa-upload mr-1"></i> Aktar',
+                                    buttons:
+                                        [
+                                            {
+                                                extend: 'excel',
+                                                text: '<i class="fas fa-file-excel mr-1"></i> Excel',
+                                                title: personelAdiSoyadi + ' - Unvan Geçmişi', // Dinamik başlık ekleme
+                                                exportOptions: {
+                                                    columns: function (idx, data, node) {
+                                                        var table = $('#example').DataTable();
+                                                        var columnHeader = table.column(idx).header().innerText.trim(); // Sütun başlığını al
+                                                        var excludedColumns = ['İşlemler']; // Dışarıda bırakılacak sütunlar
+
+                                                        return table.column(idx).visible() && !excludedColumns.includes(columnHeader);
+                                                        // Yalnızca görünür ve dışlanmamış sütunları dahil et
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                extend: 'pdf',
+                                                text: '<i class="fas fa-file-pdf mr-1"></i> PDF',
+                                                title: personelAdiSoyadi + ' - Unvan Geçmişi', // Dinamik başlık ekleme
+                                                exportOptions: {
+                                                    columns: function (idx, data, node) {
+                                                        var table = $('#example').DataTable();
+                                                        var columnHeader = table.column(idx).header().innerText.trim(); // Sütun başlığını al
+
+                                                        var includedColumns = [
+                                                            'Unvan Adı',
+                                                            'Unvana Sahip Olduğu Tarihi',
+                                                            'Unvan Değişiklik Tarihi'
+                                                        ]; // PDF'e dahil edilmesi gereken sütunlar
+
+                                                        return includedColumns.includes(columnHeader); // Yalnızca seçili başlıkları ekle
+                                                    }
+                                                },
+                                                customize: function (doc) {
+                                                    var table = $('#example').DataTable();
+                                                    var includedColumns = [
+                                                        'Unvan Adı',
+                                                        'Unvana Sahip Olduğu Tarihi',
+                                                        'Unvan Değişiklik Tarihi'
+                                                    ]; // PDF'de görünmesini istediğimiz sıradaki sütunlar
+
+                                                    // PDF için tablo içeriğini yeniden oluştur
+                                                    var newTableBody = [];
+
+                                                    // Başlıkları sıraya göre düzenle
+                                                    var tableHeaders = includedColumns.map(function (colName) {
+                                                        return { text: colName, style: 'tableHeader', alignment: 'center' };
+                                                    });
+                                                    newTableBody.push(tableHeaders);
+
+                                                    // Satırları belirtilen sıraya göre ekle
+                                                    table.rows({ search: 'applied' }).every(function (rowIdx, tableLoop, rowLoop) {
+                                                        var rowData = this.data();
+                                                        var orderedRow = [];
+
+                                                        includedColumns.forEach(function (colName) {
+                                                            var columnIndex = table.column(`:contains("${colName}")`).index(); // Başlık ile indeks bul
+                                                            orderedRow.push({ text: rowData[columnIndex], alignment: 'center' });
+                                                        });
+
+                                                        newTableBody.push(orderedRow);
+                                                    });
+
+                                                    // Yeni tabloyu PDF'e uygula
+                                                    doc.content[1].table.body = newTableBody;
+                                                }
+                                            },
+
+                                            {
+                                                extend: 'print',
+                                                text: '<i class="fas fa-print mr-1"></i> Yazdır',
+                                                exportOptions: {
+                                                    columns: function (idx, data, node) {
+                                                        var table = $('#example').DataTable();
+                                                        var columnHeader = table.column(idx).header().innerText.trim(); // Sütun başlığını al
+                                                        var excludedColumns = ['İşlemler']; // Dışarıda bırakılacak sütunlar
+                                                        return table.column(idx).visible() && !excludedColumns.includes(columnHeader);// Eşleşen sütun dışarıya aktarılmaz
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                },
+                                {
+                                    extend: 'colvis',
+                                    columns: function (idx, data, node) {
+                                        return [1].indexOf(idx) === -1;
+                                    },
+                                    text: '<i class="fas fa-columns mr-1"></i> Sütun Görünürlüğü'
+                                }
+                            ]
+                    }
+                },
+                columnDefs: [
+
+                    {
+                        searchPanes: {
+                            show: true
+                        },
+                        targets: [3]
+                    },
+                    {
+                        searchPanes: {
+                            show: false
+                        },
+                        targets: '_all'
+                    }
+                ]
+            });
+        }
+        const changeDateFormatTo = date => {
+            if (!date) return ''; // Eğer tarih yoksa boş döner
+            const onlyDate = date.split("T")[0];
+            const [yy, mm, dd] = onlyDate.split("-");
+            return `${dd}/${mm}/${yy}`;
+        };
+        function savePersonelGecmisUnvan() {
+            $('#createModal span.text-danger').text('');
+            $('#createModal .overlay').show();
+            var formData = $('#PersonelUnvanEkleForm').serialize(); // Form verilerini serialize et
+            $.ajax({
+                url: '/Admin/Personel/EklePersonelUnvan', // Hedef URL
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        $('#createModal').modal('hide');
+                        reloadTable();
+                        if (response.completeStatus) {
+                            showToast(response.message, 'Bilgi Mesajı', 'topRight', 2500, 'bg-success', true);
+                        }
+                        else {
+                            showToast(response.message, 'Bilgi Mesajı', 'topRight', 3500, 'bg-warning', true);
+                        }
+                    }
+                    else {
+                        // Hataları göster
+                        for (let key in response.errors) {
+                            $(`[name="${key}"]`).next('.text-danger').text(response.errors[key][0]);
+                        }
+                        $('.modal .overlay').hide();
+                    }
+                }
+            });
+        }
+        function editPersonel(id) {
+            // event.preventDefault();
+            $.ajax({
+                url: `/Admin/Personel/GetPersonelById/${id}`,
+                type: 'GET',
+                success: function (response) {
+                    if (response.success) {
+                        const data = response.data;
+                        $('#editModal #UpdatePersonelID').val(data.personelID);
+                        $('#editModal #UpdateKimlikNo').val(data.kimlikNo);
+                        $('#editModal #UpdateSicilNumarasi').val(data.sicilNumarasi);
+                        $('#editModal #UpdateAd').val(data.ad);
+                        $('#editModal #UpdateSoyad').val(data.soyad);
+                        $('#editModal #updateUnvanlar option').each(function () {
+                            const optionValue = $(this).val();
+                            if (optionValue == data.unvanId) {
+                                $(this).prop('selected', true);
+                            } else {
+                                $(this).prop('selected', false);
+                            }
+                        });
+                        if (data.unvanId == 1 || data.unvanId == 2 || data.unvanId == 5) {
+                            const selectedValues = data.calisilanKatiplerIds.map(String); // Choices.js string değerler bekler
+                            if (window.updatePersonelChoices) {
+                                window.updatePersonelChoices.removeActiveItems(); // Önce mevcut seçimleri temizle
+                                window.updatePersonelChoices.setChoiceByValue(selectedValues);
+                            }
+                            $('#update_katipler_content').show();
+                        }
+                        else {
+                            $('#update_katipler_content').hide();
+                        }
+                        $('#editModal #updateKadroTurleri option').each(function () {
+                            const optionValue = $(this).val();
+                            if (optionValue == data.kadroTuruId) {
+                                $(this).prop('selected', true);
+                            } else {
+                                $(this).prop('selected', false);
+                            }
+                        });
+                        $('#editModal #updateGorevlendirilmeTurleri option').each(function () {
+                            const optionValue = $(this).val();
+                            if (optionValue == data.gorevlendirilmeTuruId) {
+                                $(this).prop('selected', true);
+                            } else {
+                                $(this).prop('selected', false);
+                            }
+                        });
+                        $('#editModal #updateSehirler option').each(function () {
+                            const optionValue = $(this).val();
+                            if (optionValue == data.sehirId) {
+                                $(this).prop('selected', true);
+                            } else {
+                                $(this).prop('selected', false);
+                            }
+                        });
+                        changeKurum(data.kurumId, data.sehirId, "update");
+                        $('#editModal #updateCinsiyetler option').each(function () {
+                            const optionValue = $(this).val();
+                            if (optionValue == data.cinsiyetId) {
+                                $(this).prop('selected', true);
+                            } else {
+                                $(this).prop('selected', false);
+                            }
+                        });
+                        $('#editModal #updateKanGruplari option').each(function () {
+                            const optionValue = $(this).val();
+                            if (optionValue == data.kanGrubuId) {
+                                $(this).prop('selected', true);
+                            } else {
+                                $(this).prop('selected', false);
+                            }
+                        });
+                        $('#editModal #updateCalismaDurumlari option').each(function () {
+                            const optionValue = $(this).val();
+                            if (optionValue == data.calismaDurumuId) {
+                                $(this).prop('selected', true);
+                            } else {
+                                $(this).prop('selected', false);
+                            }
+                        });
+                        $('#editModal #updateDurumlar option').each(function () {
+                            const optionValue = $(this).val();
+                            if (optionValue == data.durumId) {
+                                $(this).prop('selected', true);
+                            } else {
+                                $(this).prop('selected', false);
+                            }
+                        });
+                        $('#editModal #UpdateDerece').val(data.derece);
+                        $('#editModal #UpdateKademe').val(data.kademe);
+                        $('#editModal #UpdateDogumYeri').val(data.dogumYeri);
+                        $('#editModal #UpdateCepTelefonu').val(data.cepTelefonu);
+                        $('#editModal #UpdateDogumTarihi').val(changeDateFormatTo(data.dogumTarihi));
+                        $('#editModal #UpdateMeslegeGirisTarihi').val(changeDateFormatTo(data.meslegeGirisTarihi));
+                        $('#editModal #UpdateBuradaGoreveBaslamaTarihi').val(changeDateFormatTo(data.buradaGoreveBaslamaTarihi));
+                        $('#editModal #UpdateBirinciSinifaAyrilmaTarihi').val(changeDateFormatTo(data.birinciSinifaAyrilmaTarihi));
+                        $('#editModal #UpdateAracPlakasi').val(data.aracPlakasi);
+                        $('#editModal .overlay').hide();
+                        $('#editModal').modal('show');
+                    }
+                    else {
+                        showToast('Seçili olan kayıt gösterilemiyor! Lütfen sayfayı yenileyip tekrar deneyiniz.', 'Hata', 'topRight', 3500, 'bg-danger', true);
+                        $('.modal .overlay').hide();
+                    }
+                },
+                error: function () {
+                    showSwalAlert('Hata!', 'Beklenmeyen bir hata oluştu!', 'error', 3500, true, true);
+                }
+            });
+        }
+        function saveUpdatedPersonel() {
+            var formData = $('#PersonelGuncelleForm').serialize(); // Form verilerini al
+            $.ajax({
+                url: '/Admin/Personel/GuncellePersonel',
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        $('#editModal').modal('hide'); // Modalı kapat
+                        reloadTable(); // Tabloyu yeniden yükle
+                        showToast(response.message, 'Bilgi Mesajı', 'topRight', 2500, 'bg-success', true);
+                    }
+                    else {
+                        // Hataları göster
+                        for (let key in response.errors) {
+                            $(`[name="${key}"]`).next('.text-danger').text(response.errors[key][0]);
+                        }
+                        $('.modal .overlay').hide();
+                    }
+                }
+            });
+        }
+        function deletePersonel() {
+            $('#deleteModal .overlay').show();
+            var formData = $('#PersonelSilForm').serialize(); // Form verilerini al
+            $.ajax({
+                url: '/Admin/Personel/SilPersonel', // Silme işlemi için endpoint
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        $('#deleteModal').modal('hide'); // Modalı kapat
+                        reloadTable(); // Tabloyu yeniden yükle
+                        showToast(response.message, 'Bilgi Mesajı', 'topRight', 2500, 'bg-success', true);
+                    }
+                    else {
+                        $('#deleteModal').modal('hide');
+                        showToast(response.message, 'Hata Mesajı', 'topRight', 3500, 'bg-danger', true);
+                    }
+                },
+                error: function (xhr) {
+                    handleError(xhr); // Hata durumunu yönet
+                }
+            });
+        }
+        function showInfoPersonel(id) {
+            $.ajax({
+                url: `/Admin/Personel/GetirSafahatBilgi/${id}`,
+                type: 'GET',
+                success: function (response) {
+                    $("#auditTrailModal").find(".modal-body").html(response);
+                    $('#auditTrailModal').modal('show');
+                },
+                error: function () {
+                    showToast('Safahat bilgileri getirilemedi. Lütfen tekrar deneyiniz.', 'Hata!', 'topRight', 3500, 'bg-danger', true);
+                }
+            });
+        }
+        function reloadComponent(componentSelector, url) {
+            $(componentSelector).load(url, function (response, status, xhr) {
+                if (status === "error") {
+                    setTimeout(function () {
+                        window.location.reload(); // Sayfayı yeniden yükle
+                    }, 1500);
+                }
+            });
+        }
+        function changeKurum(selectedKurumId, id, deger) {
+            // URL'yi doğru şekilde oluşturma
+            var url = `/Admin/Personel/GetirKurumlar?deger=${deger}&selectedKurumId=${selectedKurumId}&id=${id}`;
+            if (deger === "create") {
+                reloadComponent("#createModal #personelEkleComponent", url);
+            }
+            else if (deger === "update") {
+                reloadComponent("#editModal #personelGuncelleComponent", url);
+            }
+            else {
+                console.warn("Geçersiz işlem türü (deger):", deger);
+            }
+        }
+        function reloadTable() {
+            // Eski tabloyu kaldır
+            if ($.fn.DataTable.isDataTable('#example')) {
+                $('#example').DataTable().destroy();
+                $('#example').empty(); // DOM'u temizle
+            }
+            var personelID = $('#PersonelId').val();
+            // Tabloyu yeniden yükle
+            $('#PersonelUnvanGecmisiTablosu').load('/Admin/Personel/PersonelUnvanlari?PersonelID=' + personelID + ' #PersonelUnvanGecmisiTablosu', function (response, status, xhr) {
+                if (status === "success") {
+                    initDataTable(); // DataTable başlat
+                } else if (status === "error") {
+                    showToast("Tablo yüklenemedi. Lütfen sayfayı yenileyin.", "Hata", "topRight", 3500, "bg-danger", true);
+                }
+            });
+        }
+        function handleError(xhr) {
+            $('.modal .overlay').hide();
+            if (xhr.responseJSON && xhr.responseJSON.errors) {
+                for (let key in xhr.responseJSON.errors) {
+                    let errorElement = $(`[name='${key}']`).next('.text-danger');
+                    errorElement.text(xhr.responseJSON.errors[key][0]);
+                }
+            }
+            else {
+                $('.modal').modal('hide'); // Tüm açık modalları kapatır
+                showSwalAlert('Hata!', 'Beklenmeyen bir hata oluştu. Lütfen yaptığınız işlemi tekrar deneyiniz. Hatanın devam etmesi durumunda Bilgi İşlem Personeline bildiriniz.', 'error', 6500, true, true);
+            }
+        }
+    </script>
+}

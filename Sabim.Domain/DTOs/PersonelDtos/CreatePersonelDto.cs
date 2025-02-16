@@ -22,5 +22,6 @@
         public short CalismaDurumuId { get; init; }
         public short? OlusturanPersonelId { get; set; }
         public DateTime? OlusturulmaTarihi { get; set; }
+        public List<int>? SelectedPersonelIds { get; init; }
     }
 }

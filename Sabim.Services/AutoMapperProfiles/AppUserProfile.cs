@@ -8,6 +8,7 @@ namespace Sabim.Services.AutoMapperProfiles
     {
         public AppUserProfile()
         {
+            CreateMap<AppUser, CreateUserDto>().ReverseMap();
             CreateMap<AppUser, ResultAppUserDto>()
                 .ForMember(dest => dest.DurumAdi, opt => opt.MapFrom(src => src.Durum.DurumAdi))
                 .ForMember(dest => dest.PersonelAdSoyad, opt => opt.MapFrom(src => $"{src.Personel.Ad} {src.Personel.Soyad}"))

@@ -12,10 +12,10 @@ namespace Sabim.Web.Areas.Admin.ViewComponents.KadroTuruViewComponents
         {
             _manager = manager;
         }
-        public async Task<IViewComponentResult> InvokeAsync(int? selectedKadroTuruId = null)
+        public async Task<IViewComponentResult> InvokeAsync(string? deger, int? selectedKadroTuruId = null)
         {
             var kadroTurleri = await _manager.KadroTuruService.TFindAllAsync(false);
-            // Alfabetik sıralama
+            ViewBag.Deger = deger;
             var kadroTurleriDtoList = kadroTurleri
                 .OrderBy(k => k.KadroTuruAdi)
                 .Select(k => new ResultKadroTuruDto

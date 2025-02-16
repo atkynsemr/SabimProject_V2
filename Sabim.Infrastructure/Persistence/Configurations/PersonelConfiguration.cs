@@ -34,6 +34,18 @@ namespace Sabim.Infrastructure.Persistence.Configurations
             builder.HasOne(p => p.Unvan).WithMany(k => k.Personels).HasForeignKey(p => p.UnvanId).OnDelete(DeleteBehavior.Restrict);
             builder.HasMany(p => p.PersonelGorevlendirilmes).WithOne(pg => pg.Personel).HasForeignKey(pg => pg.PersonelId).OnDelete(DeleteBehavior.Restrict);
             builder.HasOne(p => p.AppUser).WithOne(au => au.Personel).HasForeignKey<AppUser>(au => au.PersonelId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasMany(p => p.PersonelUnvanGecmisis).WithOne(pu => pu.Personel).HasForeignKey(pu => pu.PersonelId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasMany(p => p.SavciOlarakCalisilanKatips) // Savcı olarak çalıştığı kayıtlar
+                .WithOne(sck => sck.Savci) // Savcı olarak yer alan Personel ile ilişkilendir
+                .HasForeignKey(sck => sck.SavciId) // SavcıId üzerinden ilişkiyi tanımlar
+                .OnDelete(DeleteBehavior.Cascade); // Eğer Personel (Savcı) silinirse, ilgili kayıtları da sil
+
+            builder.HasMany(p => p.KatipOlarakCalisilanKatips) // Katip olarak çalıştığı kayıtlar
+                .WithOne(sck => sck.Katip) // Katip olarak yer alan Personel ile ilişkilendir
+                .HasForeignKey(sck => sck.KatipId) // KatipId üzerinden ilişkiyi tanımlar
+                .OnDelete(DeleteBehavior.NoAction); // Eğer Personel (Katip) silinirse, ilgili kayıtları da sil
+
+
             var config = new BaseEntityConfiguration<Personel>();
             config.Configure(builder);
         }

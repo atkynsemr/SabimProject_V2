@@ -13,9 +13,10 @@ namespace Sabim.Web.Areas.Admin.ViewComponents.CinsiyetViewComponents
             _manager = manager;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(int? selectedCinsiyetId = null)
+        public async Task<IViewComponentResult> InvokeAsync(string? deger, int? selectedCinsiyetId = null)
         {
             var cinsiyetler = await _manager.CinsiyetService.TFindAllAsync(false);
+            ViewBag.Deger= deger;
             // Alfabetik sıralama
             var cinsiyetDtoList = cinsiyetler
                 .OrderBy(c => c.CinsiyetAdi)

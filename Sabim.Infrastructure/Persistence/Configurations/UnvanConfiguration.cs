@@ -15,6 +15,7 @@ namespace Sabim.Infrastructure.Persistence.Configurations
             builder.Property(u => u.OncelikSirasi).HasColumnType("SMALLINT").IsRequired();
             //Relationship
             builder.HasMany(p => p.Personels).WithOne(u => u.Unvan).HasForeignKey(p => p.UnvanId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasMany(u => u.PersonelUnvanGecmisis).WithOne(pu => pu.Unvan).HasForeignKey(pu => pu.UnvanId).OnDelete(DeleteBehavior.Restrict);
             var config= new BaseEntityConfiguration<Unvan>();
             config.Configure(builder);
         }

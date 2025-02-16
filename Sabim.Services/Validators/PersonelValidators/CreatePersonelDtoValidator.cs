@@ -13,7 +13,7 @@ namespace Sabim.Services.Validators.PersonelValidators
             RuleFor(x => x.Ad)
                       .NotEmpty().WithMessage("Personel Adı boş bırakılamaz.")
                       .MaximumLength(30).WithMessage("Personel Adı en fazla 30 karakter olmalıdır.")
-                      .MinimumLength(5).WithMessage("Personel Adı en az 3 karakter olmalıdır.")
+                      .MinimumLength(3).WithMessage("Personel Adı en az 3 karakter olmalıdır.")
                       .Matches("^[a-zA-ZçÇğĞıİöÖşŞüÜ\\s]+$").WithMessage("Personel Adı  yalnızca harf içermelidir.");
             RuleFor(x => x.Soyad)
                       .NotEmpty().WithMessage("Personel Soyadı boş bırakılamaz.")

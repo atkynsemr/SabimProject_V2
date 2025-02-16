@@ -3,7 +3,7 @@
 
 <div class="form-group">
     <label for="SehirAdi">Bulunduğu Şehir</label>
-    <select class="form-control" id="sehirler" name="SehirID" style="width: 100%;">
+    <select class="form-control" id="@(ViewBag.Deger ?? "")Sehirler" name="SehirID" style="width: 100%;">
         @foreach (var sehir in Model)
         {
             <option value="@sehir.SehirID" selected="@sehir.Selected">@sehir.SehirAdi</option>

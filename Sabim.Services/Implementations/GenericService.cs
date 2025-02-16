@@ -69,5 +69,15 @@ namespace Sabim.Services.Implementations
         {
             return _repository.GetAuditTrailWithDetailsAsync(id);
         }
+
+        public Task<object?> TAddAndGetIdAsync(T entity)
+        {
+            return _repository.AddAndGetIdAsync(entity);
+        }
+
+        public async Task<string> TDeleteRangeByExpressionAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _repository.DeleteRangeByExpressionAsync(predicate);
+        }
     }
 }

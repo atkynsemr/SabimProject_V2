@@ -1,0 +1,29 @@
+﻿@using Sabim.Domain.DTOs.PersonelUnvanGecmisiDtos
+@model List<ResultPersonelUnvanGecmisiDto>
+
+<tbody class="text-heading" id="tableContent">
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.UnvanAdi</td>
+@*             <td>@item.UnvanaSahipOlduguTarih.ToShortDateString()</td> *@
+            <td data-sort="@item.UnvanaSahipOlduguTarih.ToString("yyyy-MM-dd")">@item.UnvanaSahipOlduguTarih.ToString("dd/MM/yyyy")</td>
+            <td>@(item.UnvanDegisimTarihi?.ToShortDateString() ?? "-")</td>
+            <td class="text-center">
+                <div class="d-flex align-items-center justify-content-center">
+                    @Html.Raw(IconHelper.GetStatusNameIcon(item.DurumAdi))
+                    <span class="badge badge-lg @BadgeHelper.GetBadgeClass(item.DurumId)"> @item.DurumAdi</span>
+                </div>
+            </td>
+            <td class="text-center">
+                <div class="d-flex align-items-center justify-content-center">
+                    @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-showinfo", "", IconHelper.GetInfoIcon(), "Göster", "showInfoPersonelUnvanGecmisi", item.PersonelUnvanGecmisiID.ToString()))
+                    @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-edit", "", IconHelper.GetEditIcon(), "Düzenle", "editPersonelUnvanGecmisi", item.PersonelUnvanGecmisiID.ToString()))
+                    @Html.Raw(IconHelper.CreateLink("btn btn-icon btn-delete", "", IconHelper.GetDeleteIcon(), "Sil", "deletePersonelUnvanGecmisi", item.PersonelUnvanGecmisiID.ToString()))
+                </div>
+            </td>
+        </tr>
+    }
+</tbody>
+
+

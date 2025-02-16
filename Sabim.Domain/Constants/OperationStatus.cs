@@ -7,5 +7,6 @@
         public const string ForeignKeyConflict = "Bu kayıt başka bir tabloda kullanılıyor, silme işlemi gerçekleştirilemez!";
         public const string GlobalError = "İşlem sırasında bilinmeyen bir hata oluştu! Lütfen tekrar deneyiniz.";
         public const string PrimaryKeyNotDefined = "Birincil anahtar tanımlanmamış!";
+        public const string Incomplete = "İşleminizi kontrol ediniz. İşlem tamamlanmamış ise lütfen tekrar deneyiniz!";
     }
 }

@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
-using Sabim.Domain.DTOs.CinsiyetDtos;
 using Sabim.Domain.DTOs.SehirDtos;
 using Sabim.Domain.Entities;
 using Sabim.Infrastructure.Persistence.Context;
 using Sabim.Infrastructure.Persistence.Repository.Contracts;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Sabim.Infrastructure.Persistence.Repository.Implementations
 {

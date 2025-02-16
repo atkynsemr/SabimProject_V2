@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Sabim.Domain.DTOs.DurumDtos;
 using Sabim.Services.Contracts;
 
@@ -13,9 +12,10 @@ namespace Sabim.Web.Areas.Admin.ViewComponents.DurumViewComponents
         {
             _manager = manager;
         }
-        public async Task<IViewComponentResult> InvokeAsync(int? selectedDurumId = null)
+        public async Task<IViewComponentResult> InvokeAsync(string? deger, int? selectedDurumId = null)
         {
             var durumlar = await _manager.DurumService.TFindAllAsync(false);
+            ViewBag.Deger = deger;
             var durumDtoList = durumlar.Select(d => new ResultDurumDto
             {
                 DurumID = d.DurumID,

@@ -12,8 +12,8 @@ using Sabim.Infrastructure.Persistence.Context;
 namespace Sabim.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(SabimDbContext))]
-    [Migration("20241130103724_InitDatabase")]
-    partial class InitDatabase
+    [Migration("20250210063424_UpdateSavciKatipTable")]
+    partial class UpdateSavciKatipTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -502,29 +502,6 @@ namespace Sabim.Infrastructure.Persistence.Migrations
                     b.HasIndex("SilenPersonelId");
 
                     b.ToTable("CalismaDurumu");
-
-                    b.HasData(
-                        new
-                        {
-                            CalismaDurumuID = (short)1,
-                            CalismaDurumAdi = "Görevde",
-                            DurumId = (short)1,
-                            KurumPersonelListesineDahilMi = false
-                        },
-                        new
-                        {
-                            CalismaDurumuID = (short)2,
-                            CalismaDurumAdi = "Geçici Ayrılış (Ücretsiz İzin, Askerlik,Doğum İzni vb.)",
-                            DurumId = (short)1,
-                            KurumPersonelListesineDahilMi = false
-                        },
-                        new
-                        {
-                            CalismaDurumuID = (short)3,
-                            CalismaDurumAdi = "Kalıcı Ayrılış (Emeklilik, Nakil, İstifa,Görevlendirme Sonlandırılması vb.)",
-                            DurumId = (short)1,
-                            KurumPersonelListesineDahilMi = false
-                        });
                 });
 
             modelBuilder.Entity("Sabim.Domain.Entities.Cinsiyet", b =>
@@ -573,29 +550,6 @@ namespace Sabim.Infrastructure.Persistence.Migrations
                     b.HasIndex("SilenPersonelId");
 
                     b.ToTable("Cinsiyet");
-
-                    b.HasData(
-                        new
-                        {
-                            CinsiyetID = (short)1,
-                            CinsiyetAdi = "Erkek",
-                            DurumId = (short)1,
-                            OlusturulmaTarihi = new DateTime(2024, 11, 30, 13, 37, 19, 381, DateTimeKind.Local).AddTicks(1487)
-                        },
-                        new
-                        {
-                            CinsiyetID = (short)2,
-                            CinsiyetAdi = "Kadın",
-                            DurumId = (short)1,
-                            OlusturulmaTarihi = new DateTime(2024, 11, 30, 13, 37, 19, 381, DateTimeKind.Local).AddTicks(1513)
-                        },
-                        new
-                        {
-                            CinsiyetID = (short)3,
-                            CinsiyetAdi = "Belirtilmemiş",
-                            DurumId = (short)1,
-                            OlusturulmaTarihi = new DateTime(2024, 11, 30, 13, 37, 19, 381, DateTimeKind.Local).AddTicks(1517)
-                        });
                 });
 
             modelBuilder.Entity("Sabim.Domain.Entities.Durum", b =>
@@ -614,8 +568,8 @@ namespace Sabim.Infrastructure.Persistence.Migrations
                     b.Property<string>("DurumAdi")
                         .IsRequired()
                         .HasMaxLength(30)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(30)");
+                        .HasColumnType("nvarchar(30)")
+                        .UseCollation("SQL_Latin1_General_CP1_CI_AS");
 
                     b.HasKey("DurumID");
 
@@ -823,29 +777,6 @@ namespace Sabim.Infrastructure.Persistence.Migrations
                     b.HasIndex("SilenPersonelId");
 
                     b.ToTable("GorevlendirilmeTuru");
-
-                    b.HasData(
-                        new
-                        {
-                            GorevlendirilmeTuruID = (short)1,
-                            DurumId = (short)1,
-                            GorevlendirilmeTuruAdi = "Görevlendirilmemiş",
-                            KurumPersonelListesineDahilMi = true
-                        },
-                        new
-                        {
-                            GorevlendirilmeTuruID = (short)2,
-                            DurumId = (short)1,
-                            GorevlendirilmeTuruAdi = "Dış Kurumdan Görevlendirilme",
-                            KurumPersonelListesineDahilMi = true
-                        },
-                        new
-                        {
-                            GorevlendirilmeTuruID = (short)3,
-                            DurumId = (short)1,
-                            GorevlendirilmeTuruAdi = "Dış Kuruma Görevlendirilme",
-                            KurumPersonelListesineDahilMi = true
-                        });
                 });
 
             modelBuilder.Entity("Sabim.Domain.Entities.KabinetBazliBolum", b =>
@@ -948,32 +879,6 @@ namespace Sabim.Infrastructure.Persistence.Migrations
                     b.HasIndex("SilenPersonelId");
 
                     b.ToTable("KadroTuru");
-
-                    b.HasData(
-                        new
-                        {
-                            KadroTuruID = (short)1,
-                            DurumId = (short)1,
-                            KadroTuruAdi = "Kadrolu"
-                        },
-                        new
-                        {
-                            KadroTuruID = (short)2,
-                            DurumId = (short)1,
-                            KadroTuruAdi = "Sözleşmeli(4/B)"
-                        },
-                        new
-                        {
-                            KadroTuruID = (short)3,
-                            DurumId = (short)1,
-                            KadroTuruAdi = "Sürekli İşçi(4/D)-Taşerondan Geçen"
-                        },
-                        new
-                        {
-                            KadroTuruID = (short)4,
-                            DurumId = (short)1,
-                            KadroTuruAdi = "Sürekli İşçi(4/D)-Açıktan Atama"
-                        });
                 });
 
             modelBuilder.Entity("Sabim.Domain.Entities.KanGrubu", b =>
@@ -1022,64 +927,6 @@ namespace Sabim.Infrastructure.Persistence.Migrations
                     b.HasIndex("SilenPersonelId");
 
                     b.ToTable("KanGrubu");
-
-                    b.HasData(
-                        new
-                        {
-                            KanGrubuID = (short)1,
-                            DurumId = (short)1,
-                            KanGrubuAdi = "0 Rh(-)",
-                            OlusturulmaTarihi = new DateTime(2024, 11, 30, 13, 37, 19, 425, DateTimeKind.Local).AddTicks(6958)
-                        },
-                        new
-                        {
-                            KanGrubuID = (short)2,
-                            DurumId = (short)1,
-                            KanGrubuAdi = "0 Rh(+)",
-                            OlusturulmaTarihi = new DateTime(2024, 11, 30, 13, 37, 19, 425, DateTimeKind.Local).AddTicks(6985)
-                        },
-                        new
-                        {
-                            KanGrubuID = (short)3,
-                            DurumId = (short)1,
-                            KanGrubuAdi = "A Rh(-)",
-                            OlusturulmaTarihi = new DateTime(2024, 11, 30, 13, 37, 19, 425, DateTimeKind.Local).AddTicks(6988)
-                        },
-                        new
-                        {
-                            KanGrubuID = (short)4,
-                            DurumId = (short)1,
-                            KanGrubuAdi = "A Rh(+)",
-                            OlusturulmaTarihi = new DateTime(2024, 11, 30, 13, 37, 19, 425, DateTimeKind.Local).AddTicks(6991)
-                        },
-                        new
-                        {
-                            KanGrubuID = (short)5,
-                            DurumId = (short)1,
-                            KanGrubuAdi = "AB Rh(-)",
-                            OlusturulmaTarihi = new DateTime(2024, 11, 30, 13, 37, 19, 425, DateTimeKind.Local).AddTicks(6993)
-                        },
-                        new
-                        {
-                            KanGrubuID = (short)6,
-                            DurumId = (short)1,
-                            KanGrubuAdi = "AB Rh(+)",
-                            OlusturulmaTarihi = new DateTime(2024, 11, 30, 13, 37, 19, 425, DateTimeKind.Local).AddTicks(6996)
-                        },
-                        new
-                        {
-                            KanGrubuID = (short)7,
-                            DurumId = (short)1,
-                            KanGrubuAdi = "B Rh(-)",
-                            OlusturulmaTarihi = new DateTime(2024, 11, 30, 13, 37, 19, 425, DateTimeKind.Local).AddTicks(6999)
-                        },
-                        new
-                        {
-                            KanGrubuID = (short)8,
-                            DurumId = (short)1,
-                            KanGrubuAdi = "B Rh(+)",
-                            OlusturulmaTarihi = new DateTime(2024, 11, 30, 13, 37, 19, 425, DateTimeKind.Local).AddTicks(7001)
-                        });
                 });
 
             modelBuilder.Entity("Sabim.Domain.Entities.Kisim", b =>
@@ -1260,26 +1107,6 @@ namespace Sabim.Infrastructure.Persistence.Migrations
                     b.HasIndex("SilenPersonelId");
 
                     b.ToTable("KurumTipi");
-
-                    b.HasData(
-                        new
-                        {
-                            KurumTipiID = (short)1,
-                            DurumId = (short)1,
-                            KurumTipiAdi = "Personel Görev Yeri"
-                        },
-                        new
-                        {
-                            KurumTipiID = (short)2,
-                            DurumId = (short)1,
-                            KurumTipiAdi = "Teknik Hizmet Yeri"
-                        },
-                        new
-                        {
-                            KurumTipiID = (short)3,
-                            DurumId = (short)1,
-                            KurumTipiAdi = "Donanım Alınan Yer"
-                        });
                 });
 
             modelBuilder.Entity("Sabim.Domain.Entities.Personel", b =>
@@ -1300,6 +1127,9 @@ namespace Sabim.Infrastructure.Persistence.Migrations
                         .HasMaxLength(11)
                         .IsUnicode(false)
                         .HasColumnType("varchar(11)");
+
+                    b.Property<DateTime?>("BirinciSinifaAyrilmaTarihi")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("BuradaGoreveBaslamaTarihi")
                         .HasColumnType("datetime2");
@@ -1492,6 +1322,129 @@ namespace Sabim.Infrastructure.Persistence.Migrations
                     b.ToTable("PersonelGorevlendirilme");
                 });
 
+            modelBuilder.Entity("Sabim.Domain.Entities.PersonelUnvanGecmisi", b =>
+                {
+                    b.Property<short>("PersonelUnvanGecmisiID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("SMALLINT");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("PersonelUnvanGecmisiID"));
+
+                    b.Property<short>("DurumId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<DateTime?>("GuncellenmeTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<short?>("GuncelleyenPersonelId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<short?>("OlusturanPersonelId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<DateTime?>("OlusturulmaTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<short>("PersonelId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<short?>("SilenPersonelId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<DateTime?>("SilinmeTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UnvanDegisimTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<short>("UnvanId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<DateTime>("UnvanaSahipOlduguTarih")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("PersonelUnvanGecmisiID");
+
+                    b.HasIndex("DurumId");
+
+                    b.HasIndex("GuncelleyenPersonelId");
+
+                    b.HasIndex("OlusturanPersonelId");
+
+                    b.HasIndex("PersonelId");
+
+                    b.HasIndex("SilenPersonelId");
+
+                    b.HasIndex("UnvanId");
+
+                    b.ToTable("PersonelUnvanGecmisi");
+                });
+
+            modelBuilder.Entity("Sabim.Domain.Entities.SavciCalisilanKatip", b =>
+                {
+                    b.Property<short>("SavciCalisilanKatipID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("SavciCalisilanKatipID"));
+
+                    b.Property<short>("DurumId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<bool>("GorevlendirilmeAktifMi")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<DateTime>("GorevlendirilmeBaslamaTarihi")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<DateTime?>("GorevlendirilmeBitisTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("GuncellenmeTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<short?>("GuncelleyenPersonelId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<short>("KatipId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<short?>("OlusturanPersonelId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<DateTime?>("OlusturulmaTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<short>("SavciId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<short?>("SilenPersonelId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<DateTime?>("SilinmeTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("SavciCalisilanKatipID");
+
+                    b.HasIndex("DurumId");
+
+                    b.HasIndex("GuncelleyenPersonelId");
+
+                    b.HasIndex("KatipId");
+
+                    b.HasIndex("OlusturanPersonelId");
+
+                    b.HasIndex("SavciId");
+
+                    b.HasIndex("SilenPersonelId");
+
+                    b.ToTable("SavciCalisilanKatip", (string)null);
+                });
+
             modelBuilder.Entity("Sabim.Domain.Entities.Sehir", b =>
                 {
                     b.Property<short>("SehirID")
@@ -1517,9 +1470,9 @@ namespace Sabim.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("SehirAdi")
                         .IsRequired()
-                        .HasMaxLength(15)
+                        .HasMaxLength(20)
                         .IsUnicode(true)
-                        .HasColumnType("nvarchar(15)");
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<short>("SehirKodu")
                         .HasColumnType("SMALLINT");
@@ -1547,575 +1500,6 @@ namespace Sabim.Infrastructure.Persistence.Migrations
                     b.HasIndex("SilenPersonelId");
 
                     b.ToTable("Sehir");
-
-                    b.HasData(
-                        new
-                        {
-                            SehirID = (short)1,
-                            DurumId = (short)1,
-                            SehirAdi = "Adana",
-                            SehirKodu = (short)1
-                        },
-                        new
-                        {
-                            SehirID = (short)2,
-                            DurumId = (short)1,
-                            SehirAdi = "Adıyaman",
-                            SehirKodu = (short)2
-                        },
-                        new
-                        {
-                            SehirID = (short)3,
-                            DurumId = (short)1,
-                            SehirAdi = "Afyonkarahisar",
-                            SehirKodu = (short)3
-                        },
-                        new
-                        {
-                            SehirID = (short)4,
-                            DurumId = (short)1,
-                            SehirAdi = "Ağrı",
-                            SehirKodu = (short)4
-                        },
-                        new
-                        {
-                            SehirID = (short)5,
-                            DurumId = (short)1,
-                            SehirAdi = "Amasya",
-                            SehirKodu = (short)5
-                        },
-                        new
-                        {
-                            SehirID = (short)6,
-                            DurumId = (short)1,
-                            SehirAdi = "Ankara",
-                            SehirKodu = (short)6
-                        },
-                        new
-                        {
-                            SehirID = (short)7,
-                            DurumId = (short)1,
-                            SehirAdi = "Antalya",
-                            SehirKodu = (short)7
-                        },
-                        new
-                        {
-                            SehirID = (short)8,
-                            DurumId = (short)1,
-                            SehirAdi = "Artvin",
-                            SehirKodu = (short)8
-                        },
-                        new
-                        {
-                            SehirID = (short)9,
-                            DurumId = (short)1,
-                            SehirAdi = "Aydın",
-                            SehirKodu = (short)9
-                        },
-                        new
-                        {
-                            SehirID = (short)10,
-                            DurumId = (short)1,
-                            SehirAdi = "Balıkesir",
-                            SehirKodu = (short)10
-                        },
-                        new
-                        {
-                            SehirID = (short)11,
-                            DurumId = (short)1,
-                            SehirAdi = "Bilecik",
-                            SehirKodu = (short)11
-                        },
-                        new
-                        {
-                            SehirID = (short)12,
-                            DurumId = (short)1,
-                            SehirAdi = "Bingöl",
-                            SehirKodu = (short)12
-                        },
-                        new
-                        {
-                            SehirID = (short)13,
-                            DurumId = (short)1,
-                            SehirAdi = "Bitlis",
-                            SehirKodu = (short)13
-                        },
-                        new
-                        {
-                            SehirID = (short)14,
-                            DurumId = (short)1,
-                            SehirAdi = "Bolu",
-                            SehirKodu = (short)14
-                        },
-                        new
-                        {
-                            SehirID = (short)15,
-                            DurumId = (short)1,
-                            SehirAdi = "Burdur",
-                            SehirKodu = (short)15
-                        },
-                        new
-                        {
-                            SehirID = (short)16,
-                            DurumId = (short)1,
-                            SehirAdi = "Bursa",
-                            SehirKodu = (short)16
-                        },
-                        new
-                        {
-                            SehirID = (short)17,
-                            DurumId = (short)1,
-                            SehirAdi = "Çanakkale",
-                            SehirKodu = (short)17
-                        },
-                        new
-                        {
-                            SehirID = (short)18,
-                            DurumId = (short)1,
-                            SehirAdi = "Çankırı",
-                            SehirKodu = (short)18
-                        },
-                        new
-                        {
-                            SehirID = (short)19,
-                            DurumId = (short)1,
-                            SehirAdi = "Çorum",
-                            SehirKodu = (short)19
-                        },
-                        new
-                        {
-                            SehirID = (short)20,
-                            DurumId = (short)1,
-                            SehirAdi = "Denizli",
-                            SehirKodu = (short)20
-                        },
-                        new
-                        {
-                            SehirID = (short)21,
-                            DurumId = (short)1,
-                            SehirAdi = "Diyarbakır",
-                            SehirKodu = (short)21
-                        },
-                        new
-                        {
-                            SehirID = (short)22,
-                            DurumId = (short)1,
-                            SehirAdi = "Edirne",
-                            SehirKodu = (short)22
-                        },
-                        new
-                        {
-                            SehirID = (short)23,
-                            DurumId = (short)1,
-                            SehirAdi = "Elazığ",
-                            SehirKodu = (short)23
-                        },
-                        new
-                        {
-                            SehirID = (short)24,
-                            DurumId = (short)1,
-                            SehirAdi = "Erzincan",
-                            SehirKodu = (short)24
-                        },
-                        new
-                        {
-                            SehirID = (short)25,
-                            DurumId = (short)1,
-                            SehirAdi = "Erzurum",
-                            SehirKodu = (short)25
-                        },
-                        new
-                        {
-                            SehirID = (short)26,
-                            DurumId = (short)1,
-                            SehirAdi = "Eskişehir",
-                            SehirKodu = (short)26
-                        },
-                        new
-                        {
-                            SehirID = (short)27,
-                            DurumId = (short)1,
-                            SehirAdi = "Gaziantep",
-                            SehirKodu = (short)27
-                        },
-                        new
-                        {
-                            SehirID = (short)28,
-                            DurumId = (short)1,
-                            SehirAdi = "Giresun",
-                            SehirKodu = (short)28
-                        },
-                        new
-                        {
-                            SehirID = (short)29,
-                            DurumId = (short)1,
-                            SehirAdi = "Gümüşhane",
-                            SehirKodu = (short)29
-                        },
-                        new
-                        {
-                            SehirID = (short)30,
-                            DurumId = (short)1,
-                            SehirAdi = "Hakkari",
-                            SehirKodu = (short)30
-                        },
-                        new
-                        {
-                            SehirID = (short)31,
-                            DurumId = (short)1,
-                            SehirAdi = "Hatay",
-                            SehirKodu = (short)31
-                        },
-                        new
-                        {
-                            SehirID = (short)32,
-                            DurumId = (short)1,
-                            SehirAdi = "Isparta",
-                            SehirKodu = (short)32
-                        },
-                        new
-                        {
-                            SehirID = (short)33,
-                            DurumId = (short)1,
-                            SehirAdi = "Mersin",
-                            SehirKodu = (short)33
-                        },
-                        new
-                        {
-                            SehirID = (short)34,
-                            DurumId = (short)1,
-                            SehirAdi = "İstanbul",
-                            SehirKodu = (short)34
-                        },
-                        new
-                        {
-                            SehirID = (short)35,
-                            DurumId = (short)1,
-                            SehirAdi = "İzmir",
-                            SehirKodu = (short)35
-                        },
-                        new
-                        {
-                            SehirID = (short)36,
-                            DurumId = (short)1,
-                            SehirAdi = "Kars",
-                            SehirKodu = (short)36
-                        },
-                        new
-                        {
-                            SehirID = (short)37,
-                            DurumId = (short)1,
-                            SehirAdi = "Kastamonu",
-                            SehirKodu = (short)37
-                        },
-                        new
-                        {
-                            SehirID = (short)38,
-                            DurumId = (short)1,
-                            SehirAdi = "Kayseri",
-                            SehirKodu = (short)38
-                        },
-                        new
-                        {
-                            SehirID = (short)39,
-                            DurumId = (short)1,
-                            SehirAdi = "Kırklareli",
-                            SehirKodu = (short)39
-                        },
-                        new
-                        {
-                            SehirID = (short)40,
-                            DurumId = (short)1,
-                            SehirAdi = "Kırşehir",
-                            SehirKodu = (short)40
-                        },
-                        new
-                        {
-                            SehirID = (short)41,
-                            DurumId = (short)1,
-                            SehirAdi = "Kocaeli",
-                            SehirKodu = (short)41
-                        },
-                        new
-                        {
-                            SehirID = (short)42,
-                            DurumId = (short)1,
-                            SehirAdi = "Konya",
-                            SehirKodu = (short)42
-                        },
-                        new
-                        {
-                            SehirID = (short)43,
-                            DurumId = (short)1,
-                            SehirAdi = "Kütahya",
-                            SehirKodu = (short)43
-                        },
-                        new
-                        {
-                            SehirID = (short)44,
-                            DurumId = (short)1,
-                            SehirAdi = "Malatya",
-                            SehirKodu = (short)44
-                        },
-                        new
-                        {
-                            SehirID = (short)45,
-                            DurumId = (short)1,
-                            SehirAdi = "Manisa",
-                            SehirKodu = (short)45
-                        },
-                        new
-                        {
-                            SehirID = (short)46,
-                            DurumId = (short)1,
-                            SehirAdi = "Kahramanmaraş",
-                            SehirKodu = (short)46
-                        },
-                        new
-                        {
-                            SehirID = (short)47,
-                            DurumId = (short)1,
-                            SehirAdi = "Mardin",
-                            SehirKodu = (short)47
-                        },
-                        new
-                        {
-                            SehirID = (short)48,
-                            DurumId = (short)1,
-                            SehirAdi = "Muğla",
-                            SehirKodu = (short)48
-                        },
-                        new
-                        {
-                            SehirID = (short)49,
-                            DurumId = (short)1,
-                            SehirAdi = "Muş",
-                            SehirKodu = (short)49
-                        },
-                        new
-                        {
-                            SehirID = (short)50,
-                            DurumId = (short)1,
-                            SehirAdi = "Nevşehir",
-                            SehirKodu = (short)50
-                        },
-                        new
-                        {
-                            SehirID = (short)51,
-                            DurumId = (short)1,
-                            SehirAdi = "Niğde",
-                            SehirKodu = (short)51
-                        },
-                        new
-                        {
-                            SehirID = (short)52,
-                            DurumId = (short)1,
-                            SehirAdi = "Ordu",
-                            SehirKodu = (short)52
-                        },
-                        new
-                        {
-                            SehirID = (short)53,
-                            DurumId = (short)1,
-                            SehirAdi = "Rize",
-                            SehirKodu = (short)53
-                        },
-                        new
-                        {
-                            SehirID = (short)54,
-                            DurumId = (short)1,
-                            SehirAdi = "Sakarya",
-                            SehirKodu = (short)54
-                        },
-                        new
-                        {
-                            SehirID = (short)55,
-                            DurumId = (short)1,
-                            SehirAdi = "Samsun",
-                            SehirKodu = (short)55
-                        },
-                        new
-                        {
-                            SehirID = (short)56,
-                            DurumId = (short)1,
-                            SehirAdi = "Siirt",
-                            SehirKodu = (short)56
-                        },
-                        new
-                        {
-                            SehirID = (short)57,
-                            DurumId = (short)1,
-                            SehirAdi = "Sinop",
-                            SehirKodu = (short)57
-                        },
-                        new
-                        {
-                            SehirID = (short)58,
-                            DurumId = (short)1,
-                            SehirAdi = "Sivas",
-                            SehirKodu = (short)58
-                        },
-                        new
-                        {
-                            SehirID = (short)59,
-                            DurumId = (short)1,
-                            SehirAdi = "Tekirdağ",
-                            SehirKodu = (short)59
-                        },
-                        new
-                        {
-                            SehirID = (short)60,
-                            DurumId = (short)1,
-                            SehirAdi = "Tokat",
-                            SehirKodu = (short)60
-                        },
-                        new
-                        {
-                            SehirID = (short)61,
-                            DurumId = (short)1,
-                            SehirAdi = "Trabzon",
-                            SehirKodu = (short)61
-                        },
-                        new
-                        {
-                            SehirID = (short)62,
-                            DurumId = (short)1,
-                            SehirAdi = "Tunceli",
-                            SehirKodu = (short)62
-                        },
-                        new
-                        {
-                            SehirID = (short)63,
-                            DurumId = (short)1,
-                            SehirAdi = "Şanlıurfa",
-                            SehirKodu = (short)63
-                        },
-                        new
-                        {
-                            SehirID = (short)64,
-                            DurumId = (short)1,
-                            SehirAdi = "Uşak",
-                            SehirKodu = (short)64
-                        },
-                        new
-                        {
-                            SehirID = (short)65,
-                            DurumId = (short)1,
-                            SehirAdi = "Van",
-                            SehirKodu = (short)65
-                        },
-                        new
-                        {
-                            SehirID = (short)66,
-                            DurumId = (short)1,
-                            SehirAdi = "Yozgat",
-                            SehirKodu = (short)66
-                        },
-                        new
-                        {
-                            SehirID = (short)67,
-                            DurumId = (short)1,
-                            SehirAdi = "Zonguldak",
-                            SehirKodu = (short)67
-                        },
-                        new
-                        {
-                            SehirID = (short)68,
-                            DurumId = (short)1,
-                            SehirAdi = "Aksaray",
-                            SehirKodu = (short)68
-                        },
-                        new
-                        {
-                            SehirID = (short)69,
-                            DurumId = (short)1,
-                            SehirAdi = "Bayburt",
-                            SehirKodu = (short)69
-                        },
-                        new
-                        {
-                            SehirID = (short)70,
-                            DurumId = (short)1,
-                            SehirAdi = "Karaman",
-                            SehirKodu = (short)70
-                        },
-                        new
-                        {
-                            SehirID = (short)71,
-                            DurumId = (short)1,
-                            SehirAdi = "Kırıkkale",
-                            SehirKodu = (short)71
-                        },
-                        new
-                        {
-                            SehirID = (short)72,
-                            DurumId = (short)1,
-                            SehirAdi = "Batman",
-                            SehirKodu = (short)72
-                        },
-                        new
-                        {
-                            SehirID = (short)73,
-                            DurumId = (short)1,
-                            SehirAdi = "Şırnak",
-                            SehirKodu = (short)73
-                        },
-                        new
-                        {
-                            SehirID = (short)74,
-                            DurumId = (short)1,
-                            SehirAdi = "Bartın",
-                            SehirKodu = (short)74
-                        },
-                        new
-                        {
-                            SehirID = (short)75,
-                            DurumId = (short)1,
-                            SehirAdi = "Ardahan",
-                            SehirKodu = (short)75
-                        },
-                        new
-                        {
-                            SehirID = (short)76,
-                            DurumId = (short)1,
-                            SehirAdi = "Iğdır",
-                            SehirKodu = (short)76
-                        },
-                        new
-                        {
-                            SehirID = (short)77,
-                            DurumId = (short)1,
-                            SehirAdi = "Yalova",
-                            SehirKodu = (short)77
-                        },
-                        new
-                        {
-                            SehirID = (short)78,
-                            DurumId = (short)1,
-                            SehirAdi = "Karabük",
-                            SehirKodu = (short)78
-                        },
-                        new
-                        {
-                            SehirID = (short)79,
-                            DurumId = (short)1,
-                            SehirAdi = "Kilis",
-                            SehirKodu = (short)79
-                        },
-                        new
-                        {
-                            SehirID = (short)80,
-                            DurumId = (short)1,
-                            SehirAdi = "Osmaniye",
-                            SehirKodu = (short)80
-                        },
-                        new
-                        {
-                            SehirID = (short)81,
-                            DurumId = (short)1,
-                            SehirAdi = "Düzce",
-                            SehirKodu = (short)81
-                        });
                 });
 
             modelBuilder.Entity("Sabim.Domain.Entities.SidebarMenu", b =>
@@ -2991,6 +2375,102 @@ namespace Sabim.Infrastructure.Persistence.Migrations
                     b.Navigation("SilenPersonel");
                 });
 
+            modelBuilder.Entity("Sabim.Domain.Entities.PersonelUnvanGecmisi", b =>
+                {
+                    b.HasOne("Sabim.Domain.Entities.Durum", "Durum")
+                        .WithMany()
+                        .HasForeignKey("DurumId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Sabim.Domain.Entities.Personel", "GuncelleyenPersonel")
+                        .WithMany()
+                        .HasForeignKey("GuncelleyenPersonelId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Sabim.Domain.Entities.Personel", "OlusturanPersonel")
+                        .WithMany()
+                        .HasForeignKey("OlusturanPersonelId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Sabim.Domain.Entities.Personel", "Personel")
+                        .WithMany("PersonelUnvanGecmisis")
+                        .HasForeignKey("PersonelId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Sabim.Domain.Entities.Personel", "SilenPersonel")
+                        .WithMany()
+                        .HasForeignKey("SilenPersonelId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Sabim.Domain.Entities.Unvan", "Unvan")
+                        .WithMany("PersonelUnvanGecmisis")
+                        .HasForeignKey("UnvanId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Durum");
+
+                    b.Navigation("GuncelleyenPersonel");
+
+                    b.Navigation("OlusturanPersonel");
+
+                    b.Navigation("Personel");
+
+                    b.Navigation("SilenPersonel");
+
+                    b.Navigation("Unvan");
+                });
+
+            modelBuilder.Entity("Sabim.Domain.Entities.SavciCalisilanKatip", b =>
+                {
+                    b.HasOne("Sabim.Domain.Entities.Durum", "Durum")
+                        .WithMany()
+                        .HasForeignKey("DurumId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Sabim.Domain.Entities.Personel", "GuncelleyenPersonel")
+                        .WithMany()
+                        .HasForeignKey("GuncelleyenPersonelId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Sabim.Domain.Entities.Personel", "Katip")
+                        .WithMany("KatipOlarakCalisilanKatips")
+                        .HasForeignKey("KatipId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Sabim.Domain.Entities.Personel", "OlusturanPersonel")
+                        .WithMany()
+                        .HasForeignKey("OlusturanPersonelId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Sabim.Domain.Entities.Personel", "Savci")
+                        .WithMany("SavciOlarakCalisilanKatips")
+                        .HasForeignKey("SavciId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Sabim.Domain.Entities.Personel", "SilenPersonel")
+                        .WithMany()
+                        .HasForeignKey("SilenPersonelId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Durum");
+
+                    b.Navigation("GuncelleyenPersonel");
+
+                    b.Navigation("Katip");
+
+                    b.Navigation("OlusturanPersonel");
+
+                    b.Navigation("Savci");
+
+                    b.Navigation("SilenPersonel");
+                });
+
             modelBuilder.Entity("Sabim.Domain.Entities.Sehir", b =>
                 {
                     b.HasOne("Sabim.Domain.Entities.Durum", "Durum")
@@ -3157,7 +2637,13 @@ namespace Sabim.Infrastructure.Persistence.Migrations
                     b.Navigation("AppUser")
                         .IsRequired();
 
+                    b.Navigation("KatipOlarakCalisilanKatips");
+
                     b.Navigation("PersonelGorevlendirilmes");
+
+                    b.Navigation("PersonelUnvanGecmisis");
+
+                    b.Navigation("SavciOlarakCalisilanKatips");
                 });
 
             modelBuilder.Entity("Sabim.Domain.Entities.Sehir", b =>
@@ -3172,6 +2658,8 @@ namespace Sabim.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Sabim.Domain.Entities.Unvan", b =>
                 {
+                    b.Navigation("PersonelUnvanGecmisis");
+
                     b.Navigation("Personels");
                 });
 #pragma warning restore 612, 618

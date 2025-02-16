@@ -12,9 +12,10 @@ namespace Sabim.Web.Areas.Admin.ViewComponents.KurumTipiViewComponents
         {
             _manager = manager;
         }
-        public async Task<IViewComponentResult> InvokeAsync(int? selectedKurumTipiId = null)
+        public async Task<IViewComponentResult> InvokeAsync(string? deger, int? selectedKurumTipiId = null)
         {
             var kurumTipleri = await _manager.KurumTipiService.TFindAllAsync(false);
+            ViewBag.Deger = deger;
             var kurumTipiDtoList = kurumTipleri.Select(k => new ResultKurumTipiDto
             {
                KurumTipiID = k.KurumTipiID,

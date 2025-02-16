@@ -7,7 +7,7 @@
         <div class="input-group-prepend">
             <span class="input-group-text"><i class="fas fa-tint"></i></span>
         </div>
-        <select class="form-control" id="kanGruplari" name="KanGrubuID" >
+        <select class="form-control" id="@(ViewBag.Deger ?? "")KanGruplari" name="KanGrubuID">
             @foreach (var kanGrubu in Model)
             {
                 <option value="@kanGrubu.KanGrubuID" selected="@kanGrubu.Selected">@kanGrubu.KanGrubuAdi</option>

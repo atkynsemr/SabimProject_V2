@@ -34,5 +34,8 @@
         public CalismaDurumu CalismaDurumu {  get; set; }
         public AppUser AppUser { get; set; }
         public ICollection<PersonelGorevlendirilme> PersonelGorevlendirilmes { get; set; } = new List<PersonelGorevlendirilme>();
+        public ICollection<PersonelUnvanGecmisi> PersonelUnvanGecmisis { get; set; } = new List<PersonelUnvanGecmisi>();
+        public ICollection<SavciCalisilanKatip> SavciOlarakCalisilanKatips { get; set; } = new List<SavciCalisilanKatip>();
+        public ICollection<SavciCalisilanKatip> KatipOlarakCalisilanKatips { get; set; } = new List<SavciCalisilanKatip>();
     }
 }

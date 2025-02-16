@@ -16,6 +16,7 @@
         public DateTime? BuradaGoreveBaslamaTarihi { get; init; }
         public string? KimlikNo { get; init; }
         public DateTime? BuradanAyrilmaTarihi { get; init; }
+        public DateTime? BirinciSinifaAyrilmaTarihi { get; init; }
         public string? AracPlakasi { get; init; }
         public short UnvanId { get; init; }
         public string? UnvanAdi { get; init; }
@@ -26,9 +27,10 @@
         public string? KurumAdi { get; init; }
         public short KadroTuruId { get; init; }
         public string? KadroTuruAdi { get; init; }
-        public short CalismaDurumuID { get; init; }
+        public short CalismaDurumuId { get; init; }
         public string? CalismaDurumAdi { get; init; }
         public short? GuncelleyenPersonelId { get; set; }
         public DateTime? GuncellenmeTarihi { get; set; }
+        public short? SehirId { get; init; }
     }
 }

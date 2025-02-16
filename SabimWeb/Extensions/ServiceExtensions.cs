@@ -50,6 +50,7 @@ namespace Sabim.Web.Extensions
             services.AddScoped<IRepositoryBase<AppUser>, AppUserRepository>();
             services.AddScoped<IRepositoryBase<SidebarMenu>, SidebarMenuRepository>();
             services.AddScoped<IRepositoryBase<Ekran>, EkranRepository>();
+            services.AddScoped<IRepositoryBase<SavciCalisilanKatip>, SavciCalisilanKatipServiceRepository>();
             //Repository
             services.AddScoped<ICalismaDurumuRepository, CalismaDurumuRepository>();
             services.AddScoped<ICinsiyetRepository, CinsiyetRepository>();
@@ -72,6 +73,7 @@ namespace Sabim.Web.Extensions
             services.AddScoped<IAppUserRepository, AppUserRepository>();
             services.AddScoped<ISidebarMenuRepository, SidebarMenuRepository>();
             services.AddScoped<IEkranRepository, EkranRepository>();
+            services.AddScoped<ISavciCalisilanKatipServiceRepository, SavciCalisilanKatipServiceRepository>();
         }
         public static void ConfigureRepositoryManager(this IServiceCollection services)
         {
@@ -106,6 +108,7 @@ namespace Sabim.Web.Extensions
             services.AddScoped<IEkranService, EkranService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddSingleton<ILoggerService, LoggerService>();
+            services.AddScoped<ISavciCalisilanKatipService, SavciCalisilanKatipService>();
         }
         public static void ConfigureServiceManager(this IServiceCollection services)
         {
@@ -194,6 +197,5 @@ namespace Sabim.Web.Extensions
                 return new EmailHelper(mailSettings);
             });
         }
-
     }
 }

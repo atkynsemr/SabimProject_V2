@@ -7,8 +7,8 @@
         <div class="input-group-prepend">
             <span class="input-group-text"><i class="fas fa-restroom"></i></span>
         </div>
-        <select class="form-control" id="cinsiyetler" name="CinsiyetID">
-            @foreach (var cinsiyet in Model)
+        <select class="form-control" id="@(ViewBag.Deger ?? "")Cinsiyetler" name="CinsiyetID">
+             @foreach (var cinsiyet in Model)
             {
                 <option value="@cinsiyet.CinsiyetID" selected="@cinsiyet.Selected">@cinsiyet.CinsiyetAdi</option>
             }

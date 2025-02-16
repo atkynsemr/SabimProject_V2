@@ -1,0 +1,12 @@
+﻿@using Sabim.Domain.DTOs.PersonelDtos
+@model List<ListPersonelDto>
+
+<div class="form-group">
+    <label for="KadroTuruAdi">Personeller</label>
+    <select class="form-control" id="@(ViewBag.Deger ?? "")PersonelListesi" name="SelectedPersonelIds" placeholder="Katip Listesi" multiple style="width: 100%;">
+        @foreach (var personel in Model)
+        {
+            <option value="@personel.PersonelID" selected="@personel.Selected">@personel.AdSoyad</option>
+        }
+    </select>
+</div>

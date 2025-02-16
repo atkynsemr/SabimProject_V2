@@ -12,9 +12,11 @@ namespace Sabim.Services.Contracts
         Task<string> TAddAsync(T entity);
         Task<string> TUpdateAsync(T entity);
         Task<string> TDeleteAsync(short id);
+        Task<string> TDeleteRangeByExpressionAsync(Expression<Func<T, bool>> predicate);
         Task<List<T>> TFindAllAsync(bool trackChanges);
         Task<List<T>> TFindAllAsyncWithEntities(bool trackChanges, params Expression<Func<T, object>>[] childrens);
         bool TIsAny(Expression<Func<T, bool>> predicate, short? excludeId = null);
         Task<AuditTrailDto?> TGetAuditTrailWithDetailsAsync<TKey>(TKey id);
+        Task<object?> TAddAndGetIdAsync(T entity);
     }
 }

@@ -7,7 +7,6 @@ using Sabim.Domain.Entities;
 using Sabim.Services.Contracts;
 using Sabim.Web.Helpers.MethodHelper;
 using System.Security.Claims;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Sabim.Web.Areas.Admin.Controllers
 {

@@ -1,0 +1,18 @@
+﻿@using Sabim.Domain.DTOs.AppRoleDtos
+@model List<ResultAppRoleDto>
+
+<div class="form-group">
+    <label for="Name">Roller</label>
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fas fa-user-shield"></i></span>
+        </div>
+        <select class="form-control" id="@(ViewBag.Deger ?? "")AppRoller" name="RoleId">
+            @foreach (var appRole in Model)
+            {
+                <option value="@appRole.Id" selected="@appRole.Selected">@appRole.Name</option>
+            }
+        </select>
+    </div>
+</div>
+

@@ -11,10 +11,10 @@ namespace Sabim.Web.Areas.Admin.ViewComponents.UnvanViewComponent
         {
             _manager = manager;
         }
-        public async Task<IViewComponentResult> InvokeAsync(int? selectedUnvanId = null)
+        public async Task<IViewComponentResult> InvokeAsync(string? deger, int? selectedUnvanId = null)
         {
             var unvanlar = await _manager.UnvanService.TFindAllAsync(false);
-            // Alfabetik sıralama
+            ViewBag.Deger = deger;
             var unvanDtoList = unvanlar
                 .OrderBy(u => u.UnvanAdi)
                 .Select(u => new ResultUnvanDto

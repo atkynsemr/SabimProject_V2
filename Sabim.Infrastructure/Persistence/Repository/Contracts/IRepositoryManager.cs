@@ -25,5 +25,6 @@ namespace Sabim.Infrastructure.Persistence.Repository.Contracts
         IAppRoleRepository AppRole { get; }
         ISidebarMenuRepository SidebarMenu { get; } 
         IEkranRepository Ekran { get; }
+        ISavciCalisilanKatipServiceRepository SavciCalisilanKatip { get; }
     }
 }

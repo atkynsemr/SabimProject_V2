@@ -27,6 +27,7 @@ namespace Sabim.Infrastructure.Persistence.Repository.Implementations
         private readonly IAppRoleRepository _appRoleRepository;
         private readonly ISidebarMenuRepository _sidebarMenuRepository;
         private readonly IEkranRepository _ekranRepository;
+        private readonly ISavciCalisilanKatipServiceRepository _savciCalisilanKatipServiceRepository;
 
         public RepositoryManager(SabimDbContext context, ICalismaDurumuRepository calismaDurumuRepository,
             ICinsiyetRepository cinsiyetRepository, IDurumRepository durumRepository,
@@ -36,7 +37,7 @@ namespace Sabim.Infrastructure.Persistence.Repository.Implementations
             ISehirRepository sehirRepository, IUnvanRepository unvanRepository, IBolumRepository bolumRepository, IBirimRepository birimRepository, IKisimRepository kisimRepository,
             IKabinetBazliBolumRepository kabinetBazliBolumRepository, IGorevlendirilmeTipiRepository gorevlendirilmeTipiRepository, IPersonelGorevlendirilmeRepository personelGorevlendirilmeRepository, 
             IAppUserRepository appUserRepository, IAppRoleRepository appRoleRepository, ISidebarMenuRepository sidebarMenuRepository, 
-            IEkranRepository ekranRepository)
+            IEkranRepository ekranRepository, ISavciCalisilanKatipServiceRepository savciCalisilanKatipServiceRepository)
         {
             _context = context;
             _calismaDurumuRepository = calismaDurumuRepository;
@@ -60,6 +61,7 @@ namespace Sabim.Infrastructure.Persistence.Repository.Implementations
             _appRoleRepository = appRoleRepository;
             _sidebarMenuRepository = sidebarMenuRepository;
             _ekranRepository = ekranRepository;
+            _savciCalisilanKatipServiceRepository = savciCalisilanKatipServiceRepository;
         }
         public ICalismaDurumuRepository CalismaDurumu => _calismaDurumuRepository;
         public ICinsiyetRepository Cinsiyet => _cinsiyetRepository;
@@ -82,6 +84,7 @@ namespace Sabim.Infrastructure.Persistence.Repository.Implementations
         public IAppRoleRepository AppRole => _appRoleRepository;
         public ISidebarMenuRepository SidebarMenu => _sidebarMenuRepository;
         public IEkranRepository Ekran => _ekranRepository;
+        public ISavciCalisilanKatipServiceRepository SavciCalisilanKatip => _savciCalisilanKatipServiceRepository;
         public IRepositoryBase<T> GetRepository<T>() where T : class
         {
             return new RepositoryBase<T>(_context);

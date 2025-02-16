@@ -21,11 +21,8 @@ namespace Sabim.Web.Areas.Admin.Controllers
             _manager = manager;
             _mapper = mapper;
         }
-
         public async Task<IActionResult> Index()
         {
-            //var result =await _manager.BirimService.TFindAllAsyncWithEntities(false, e=>e.Durum, e=>e.Bolum, e=>e.Kisims);
-            //var birimler = _mapper.Map<List<ResultBirimWithKisimCountDto>>(result);
             return View();
         }
         [HttpPost]

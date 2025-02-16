@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/colreorder/2.0.4/css/colReorder.bootstrap4.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/4.0.1/css/fixedHeader.bootstrap4.css">
     <link rel="stylesheet" href="/AdminTemplate/dist/css/CustomCss.css">
+    <link rel="stylesheet" href="/AdminTemplate/dist/css/choices.min.css">
 }
 
 <!-- Personel Ekleme Modal Başlangıç-->
@@ -38,8 +39,7 @@
                 <div class="card-header p-2 mb-3">
                     <ul class="nav nav-pills">
                         <li class="nav-item"><a class="nav-link active" href="#personelKisiselBilgileri" data-toggle="tab">Kişisel Bilgiler</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Timeline</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#personelKullaniciBilgileri" data-toggle="tab">Kullanıcı Bilgileri</a></li>
                     </ul>
                 </div>
                 <form id="PersonelEkleForm">
@@ -54,8 +54,8 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fa fa-id-card"></i></span>
                                             </div>
-                                            <input type="text" class="form-control" id="kimlikNo" name="KimlikNo" asp-for="YeniPersonel.KimlikNo" placeholder="TC Kimlik Numarası Giriniz" maxlength="11" onkeypress="return event.charCode >= 48 && event.charCode <= 57;" />
-                                            <span asp-validation-for="YeniPersonel.KimlikNo" name="KimlikNo" class="text-danger"></span>
+                                            <input type="text" class="form-control" id="CreateKimlikNo" name="KimlikNo" asp-for="YeniPersonel.KimlikNo" placeholder="TC Kimlik Numarası Giriniz" maxlength="11" onkeypress="return event.charCode >= 48 && event.charCode <= 57;" />
+                                            <span asp-validation-for="YeniPersonel.KimlikNo" name="KimlikNo" class="col-sm-12 text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -64,41 +64,44 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><strong>ab</strong></span>
                                             </div>
-                                            <input type="text" class="form-control capitalize-input" id="sicilNumarasi" name="SicilNumarasi" asp-for="YeniPersonel.SicilNumarasi" placeholder="Sicil Numarasını Giriniz" minlength="5" maxlength="7" onkeypress="return event.charCode >= 48 && event.charCode <= 57;" required />
-                                            <span asp-validation-for="YeniPersonel.SicilNumarasi" name="SicilNumarasi" class="text-danger"></span>
+                                            <input type="text" class="form-control capitalize-input" id="CreateSicilNumarasi" name="SicilNumarasi" asp-for="YeniPersonel.SicilNumarasi" placeholder="Sicil Numarasını Giriniz" minlength="5" maxlength="7" onkeypress="return event.charCode >= 48 && event.charCode <= 57;" required />
+                                            <span asp-validation-for="YeniPersonel.SicilNumarasi" name="SicilNumarasi" class="col-sm-12 text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="Ad">Personel Adı</label>
-                                        <input type="text" class="form-control capitalize-input" id="ad" name="PersonelAdi" asp-for="YeniPersonel.Ad" placeholder="Personel Adı Giriniz" maxlength="30" required />
+                                        <input type="text" class="form-control capitalize-input" id="CreateAd" name="Ad" asp-for="YeniPersonel.Ad" placeholder="Personel Adı Giriniz" maxlength="30" required />
                                         <span asp-validation-for="YeniPersonel.Ad" name="Ad" class="text-danger"></span>
                                     </div>
                                     <div class="form-group">
                                         <label for="Soyad">Personel Soyadı</label>
-                                        <input type="text" class="form-control capitalize-input" id="soyad" name="PersonelSoyadi" asp-for="YeniPersonel.Soyad" placeholder="Personel Soyadı Giriniz" maxlength="25" required />
+                                        <input type="text" class="form-control capitalize-input" id="CreateSoyad" name="Soyad" asp-for="YeniPersonel.Soyad" placeholder="Personel Soyadı Giriniz" maxlength="25" required />
                                         <span asp-validation-for="YeniPersonel.Soyad" name="Soyad" class="text-danger"></span>
                                     </div>
-                                    @await Component.InvokeAsync("_UnvanGenelComponent")
-                                    @await Component.InvokeAsync("_KadroTuruGenelComponent")
-                                    @await Component.InvokeAsync("_GorevlendirilmeTuruGenelComponent")
+                                    @await Component.InvokeAsync("_UnvanGenelComponent", new { deger = "create" })
+                                    <div id="katipler_content">
+                                    @await Component.InvokeAsync("_PersonelListesiComponent", new { deger = "create" })
+                                    </div>
+                                    @await Component.InvokeAsync("_KadroTuruGenelComponent", new { deger = "create" })
                                 </div>
                                 <div class="col">
-                                    @await Component.InvokeAsync("_SehirListesiGenelComponent")
+                                    @await Component.InvokeAsync("_GorevlendirilmeTuruGenelComponent", new { deger = "create" })
+                                    @await Component.InvokeAsync("_SehirListesiGenelComponent", new { deger = "create", selectedSehirId = 55 })
                                     <div id="personelEkleComponent">
-                                        @await Component.InvokeAsync("_KurumGenelComponent", new { kurumTipiId = 1, sehirId = 1 })
+                                        @await Component.InvokeAsync("_KurumGenelComponent", new { deger = "create", selectedKurumId = 784, kurumTipiId = 1, sehirId = 55 })
                                     </div>
                                     <div class="form-group">
                                         <label for="Derece">Personel Derecesi</label>
-                                        <input type="text" class="form-control" id="derece" name="Derece" asp-for="YeniPersonel.Derece" placeholder="Personel Derecesini Giriniz" maxlength="2" onkeypress="return event.charCode >= 48 && event.charCode <= 57;" />
+                                        <input type="text" class="form-control" id="CreateDerece" name="Derece" asp-for="YeniPersonel.Derece" placeholder="Personel Derecesini Giriniz" maxlength="2" onkeypress="return event.charCode >= 48 && event.charCode <= 57;" />
                                         <span asp-validation-for="YeniPersonel.Derece" name="Derece" class="text-danger"></span>
                                     </div>
                                     <div class="form-group">
                                         <label for="Derece">Personel Kademesi</label>
-                                        <input type="text" class="form-control" id="kademe" name="Kademe" asp-for="YeniPersonel.Kademe" placeholder="Personel Kademesini Giriniz" maxlength="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57;" />
+                                        <input type="text" class="form-control" id="CreateKademe" name="Kademe" asp-for="YeniPersonel.Kademe" placeholder="Personel Kademesini Giriniz" maxlength="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57;" />
                                         <span asp-validation-for="YeniPersonel.Kademe" name="Kademe" class="text-danger"></span>
                                     </div>
-                                    @await Component.InvokeAsync("_CinsiyetListesiGenelComponent")
-                                    @await Component.InvokeAsync("_KanGrubuGenelComponent")
+                                    @await Component.InvokeAsync("_CinsiyetListesiGenelComponent", new { deger = "create" })
+                                    @await Component.InvokeAsync("_KanGrubuGenelComponent", new { deger = "create" })
                                 </div>
                                 <div class="col">
                                     <div class="form-group">
@@ -107,8 +110,8 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fa fa-map"></i></span>
                                             </div>
-                                            <input type="text" class="form-control capitalize-input" id="dogumYeri" name="DogumYeri" asp-for="YeniPersonel.DogumYeri" placeholder="Doğum Yerini Giriniz" maxlength="35" />
-                                            <span asp-validation-for="YeniPersonel.DogumYeri" name="DogumYeri" class="text-danger"></span>
+                                            <input type="text" class="form-control capitalize-input" id="CreateDogumYeri" name="DogumYeri" asp-for="YeniPersonel.DogumYeri" placeholder="Doğum Yerini Giriniz" maxlength="35" />
+                                            <span asp-validation-for="YeniPersonel.DogumYeri" name="DogumYeri" class="col-sm-12 text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -117,7 +120,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fas fa-phone"></i></span>
                                             </div>
-                                            <input type="text" class="form-control" id="cepTelefonu" name="CepTelefonu" asp-for="YeniPersonel.CepTelefonu" placeholder="Cep Telefonu Giriniz" maxlength="11" />
+                                            <input type="text" class="form-control" id="CreateCepTelefonu" name="CepTelefonu" asp-for="YeniPersonel.CepTelefonu" placeholder="Cep Telefonu Giriniz" maxlength="11" onkeypress="return event.charCode >= 48 && event.charCode <= 57;" />
                                             <span asp-validation-for="YeniPersonel.CepTelefonu" name="CepTelefonu" class="col-sm-12 text-danger"></span>
                                         </div>
                                     </div>
@@ -127,7 +130,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                                             </div>
-                                            <input type="text" class="form-control" id="dogumTarihi" name="DogumTarihi" asp-for="YeniPersonel.DogumTarihi" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask />
+                                            <input type="text" class="form-control" id="CreateDogumTarihi" name="DogumTarihi" asp-for="YeniPersonel.DogumTarihi" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask />
                                             <span asp-validation-for="YeniPersonel.DogumTarihi" name="DogumTarihi" class="col-sm-12 text-danger"></span>
                                         </div>
                                     </div>
@@ -137,7 +140,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                                             </div>
-                                            <input type="text" class="form-control" id="meslegeGirisTarihi" name="MeslegeGirisTarihi" asp-for="YeniPersonel.MeslegeGirisTarihi" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask />
+                                            <input type="text" class="form-control" id="CreateMeslegeGirisTarihi" name="MeslegeGirisTarihi" asp-for="YeniPersonel.MeslegeGirisTarihi" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask />
                                             <span asp-validation-for="YeniPersonel.MeslegeGirisTarihi" name="MeslegeGirisTarihi" class="col-sm-12 text-danger"></span>
                                         </div>
                                     </div>
@@ -147,7 +150,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                                             </div>
-                                            <input type="text" class="form-control" id="buradaGoreveBaslamaTarihi" name="BuradaGoreveBaslamaTarihi" asp-for="YeniPersonel.BuradaGoreveBaslamaTarihi" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask />
+                                            <input type="text" class="form-control" id="CreateBuradaGoreveBaslamaTarihi" name="BuradaGoreveBaslamaTarihi" asp-for="YeniPersonel.BuradaGoreveBaslamaTarihi" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask />
                                             <span asp-validation-for="YeniPersonel.BuradaGoreveBaslamaTarihi" name="BuradaGoreveBaslamaTarihi" class="col-sm-12 text-danger"></span>
                                         </div>
                                     </div>
@@ -157,161 +160,73 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                                             </div>
-                                            <input type="text" class="form-control" id="birinciSinifaAyrilmaTarihi" name="BirinciSinifaAyrilmaTarihi" asp-for="YeniPersonel.BirinciSinifaAyrilmaTarihi" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask />
+                                            <input type="text" class="form-control" id="CreateBirinciSinifaAyrilmaTarihi" name="BirinciSinifaAyrilmaTarihi" asp-for="YeniPersonel.BirinciSinifaAyrilmaTarihi" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask />
                                             <span asp-validation-for="YeniPersonel.BirinciSinifaAyrilmaTarihi" name="DogumTarihi" class="col-sm-12 text-danger"></span>
                                         </div>
                                     </div>
+                                    <div class="form-group">
+                                        <label for="dogumYeri">Araç Plakası</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-car"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control text-capitalize" id="CreateAracPlakasi" name="AracPlakasi" asp-for="YeniPersonel.AracPlakasi" placeholder="Araç Plakası Giriniz" maxlength="11" />
+                                            <span asp-validation-for="YeniPersonel.AracPlakasi" name="AracPlakasi" class="col-sm-12 text-danger"></span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <input type="hidden" id="DurumId" name="DurumId" asp-for="YeniPersonel.DurumId" value="1" />
+                                <input type="hidden" id="CreateDurumId" name="DurumId" asp-for="YeniPersonel.DurumId" value="1" />
+                                <input type="hidden" id="CreateCalismaDurumuId" name="CalismaDurumuId" asp-for="YeniPersonel.CalismaDurumuId" value="1" />
                             </div>
                         </div>
                         <!-- /.tab-pane -->
-                        <div class="tab-pane" id="timeline">
-                            <!-- The timeline -->
-                            <div class="timeline timeline-inverse">
-                                <!-- timeline time label -->
-                                <div class="time-label">
-                                    <span class="bg-danger">
-                                        10 Feb. 2014
-                                    </span>
-                                </div>
-                                <!-- /.timeline-label -->
-                                <!-- timeline item -->
-                                <div>
-                                    <i class="fas fa-envelope bg-primary"></i>
-
-                                    <div class="timeline-item">
-                                        <span class="time"><i class="far fa-clock"></i> 12:05</span>
-
-                                        <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
-
-                                        <div class="timeline-body">
-                                            Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
-                                            weebly ning heekya handango imeem plugg dopplr jibjab, movity
-                                            jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
-                                            quora plaxo ideeli hulu weebly balihoo...
-                                        </div>
-                                        <div class="timeline-footer">
-                                            <a href="#" class="btn btn-primary btn-sm">Read more</a>
-                                            <a href="#" class="btn btn-danger btn-sm">Delete</a>
+                        <div class="tab-pane" id="personelKullaniciBilgileri">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="UserName">Kullanıcı Adı</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-user"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" id="CreateUserName" name="UserName" asp-for="YeniKullanici.UserName" placeholder="Kullanıcı Adını Giriniz" maxlength="20" required />
+                                            <span asp-validation-for="YeniKullanici.UserName" name="UserName" class="col-sm-12 text-danger"></span>
                                         </div>
                                     </div>
-                                </div>
-                                <!-- END timeline item -->
-                                <!-- timeline item -->
-                                <div>
-                                    <i class="fas fa-user bg-info"></i>
-
-                                    <div class="timeline-item">
-                                        <span class="time"><i class="far fa-clock"></i> 5 mins ago</span>
-
-                                        <h3 class="timeline-header border-0">
-                                            <a href="#">Sarah Young</a> accepted your friend request
-                                        </h3>
-                                    </div>
-                                </div>
-                                <!-- END timeline item -->
-                                <!-- timeline item -->
-                                <div>
-                                    <i class="fas fa-comments bg-warning"></i>
-
-                                    <div class="timeline-item">
-                                        <span class="time"><i class="far fa-clock"></i> 27 mins ago</span>
-
-                                        <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
-
-                                        <div class="timeline-body">
-                                            Take me to your leader!
-                                            Switzerland is small and neutral!
-                                            We are more like Germany, ambitious and misunderstood!
-                                        </div>
-                                        <div class="timeline-footer">
-                                            <a href="#" class="btn btn-warning btn-flat btn-sm">View comment</a>
+                                    <div class="form-group">
+                                        <label for="Email">Email</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-envelope"></i></span>
+                                            </div>
+                                            <input type="email" class="form-control" id="CreateEmail" name="Email" asp-for="YeniKullanici.Email" placeholder="Email Adresini Giriniz" maxlength="35" required />
+                                            <span asp-validation-for="YeniKullanici.Email" name="Email" class="col-sm-12 text-danger"></span>
                                         </div>
                                     </div>
-                                </div>
-                                <!-- END timeline item -->
-                                <!-- timeline time label -->
-                                <div class="time-label">
-                                    <span class="bg-success">
-                                        3 Jan. 2014
-                                    </span>
-                                </div>
-                                <!-- /.timeline-label -->
-                                <!-- timeline item -->
-                                <div>
-                                    <i class="fas fa-camera bg-purple"></i>
-
-                                    <div class="timeline-item">
-                                        <span class="time"><i class="far fa-clock"></i> 2 days ago</span>
-
-                                        <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
-
-                                        <div class="timeline-body">
-                                            <img src="https://placehold.it/150x100" alt="...">
-                                            <img src="https://placehold.it/150x100" alt="...">
-                                            <img src="https://placehold.it/150x100" alt="...">
-                                            <img src="https://placehold.it/150x100" alt="...">
+                                    <div class="form-group">
+                                        <label for="Password">Şifre</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-lock"></i></span>
+                                            </div>
+                                            <input type="password" class="form-control" id="CreatePassword" name="Password" asp-for="YeniKullanici.Password" placeholder="Şifre Giriniz" maxlength="15" required />
+                                            <span asp-validation-for="YeniKullanici.Password" name="Password" class="col-sm-12 text-danger"></span>
                                         </div>
                                     </div>
-                                </div>
-                                <!-- END timeline item -->
-                                <div>
-                                    <i class="far fa-clock bg-gray"></i>
+                                    <div class="form-group">
+                                        <label for="ConfirmPassword">Şifre(Tekrar)</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-lock"></i></span>
+                                            </div>
+                                            <input type="password" class="form-control" id="CreateConfirmPassword" name="ConfirmPassword" asp-for="YeniKullanici.ConfirmPassword" placeholder="Şifre(Tekrar) Giriniz" maxlength="15" required />
+                                            <span asp-validation-for="YeniKullanici.ConfirmPassword" name="ConfirmPassword" class="col-sm-12 text-danger"></span>
+                                        </div>
+                                    </div>
+                                    @await Component.InvokeAsync("_AppRoleGenelComponent", new { deger = "create" })
                                 </div>
                             </div>
                         </div>
-                        <!-- /.tab-pane -->
-
-                        <div class="tab-pane" id="settings">
-                            <form class="form-horizontal">
-                                <div class="form-group row">
-                                    <label for="inputName" class="col-sm-2 col-form-label">Name</label>
-                                    <div class="col-sm-10">
-                                        <input type="email" class="form-control" id="inputName" placeholder="Name">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
-                                    <div class="col-sm-10">
-                                        <input type="email" class="form-control" id="inputEmail" placeholder="Email">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="inputName2" class="col-sm-2 col-form-label">Name</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="inputName2" placeholder="Name">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="inputExperience" class="col-sm-2 col-form-label">Experience</label>
-                                    <div class="col-sm-10">
-                                        <textarea class="form-control" id="inputExperience" placeholder="Experience"></textarea>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="inputSkills" class="col-sm-2 col-form-label">Skills</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="inputSkills" placeholder="Skills">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="offset-sm-2 col-sm-10">
-                                        <div class="checkbox">
-                                            <label>
-                                                <input type="checkbox"> I agree to the <a href="#">terms and conditions</a>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="offset-sm-2 col-sm-10">
-                                        <button type="submit" class="btn btn-danger">Submit</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        <!-- /.tab-pane -->
                     </div>
                 </form>
             </div>
@@ -323,6 +238,209 @@
     </div>
 </div>
 <!-- ./Personel Ekleme Modal Bitiş-->
+<!-- Personel Düzenleme Modal Başlangıç-->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel">
+    <div class="modal-dialog mw-100 w-75" role="document">
+        <div class="modal-content">
+            <div class="overlay">
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                    <div class="spinner-border text-light" role="status">
+                        <span class="sr-only">Lütfen Bekleyiniz...</span>
+                    </div>
+                    <div>
+                        <span class="text-center text-white">Lütfen Bekleyiniz...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-header warning">
+                <h5 class="modal-title" id="editModalLabel">Personel Düzenle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Form Başlangıcı -->
+                <form id="PersonelGuncelleForm">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="PersonelID" id="UpdatePersonelID" asp-for="GuncellePersonel.PersonelID" />
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="KimlikNo">T.C. Kimlik Numarası</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa fa-id-card"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control" id="UpdateKimlikNo" name="KimlikNo" asp-for="GuncellePersonel.KimlikNo" placeholder="TC Kimlik Numarası Giriniz" maxlength="11" onkeypress="return event.charCode >= 48 && event.charCode <= 57;" />
+                                    <span asp-validation-for="GuncellePersonel.KimlikNo" name="KimlikNo" class="col-sm-12 text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="SicilNumarasi">Sicil Numarası</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><strong>ab</strong></span>
+                                    </div>
+                                    <input type="text" class="form-control capitalize-input" id="UpdateSicilNumarasi" name="SicilNumarasi" asp-for="GuncellePersonel.SicilNumarasi" placeholder="Sicil Numarasını Giriniz" minlength="5" maxlength="7" onkeypress="return event.charCode >= 48 && event.charCode <= 57;" required />
+                                    <span asp-validation-for="GuncellePersonel.SicilNumarasi" name="SicilNumarasi" class="col-sm-12 text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="Ad">Personel Adı</label>
+                                <input type="text" class="form-control capitalize-input" id="UpdateAd" name="Ad" asp-for="GuncellePersonel.Ad" placeholder="Personel Adı Giriniz" maxlength="30" required />
+                                <span asp-validation-for="GuncellePersonel.Ad" name="Ad" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="Soyad">Personel Soyadı</label>
+                                <input type="text" class="form-control capitalize-input" id="UpdateSoyad" name="Soyad" asp-for="GuncellePersonel.Soyad" placeholder="Personel Soyadı Giriniz" maxlength="25" required />
+                                <span asp-validation-for="GuncellePersonel.Soyad" name="Soyad" class="text-danger"></span>
+                            </div>
+                            @await Component.InvokeAsync("_UnvanGenelComponent", new { deger = "update" })
+                            <div id="update_katipler_content">
+                                @await Component.InvokeAsync("_PersonelListesiComponent", new { deger = "update" })
+                            </div>
+                            @await Component.InvokeAsync("_KadroTuruGenelComponent", new { deger = "update" })
+                            @await Component.InvokeAsync("_GorevlendirilmeTuruGenelComponent", new { deger = "update" })
+                            @await Component.InvokeAsync("_CalismaDurumuGenelComponent", new { deger = "update" })
+                        </div>
+                        <div class="col">
+                            @await Component.InvokeAsync("_SehirListesiGenelComponent", new { deger = "update" })
+                            <div id="personelGuncelleComponent">
+                                @await Component.InvokeAsync("_KurumGenelComponent", new { kurumTipiId = 1, sehirId = 1 })
+                            </div>
+                            <div class="form-group">
+                                <label for="Derece">Personel Derecesi</label>
+                                <input type="text" class="form-control" id="UpdateDerece" name="Derece" asp-for="GuncellePersonel.Derece" placeholder="Personel Derecesini Giriniz" maxlength="2" onkeypress="return event.charCode >= 48 && event.charCode <= 57;" />
+                                <span asp-validation-for="GuncellePersonel.Derece" name="Derece" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="Derece">Personel Kademesi</label>
+                                <input type="text" class="form-control" id="UpdateKademe" name="Kademe" asp-for="GuncellePersonel.Kademe" placeholder="Personel Kademesini Giriniz" maxlength="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57;" />
+                                <span asp-validation-for="GuncellePersonel.Kademe" name="Kademe" class="text-danger"></span>
+                            </div>
+                            @await Component.InvokeAsync("_CinsiyetListesiGenelComponent", new { deger = "update" })
+                            @await Component.InvokeAsync("_KanGrubuGenelComponent", new { deger = "update" })
+                            <div class="form-group">
+                                <label for="dogumYeri">Doğum Yeri</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa fa-map"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control capitalize-input" id="UpdateDogumYeri" name="DogumYeri" asp-for="GuncellePersonel.DogumYeri" placeholder="Doğum Yerini Giriniz" maxlength="35" />
+                                    <span asp-validation-for="GuncellePersonel.DogumYeri" name="DogumYeri" class="col-sm-12 text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Cep Telefonu</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control" id="UpdateCepTelefonu" name="CepTelefonu" asp-for="GuncellePersonel.CepTelefonu" placeholder="Cep Telefonu Giriniz" maxlength="11" onkeypress="return event.charCode >= 48 && event.charCode <= 57;" />
+                                    <span asp-validation-for="GuncellePersonel.CepTelefonu" name="CepTelefonu" class="col-sm-12 text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Doğum Tarihi</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control" id="UpdateDogumTarihi" name="DogumTarihi" asp-for="GuncellePersonel.DogumTarihi" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask />
+                                    <span asp-validation-for="GuncellePersonel.DogumTarihi" name="DogumTarihi" class="col-sm-12 text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Mesleğe Giriş Tarihi</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control" id="UpdateMeslegeGirisTarihi" name="MeslegeGirisTarihi" asp-for="GuncellePersonel.MeslegeGirisTarihi" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask />
+                                    <span asp-validation-for="GuncellePersonel.MeslegeGirisTarihi" name="MeslegeGirisTarihi" class="col-sm-12 text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Burada Göreve Başlama Tarihi</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control" id="UpdateBuradaGoreveBaslamaTarihi" name="BuradaGoreveBaslamaTarihi" asp-for="GuncellePersonel.BuradaGoreveBaslamaTarihi" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask />
+                                    <span asp-validation-for="GuncellePersonel.BuradaGoreveBaslamaTarihi" name="BuradaGoreveBaslamaTarihi" class="col-sm-12 text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Birinci Sınıfa Ayrılma Tarihi</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control" id="UpdateBirinciSinifaAyrilmaTarihi" name="BirinciSinifaAyrilmaTarihi" asp-for="GuncellePersonel.BirinciSinifaAyrilmaTarihi" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask />
+                                    <span asp-validation-for="GuncellePersonel.BirinciSinifaAyrilmaTarihi" name="BirinciSinifaAyrilmaTarihi" class="col-sm-12 text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="dogumYeri">Araç Plakası</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa fa-car"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control" id="UpdateAracPlakasi" name="AracPlakasi" asp-for="GuncellePersonel.AracPlakasi" placeholder="Araç Plakası Giriniz" maxlength="11" />
+                                    <span asp-validation-for="GuncellePersonel.AracPlakasi" name="AracPlakasi" class="col-sm-12 text-danger"></span>
+                                </div>
+                            </div>
+                            @await Component.InvokeAsync("_DurumListesiGenelComponent", new { deger = "update" })
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-warning" id="GuncellePersonelButton">Güncelle</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ./Personel Düzenleme Modal Bitiş-->
+<!-- Personel Silme Modal Başlangıç-->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="deleteModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="overlay" style="display: none;">
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                    <div class="spinner-border text-light" role="status">
+                        <span class="sr-only">Lütfen Bekleyiniz...</span>
+                    </div>
+                    <div>
+                        <span class="text-center text-white">Lütfen Bekleyiniz...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-header danger">
+                <h5 class="modal-title" id="deleteModalLabel">Personel Sil</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Form Başlangıcı -->
+                <form id="PersonelSilForm">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="PersonelID" id="DeletePersonelID" />
+                    <p id="PersonelAdSoyadLabel">Personel Ad Soyad: <strong id="PersonelAdSoyad"></strong> silinecektir. Onaylıyor musunuz?</p>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-danger" id="SilPersonelButton">Sil</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ./Personel Silme Modal Başlangıç-->
 <!-- Modal -->
 <div class="modal fade" id="unvanBazlıVerilerModal" tabindex="-1" role="dialog" aria-labelledby="unvanBazlıVerilerModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -371,9 +489,10 @@
     </div>
     <div class="card-body mt-2">
         <div id="PersonelTablosu">
-            <table id="example" class="table table-striped table-bordered table-hover display text-center mt-3" style="width:100% !important">
+            <table id="example" class="table table-striped table-bordered table-hover display text-center mt-3" style="width:100%">
                 <thead>
                     <tr>
+                        <th>İşlemler</th>
                         <th>Ünvan Önceliği</th>
                         <th>Ad ve Soyad</th>
                         <th class="text-center">Sicil No</th>
@@ -388,13 +507,19 @@
                         <th>Kadro Türü</th>
                         <th>Çalışma Durumu</th>
                         <th>Görevlendirilme Türü</th>
+                        <th>Doğum Tarihi</th>
+                        <th>Mesleğe Giriş Tarihi</th>
+                        <th>Burada Göreve Başlama Tarihi</th>
+                        <th>Birinci Sınıfa Ayrılma Tarihi</th>
+                        <th>Araç Plakası</th>
+                        <th class="text-start">Çalışılan Katipler</th>
                         <th>Durum</th>
-                        <th>İşlemler</th>
                     </tr>
                 </thead>
                 @await Component.InvokeAsync("_PersonelComponent")
                 <tfoot>
                     <tr>
+                        <th>İşlemler</th>
                         <th>Ünvan Önceliği</th>
                         <th>Ad ve Soyad</th>
                         <th class="text-center">Sicil No</th>
@@ -409,8 +534,13 @@
                         <th>Kadro Türü</th>
                         <th>Çalışma Durumu</th>
                         <th>Görevlendirilme Türü</th>
+                        <th>Doğum Tarihi</th>
+                        <th>Mesleğe Giriş Tarihi</th>
+                        <th>Burada Göreve Başlama Tarihi</th>
+                        <th>Birinci Sınıfa Ayrılma Tarihi</th>
+                        <th>Araç Plakası</th>
+                        <th class="text-start">Çalışılan Katipler</th>
                         <th>Durum</th>
-                        <th>İşlemler</th>
                     </tr>
                 </tfoot>
             </table>
@@ -450,11 +580,34 @@
     <script src="/AdminTemplate/dist/js/customize/SwalAlertCustom.js"></script>
     <!-- InputMask -->
     <script src="/AdminTemplate/plugins/jquery/jquery.inputmask.min.js"></script>
+    <script src="/AdminTemplate/plugins/jquery/choices.min.js"></script>
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
+            window.createPersonelChoices = new Choices('#createPersonelListesi', {
+                removeItemButton: true,
+                maxItemCount: null, // Sınırsız seçim hakkı
+                searchResultLimit: 1000,
+                renderChoiceLimit: 1000,
+                noResultsText: "Sonuç bulunamadı",
+                noChoicesText: "Seçenek yok",
+                itemSelectText: "Seçmek için tıklayın",
+                uniqueItemText: "Bu seçenek zaten eklendi",
+            });
+            window.updatePersonelChoices = new Choices('#updatePersonelListesi', {
+                removeItemButton: true,
+                maxItemCount: null, // Sınırsız seçim hakkı
+                searchResultLimit: 1000,
+                renderChoiceLimit: 1000,
+                noResultsText: "Sonuç bulunamadı",
+                noChoicesText: "Seçenek yok",
+                itemSelectText: "Seçmek için tıklayın",
+                uniqueItemText: "Bu seçenek zaten eklendi",
+            });
             initDataTable();
-            $(".modal").on("hidden.bs.modal", function() {
-                $('.modal').each(function() {
+            //Kayıt İşlemi
+            $('#KaydetPersonelButton').click(savePersonel);
+            $(".modal").on("hidden.bs.modal", function () {
+                $('.modal').each(function () {
                     let modal = $(this);
                     let form = modal.find('form');
                     // Eğer form varsa, formu sıfırla
@@ -464,28 +617,78 @@
                     // Hata mesajlarını temizle
                     modal.find('span.text-danger').text('');
                 });
+                $('#createModal .nav-pills .nav-link').removeClass('active'); // Tüm tab'ları deaktif yap
+                $('#createModal .tab-content .tab-pane').removeClass('active'); // Tüm içerik alanlarını deaktif yap
+                // İlk tab'ı aktif yap
+                $('#createModal .nav-pills .nav-link:first').addClass('active');
+                $('#createModal .tab-content .tab-pane:first').addClass('active');
+                $('#createKurumlar').val(784);
                 // Overlay (arka plan) elemanını gizle
                 $('.overlay').hide();
             });
-            $('[data-widget="pushmenu"]').on('click', function() {
-                setTimeout(function() {
+            $('[data-widget="pushmenu"]').on('click', function () {
+                setTimeout(function () {
                     var table = $('#example').DataTable();
                     table.columns.adjust().draw(); // Sütunları yeniden boyutlandır ve yeniden çiz
-                }, 300); // Animasyon tamamlandıktan sonra
+                }, 400); // Animasyon tamamlandıktan sonra
             });
-            $(document).on('click', '.btn-showinfo', function(event) {
+            $(document).one('click', '.btn-edit', function (event) {
+                event.preventDefault(); // Tekrar tetiklenmesini engelle
+                let id = $(this).data('id');
+                if (id) {
+                    editPersonel(id);
+                }
+            });
+            $(document).on('click', '.btn-showinfo', function (event) {
                 event.preventDefault(); // Sayfanın yeniden yüklenmesini engelle
                 let id = $(this).data('id');
                 if (id) {
                     showInfoPersonel(id);
                 }
             });
-            $('#sehirler').change(function() {
+            $(document).on('click', '.btn-delete', function (event) {
+                event.preventDefault(); // Sayfanın yeniden yüklenmesini engelle
+                let PersonelID = $(this).data('id');
+                $.ajax({
+                    url: `/Admin/Personel/GetPersonelById/${PersonelID}`,
+                    type: 'GET',
+                    success: function (response) {
+                        if (response.success) {
+                            const personelData = response.data;
+                            $('#deleteModal #DeletePersonelID').val(personelData.personelID);
+                            $('#deleteModal #PersonelAdSoyad').text(personelData.adSoyad + " (" + personelData.sicilNumarasi + ")");
+                            $('#deleteModal').modal('show'); // Modalı aç
+                        } else {
+                            showToast('Silinecek veri bulunamadı.', 'Hata!', 'topRight', 3500, 'bg-danger', true);
+                        }
+                    },
+                    error: function () {
+                        showToast('Silme işlemi için veri getirilemedi. Lütfen tekrar deneyiniz.', 'Hata!', 'topRight', 3500, 'bg-danger', true);
+                    }
+                });
+            });
+            $('#createSehirler').change(function () {
                 var selectedSehirId = $(this).val();
-                changeKurum(selectedSehirId);
+                changeKurum(null, selectedSehirId, "create");
+            });
+            $('#updateSehirler').change(function () {
+                var selectedSehirId = $(this).val();
+                changeKurum(null, selectedSehirId, "update");
             });
             $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' });
             $('[data-mask]').inputmask();
+            // Düzenle Kaydet Butonu
+            $('#GuncellePersonelButton').click(saveUpdatedPersonel);
+            // Sil Modal'ı
+            $('#SilPersonelButton').click(deletePersonel);
+            $('#createUnvanlar').change(function () {
+                toggleCreateKatiplerContent();
+            });
+            $('#updateUnvanlar').change(function() {
+                toggleUpdateKatiplerContent();
+            });
+            toggleCreateKatiplerContent();
+            toggleUpdateKatiplerContent();
         });
         function initDataTable() {
             $('#example').DataTable({
@@ -495,8 +698,8 @@
                 "lengthChange": false,
                 "autoWidth": false,
                 "lengthChange": true,
-                "pageLength": 25,
-                "order": [[0, 'asc'], [2, 'asc']],
+                "pageLength": 50,
+                "order": [[1, 'asc'], [3, 'asc']],
                 "language": {
                     "searchPanes": {
                         "emptyPanes": 'Filtreleme Paneli Bulunamadı',
@@ -506,7 +709,8 @@
                         },
                         "collapseMessage": 'Tümünü Kapat',
                         "showMessage": 'Hepsini Göster',
-                        "clearMessage": 'Hepsini Temizle'
+                        "clearMessage": 'Hepsini Temizle',
+                        "collapse": { 0: 'Filtreleme Paneli', _: 'Filtreleme Paneli (%d)' }
                     },
                     "sProcessing": "İşleniyor...",
                     "sLengthMenu": "_MENU_",
@@ -549,39 +753,90 @@
                                                 extend: 'excel',
                                                 text: '<i class="fas fa-file-excel mr-1"></i> Excel',
                                                 exportOptions: {
-                                                    columns: ':visible:not(:eq(14))'
+                                                    columns: function (idx, data, node) {
+                                                        var table = $('#example').DataTable();
+                                                        var columnHeader = table.column(idx).header().innerText.trim(); // Sütun başlığını al
+                                                        var excludedColumns = ['İşlemler']; // Dışarıda bırakılacak sütunlar
+
+                                                        return table.column(idx).visible() && !excludedColumns.includes(columnHeader);
+                                                        // Yalnızca görünür ve dışlanmamış sütunları dahil et
+                                                    }
                                                 }
                                             },
                                             {
                                                 extend: 'pdf',
                                                 text: '<i class="fas fa-file-pdf mr-1"></i> PDF',
                                                 exportOptions: {
-                                                    columns: ':visible:not(:eq(14))'
+                                                    columns: function (idx, data, node) {
+                                                        var table = $('#example').DataTable();
+                                                        var columnHeader = table.column(idx).header().innerText.trim(); // Sütun başlığını al
+
+                                                        var includedColumns = [
+                                                            'T.C Kimlik No',
+                                                            'Sicil No',
+                                                            'Ad ve Soyad',
+                                                            'Unvan',
+                                                            'Cep Telefonu'
+                                                        ]; // PDF'e dahil edilmesi gereken sütunlar
+
+                                                        return includedColumns.includes(columnHeader); // Yalnızca seçili başlıkları ekle
+                                                    }
                                                 },
-                                                customize: function(doc) {
-                                                    // Tablonun başlıklarını ve içeriğini ortala
-                                                    doc.styles.tableHeader.alignment = 'center';
-                                                    doc.content[1].table.body.forEach(function(row) {
-                                                        row.forEach(function(cell) {
-                                                            cell.alignment = 'center';
-                                                        });
+                                                customize: function (doc) {
+                                                    var table = $('#example').DataTable();
+                                                    var includedColumns = [
+                                                        'T.C Kimlik No',
+                                                        'Sicil No',
+                                                        'Ad ve Soyad',
+                                                        'Unvan',
+                                                        'Cep Telefonu'
+                                                    ]; // PDF'de görünmesini istediğimiz sıradaki sütunlar
+
+                                                    // PDF için tablo içeriğini yeniden oluştur
+                                                    var newTableBody = [];
+
+                                                    // Başlıkları sıraya göre düzenle
+                                                    var tableHeaders = includedColumns.map(function (colName) {
+                                                        return { text: colName, style: 'tableHeader', alignment: 'center' };
                                                     });
-                                                    doc.content[1].table.widths = new Array(doc.content[1].table.body[0].length).fill('*');
+                                                    newTableBody.push(tableHeaders);
+
+                                                    // Satırları belirtilen sıraya göre ekle
+                                                    table.rows({ search: 'applied' }).every(function (rowIdx, tableLoop, rowLoop) {
+                                                        var rowData = this.data();
+                                                        var orderedRow = [];
+
+                                                        includedColumns.forEach(function (colName) {
+                                                            var columnIndex = table.column(`:contains("${colName}")`).index(); // Başlık ile indeks bul
+                                                            orderedRow.push({ text: rowData[columnIndex], alignment: 'center' });
+                                                        });
+
+                                                        newTableBody.push(orderedRow);
+                                                    });
+
+                                                    // Yeni tabloyu PDF'e uygula
+                                                    doc.content[1].table.body = newTableBody;
                                                 }
                                             },
+
                                             {
                                                 extend: 'print',
                                                 text: '<i class="fas fa-print mr-1"></i> Yazdır',
                                                 exportOptions: {
-                                                    columns: ':visible:not(:eq(14))'
+                                                    columns: function (idx, data, node) {
+                                                        var table = $('#example').DataTable();
+                                                        var columnHeader = table.column(idx).header().innerText.trim(); // Sütun başlığını al
+                                                        var excludedColumns = ['İşlemler']; // Dışarıda bırakılacak sütunlar
+                                                        return table.column(idx).visible() && !excludedColumns.includes(columnHeader);// Eşleşen sütun dışarıya aktarılmaz
+                                                    }
                                                 }
                                             }
                                         ]
                                 },
                                 {
                                     extend: 'colvis',
-                                    columns: function(idx, data, node) {
-                                        return [0].indexOf(idx) === -1;
+                                    columns: function (idx, data, node) {
+                                        return [1].indexOf(idx) === -1;
                                     },
                                     text: '<i class="fas fa-columns mr-1"></i> Sütun Görünürlüğü'
                                 }
@@ -599,7 +854,7 @@
                                 searching: true,
                             }
                         },
-                        targets: [4, 7, 10, 11, 12]
+                        targets: [5, 8, 9, 11, 12, 13, 14]
                     },
                     {
                         searchPanes: {
@@ -608,45 +863,243 @@
                         targets: '_all'
                     },
                     {
-                        targets: [7, 8, 9],
+                        targets: [7, 8, 9, 10, 12, 13, 14, 15, 18, 19],
                         visible: false
                     },
                     {
-                        targets: [0],
+                        targets: [1],
                         visible: false,
                         searchable: false
                     }
                 ]
-
-
-
+            });
+        }
+        const changeDateFormatTo = date => {
+            if (!date) return ''; // Eğer tarih yoksa boş döner
+            const onlyDate = date.split("T")[0];
+            const [yy, mm, dd] = onlyDate.split("-");
+            return `${dd}/${mm}/${yy}`;
+        };
+        function savePersonel() {
+            $('#createModal span.text-danger').text('');
+            $('#createModal .overlay').show();
+            var formData = $('#PersonelEkleForm').serialize(); // Form verilerini serialize et
+            $.ajax({
+                url: '/Admin/Personel/EklePersonel', // Hedef URL
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        $('#createModal').modal('hide');
+                        reloadTable();
+                        if (response.completeStatus) {
+                            showToast(response.message, 'Bilgi Mesajı', 'topRight', 2500, 'bg-success', true);
+                        }
+                        else {
+                            showToast(response.message, 'Bilgi Mesajı', 'topRight', 3500, 'bg-warning', true);
+                        }
+                    }
+                    else {
+                        // Hataları göster
+                        for (let key in response.errors) {
+                            $(`[name="${key}"]`).next('.text-danger').text(response.errors[key][0]);
+                        }
+                        $('.modal .overlay').hide();
+                    }
+                }
+            });
+        }
+        function editPersonel(id) {
+            // event.preventDefault();
+            $.ajax({
+                url: `/Admin/Personel/GetPersonelById/${id}`,
+                type: 'GET',
+                success: function (response) {
+                    if (response.success) {
+                        const data = response.data;
+                        $('#editModal #UpdatePersonelID').val(data.personelID);
+                        $('#editModal #UpdateKimlikNo').val(data.kimlikNo);
+                        $('#editModal #UpdateSicilNumarasi').val(data.sicilNumarasi);
+                        $('#editModal #UpdateAd').val(data.ad);
+                        $('#editModal #UpdateSoyad').val(data.soyad);
+                        $('#editModal #updateUnvanlar option').each(function () {
+                            const optionValue = $(this).val();
+                            if (optionValue == data.unvanId) {
+                                $(this).prop('selected', true);
+                            } else {
+                                $(this).prop('selected', false);
+                            }
+                        });
+                        if (data.unvanId == 1 || data.unvanId == 2 || data.unvanId == 5) {
+                            const selectedValues = data.calisilanKatiplerIds.map(String); // Choices.js string değerler bekler
+                            if (window.updatePersonelChoices) {
+                                window.updatePersonelChoices.removeActiveItems(); // Önce mevcut seçimleri temizle
+                                window.updatePersonelChoices.setChoiceByValue(selectedValues);
+                            }
+                            $('#update_katipler_content').show();
+                        } 
+                        else 
+                        {
+                            $('#update_katipler_content').hide();
+                        }
+                        $('#editModal #updateKadroTurleri option').each(function () {
+                            const optionValue = $(this).val();
+                            if (optionValue == data.kadroTuruId) {
+                                $(this).prop('selected', true);
+                            } else {
+                                $(this).prop('selected', false);
+                            }
+                        });
+                        $('#editModal #updateGorevlendirilmeTurleri option').each(function () {
+                            const optionValue = $(this).val();
+                            if (optionValue == data.gorevlendirilmeTuruId) {
+                                $(this).prop('selected', true);
+                            } else {
+                                $(this).prop('selected', false);
+                            }
+                        });
+                        $('#editModal #updateSehirler option').each(function () {
+                            const optionValue = $(this).val();
+                            if (optionValue == data.sehirId) {
+                                $(this).prop('selected', true);
+                            } else {
+                                $(this).prop('selected', false);
+                            }
+                        });
+                        changeKurum(data.kurumId, data.sehirId, "update");
+                        $('#editModal #updateCinsiyetler option').each(function () {
+                            const optionValue = $(this).val();
+                            if (optionValue == data.cinsiyetId) {
+                                $(this).prop('selected', true);
+                            } else {
+                                $(this).prop('selected', false);
+                            }
+                        });
+                        $('#editModal #updateKanGruplari option').each(function () {
+                            const optionValue = $(this).val();
+                            if (optionValue == data.kanGrubuId) {
+                                $(this).prop('selected', true);
+                            } else {
+                                $(this).prop('selected', false);
+                            }
+                        });
+                        $('#editModal #updateCalismaDurumlari option').each(function () {
+                            const optionValue = $(this).val();
+                            if (optionValue == data.calismaDurumuId) {
+                                $(this).prop('selected', true);
+                            } else {
+                                $(this).prop('selected', false);
+                            }
+                        });
+                        $('#editModal #updateDurumlar option').each(function () {
+                            const optionValue = $(this).val();
+                            if (optionValue == data.durumId) {
+                                $(this).prop('selected', true);
+                            } else {
+                                $(this).prop('selected', false);
+                            }
+                        });
+                        $('#editModal #UpdateDerece').val(data.derece);
+                        $('#editModal #UpdateKademe').val(data.kademe);
+                        $('#editModal #UpdateDogumYeri').val(data.dogumYeri);
+                        $('#editModal #UpdateCepTelefonu').val(data.cepTelefonu);
+                        $('#editModal #UpdateDogumTarihi').val(changeDateFormatTo(data.dogumTarihi));
+                        $('#editModal #UpdateMeslegeGirisTarihi').val(changeDateFormatTo(data.meslegeGirisTarihi));
+                        $('#editModal #UpdateBuradaGoreveBaslamaTarihi').val(changeDateFormatTo(data.buradaGoreveBaslamaTarihi));
+                        $('#editModal #UpdateBirinciSinifaAyrilmaTarihi').val(changeDateFormatTo(data.birinciSinifaAyrilmaTarihi));
+                        $('#editModal #UpdateAracPlakasi').val(data.aracPlakasi);
+                        $('#editModal .overlay').hide();
+                        $('#editModal').modal('show');
+                    }
+                    else {
+                        showToast('Seçili olan kayıt gösterilemiyor! Lütfen sayfayı yenileyip tekrar deneyiniz.', 'Hata', 'topRight', 3500, 'bg-danger', true);
+                        $('.modal .overlay').hide();
+                    }
+                },
+                error: function () {
+                    showSwalAlert('Hata!', 'Beklenmeyen bir hata oluştu!', 'error', 3500, true, true);
+                }
+            });
+        }
+        function saveUpdatedPersonel() {
+            var formData = $('#PersonelGuncelleForm').serialize(); // Form verilerini al
+            $.ajax({
+                url: '/Admin/Personel/GuncellePersonel',
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        $('#editModal').modal('hide'); // Modalı kapat
+                        reloadTable(); // Tabloyu yeniden yükle
+                        showToast(response.message, 'Bilgi Mesajı', 'topRight', 2500, 'bg-success', true);
+                    }
+                    else {
+                        // Hataları göster
+                        for (let key in response.errors) {
+                            $(`[name="${key}"]`).next('.text-danger').text(response.errors[key][0]);
+                        }
+                        $('.modal .overlay').hide();
+                    }
+                }
+            });
+        }
+        function deletePersonel() {
+            $('#deleteModal .overlay').show();
+            var formData = $('#PersonelSilForm').serialize(); // Form verilerini al
+            $.ajax({
+                url: '/Admin/Personel/SilPersonel', // Silme işlemi için endpoint
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        $('#deleteModal').modal('hide'); // Modalı kapat
+                        reloadTable(); // Tabloyu yeniden yükle
+                        showToast(response.message, 'Bilgi Mesajı', 'topRight', 2500, 'bg-success', true);
+                    }
+                    else {
+                        $('#deleteModal').modal('hide');
+                        showToast(response.message, 'Hata Mesajı', 'topRight', 3500, 'bg-danger', true);
+                    }
+                },
+                error: function (xhr) {
+                    handleError(xhr); // Hata durumunu yönet
+                }
             });
         }
         function showInfoPersonel(id) {
             $.ajax({
                 url: `/Admin/Personel/GetirSafahatBilgi/${id}`,
                 type: 'GET',
-                success: function(response) {
+                success: function (response) {
                     $("#auditTrailModal").find(".modal-body").html(response);
                     $('#auditTrailModal').modal('show');
                 },
-                error: function() {
+                error: function () {
                     showToast('Safahat bilgileri getirilemedi. Lütfen tekrar deneyiniz.', 'Hata!', 'topRight', 3500, 'bg-danger', true);
                 }
             });
         }
         function reloadComponent(componentSelector, url) {
-            $(componentSelector).load(url, function(response, status, xhr) {
+            $(componentSelector).load(url, function (response, status, xhr) {
                 if (status === "error") {
-                    setTimeout(function() {
+                    setTimeout(function () {
                         window.location.reload(); // Sayfayı yeniden yükle
                     }, 1500);
                 }
             });
         }
-        function changeKurum(id) {
-            var url = `/Admin/Personel/GetirKurumlar/${id}`;
-            reloadComponent("#createModal #personelEkleComponent", url);
+        function changeKurum(selectedKurumId, id, deger) {
+            // URL'yi doğru şekilde oluşturma
+            var url = `/Admin/Personel/GetirKurumlar?deger=${deger}&selectedKurumId=${selectedKurumId}&id=${id}`;
+            if (deger === "create") {
+                reloadComponent("#createModal #personelEkleComponent", url);
+            }
+            else if (deger === "update") {
+                reloadComponent("#editModal #personelGuncelleComponent", url);
+            }
+            else {
+                console.warn("Geçersiz işlem türü (deger):", deger);
+            }
         }
         function reloadTable() {
             // Eski tabloyu kaldır
@@ -655,7 +1108,7 @@
                 $('#example').empty(); // DOM'u temizle
             }
             // Tabloyu yeniden yükle
-            $('#PersonelTablosu').load('/Admin/Personel #PersonelTablosu', function(response, status, xhr) {
+            $('#PersonelTablosu').load('/Admin/Personel #PersonelTablosu', function (response, status, xhr) {
                 if (status === "success") {
                     initDataTable(); // DataTable başlat
                 } else if (status === "error") {
@@ -676,6 +1129,48 @@
                 showSwalAlert('Hata!', 'Beklenmeyen bir hata oluştu. Lütfen yaptığınız işlemi tekrar deneyiniz. Hatanın devam etmesi durumunda Bilgi İşlem Personeline bildiriniz.', 'error', 6500, true, true);
             }
         }
+        document.addEventListener('DOMContentLoaded', function () {
+            const sicilInput = document.getElementById('CreateSicilNumarasi');
+            const userNameInput = document.getElementById('CreateUserName');
+            const emailInput = document.getElementById('CreateEmail');
+            const confirmPassword = document.getElementById('CreateConfirmPassword');
+            const password = document.getElementById('CreatePassword');
+            // Sicil Numarası alanından focus çıkışı olduğunda diğer alanları doldur
+            sicilInput.addEventListener('blur', function () {
+                const sicilValue = sicilInput.value.trim();
+                // Sicil numarası doluysa
+                if (sicilValue) {
+                    userNameInput.value = sicilValue;
+                    confirmPassword.value = sicilValue;
+                    password.value = sicilValue;
+                    emailInput.value = `ab${sicilValue}@@adalet.gov.tr`;
+                } else {
+                    // Sicil numarası boşsa diğer alanları temizle
+                    userNameInput.value = '';
+                    confirmPassword.value = '';
+                    password.value = '';
+                    emailInput.value = '';
+                }
+            });
+        });
+        function toggleCreateKatiplerContent() {
+            var selectedValue = $('#createUnvanlar').val();
+            if (selectedValue == '1' || selectedValue == '2' || selectedValue == '5') {
+                $('#katipler_content').show();
+            } else {
+                $('#katipler_content').hide();
+            }
+        }
+        function toggleUpdateKatiplerContent() {
+            var selectedValue = $('#updateUnvanlar').val();
+            if (selectedValue == '1' || selectedValue == '2' || selectedValue == '5') {
+                $('#update_katipler_content').show();
+            } else {
+                $('#update_katipler_content').hide();
+            }
+        }
     </script>
 }
+
+
 

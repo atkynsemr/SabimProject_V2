@@ -1,0 +1,2 @@
+﻿DurumId:1 - Aktif
+CalismaDurumuId:1 - Görevde

@@ -11,10 +11,10 @@ namespace Sabim.Web.Areas.Admin.ViewComponents.KanGrubuViewComponents
         {
             _manager = manager;
         }
-        public async Task<IViewComponentResult> InvokeAsync(int? selectedKanGrubuId = null)
+        public async Task<IViewComponentResult> InvokeAsync(string? deger, int? selectedKanGrubuId = null)
         {
             var kanGruplari = await _manager.KanGrubuService.TFindAllAsync(false);
-            // Alfabetik sıralama
+            ViewBag.Deger = deger;
             var kanGruplariDtoList = kanGruplari
                 .OrderBy(k => k.KanGrubuAdi)
                 .Select(k => new ResultKanGrubuDto

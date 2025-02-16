@@ -1,0 +1,12 @@
+﻿@using Sabim.Domain.DTOs.CalismaDurumuDtos
+@model List<ResultCalismaDurumuDto>
+
+<div class="form-group">
+    <label for="CalismaDurumAdi">Çalışma Durumu</label>
+    <select class="form-control" id="@(ViewBag.Deger ?? "")CalismaDurumlari" name="CalismaDurumuID" style="width: 100%;">
+        @foreach (var calismaDurumu in Model)
+        {
+            <option value="@calismaDurumu.CalismaDurumuID" selected="@calismaDurumu.Selected">@calismaDurumu.CalismaDurumAdi</option>
+        }
+    </select>
+</div>

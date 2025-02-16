@@ -19,7 +19,7 @@ namespace Sabim.Infrastructure.Persistence.Migrations
                 {
                     DurumID = table.Column<short>(type: "SMALLINT", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DurumAdi = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    DurumAdi = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false, collation: "SQL_Latin1_General_CP1_CI_AS"),
                     AktifMi = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
@@ -598,6 +598,7 @@ namespace Sabim.Infrastructure.Persistence.Migrations
                     BuradaGoreveBaslamaTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
                     KimlikNo = table.Column<string>(type: "varchar(11)", unicode: false, maxLength: 11, nullable: true),
                     BuradanAyrilmaTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    BirinciSinifaAyrilmaTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
                     AracPlakasi = table.Column<string>(type: "varchar(11)", unicode: false, maxLength: 11, nullable: true),
                     UnvanId = table.Column<short>(type: "SMALLINT", nullable: false),
                     GorevlendirilmeTuruId = table.Column<short>(type: "SMALLINT", nullable: false),
@@ -754,7 +755,7 @@ namespace Sabim.Infrastructure.Persistence.Migrations
                 {
                     SehirID = table.Column<short>(type: "SMALLINT", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    SehirAdi = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    SehirAdi = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     SehirKodu = table.Column<short>(type: "SMALLINT", nullable: false),
                     OlusturanPersonelId = table.Column<short>(type: "SMALLINT", nullable: true),
                     OlusturulmaTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -882,6 +883,65 @@ namespace Sabim.Infrastructure.Persistence.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "PersonelUnvanGecmisi",
+                columns: table => new
+                {
+                    PersonelUnvanGecmisiID = table.Column<short>(type: "SMALLINT", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PersonelId = table.Column<short>(type: "SMALLINT", nullable: false),
+                    UnvanId = table.Column<short>(type: "SMALLINT", nullable: false),
+                    UnvanaSahipOlduguTarih = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UnvanDegisimTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    OlusturanPersonelId = table.Column<short>(type: "SMALLINT", nullable: true),
+                    OlusturulmaTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    GuncelleyenPersonelId = table.Column<short>(type: "SMALLINT", nullable: true),
+                    GuncellenmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    SilenPersonelId = table.Column<short>(type: "SMALLINT", nullable: true),
+                    SilinmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DurumId = table.Column<short>(type: "SMALLINT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PersonelUnvanGecmisi", x => x.PersonelUnvanGecmisiID);
+                    table.ForeignKey(
+                        name: "FK_PersonelUnvanGecmisi_Durum_DurumId",
+                        column: x => x.DurumId,
+                        principalTable: "Durum",
+                        principalColumn: "DurumID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_PersonelUnvanGecmisi_Personel_GuncelleyenPersonelId",
+                        column: x => x.GuncelleyenPersonelId,
+                        principalTable: "Personel",
+                        principalColumn: "PersonelID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_PersonelUnvanGecmisi_Personel_OlusturanPersonelId",
+                        column: x => x.OlusturanPersonelId,
+                        principalTable: "Personel",
+                        principalColumn: "PersonelID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_PersonelUnvanGecmisi_Personel_PersonelId",
+                        column: x => x.PersonelId,
+                        principalTable: "Personel",
+                        principalColumn: "PersonelID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_PersonelUnvanGecmisi_Personel_SilenPersonelId",
+                        column: x => x.SilenPersonelId,
+                        principalTable: "Personel",
+                        principalColumn: "PersonelID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_PersonelUnvanGecmisi_Unvan_UnvanId",
+                        column: x => x.UnvanId,
+                        principalTable: "Unvan",
+                        principalColumn: "UnvanID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.InsertData(
                 table: "Durum",
                 columns: new[] { "DurumID", "AktifMi", "DurumAdi" },
@@ -892,160 +952,6 @@ namespace Sabim.Infrastructure.Persistence.Migrations
                     { (short)3, true, "Silinmiş" },
                     { (short)4, true, "Dondurulmuş" },
                     { (short)5, true, "Kapatılmış" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "CalismaDurumu",
-                columns: new[] { "CalismaDurumuID", "CalismaDurumAdi", "DurumId", "GuncellenmeTarihi", "GuncelleyenPersonelId", "OlusturanPersonelId", "OlusturulmaTarihi", "SilenPersonelId", "SilinmeTarihi" },
-                values: new object[,]
-                {
-                    { (short)1, "Görevde", (short)1, null, null, null, null, null, null },
-                    { (short)2, "Geçici Ayrılış (Ücretsiz İzin, Askerlik,Doğum İzni vb.)", (short)1, null, null, null, null, null, null },
-                    { (short)3, "Kalıcı Ayrılış (Emeklilik, Nakil, İstifa,Görevlendirme Sonlandırılması vb.)", (short)1, null, null, null, null, null, null }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Cinsiyet",
-                columns: new[] { "CinsiyetID", "CinsiyetAdi", "DurumId", "GuncellenmeTarihi", "GuncelleyenPersonelId", "OlusturanPersonelId", "OlusturulmaTarihi", "SilenPersonelId", "SilinmeTarihi" },
-                values: new object[,]
-                {
-                    { (short)1, "Erkek", (short)1, null, null, null, new DateTime(2024, 11, 30, 13, 37, 19, 381, DateTimeKind.Local).AddTicks(1487), null, null },
-                    { (short)2, "Kadın", (short)1, null, null, null, new DateTime(2024, 11, 30, 13, 37, 19, 381, DateTimeKind.Local).AddTicks(1513), null, null },
-                    { (short)3, "Belirtilmemiş", (short)1, null, null, null, new DateTime(2024, 11, 30, 13, 37, 19, 381, DateTimeKind.Local).AddTicks(1517), null, null }
-                });
-
-            migrationBuilder.InsertData(
-                table: "GorevlendirilmeTuru",
-                columns: new[] { "GorevlendirilmeTuruID", "DurumId", "GorevlendirilmeTuruAdi", "GuncellenmeTarihi", "GuncelleyenPersonelId", "KurumPersonelListesineDahilMi", "OlusturanPersonelId", "OlusturulmaTarihi", "SilenPersonelId", "SilinmeTarihi" },
-                values: new object[,]
-                {
-                    { (short)1, (short)1, "Görevlendirilmemiş", null, null, true, null, null, null, null },
-                    { (short)2, (short)1, "Dış Kurumdan Görevlendirilme", null, null, true, null, null, null, null },
-                    { (short)3, (short)1, "Dış Kuruma Görevlendirilme", null, null, true, null, null, null, null }
-                });
-
-            migrationBuilder.InsertData(
-                table: "KadroTuru",
-                columns: new[] { "KadroTuruID", "DurumId", "GuncellenmeTarihi", "GuncelleyenPersonelId", "KadroTuruAdi", "OlusturanPersonelId", "OlusturulmaTarihi", "SilenPersonelId", "SilinmeTarihi" },
-                values: new object[,]
-                {
-                    { (short)1, (short)1, null, null, "Kadrolu", null, null, null, null },
-                    { (short)2, (short)1, null, null, "Sözleşmeli(4/B)", null, null, null, null },
-                    { (short)3, (short)1, null, null, "Sürekli İşçi(4/D)-Taşerondan Geçen", null, null, null, null },
-                    { (short)4, (short)1, null, null, "Sürekli İşçi(4/D)-Açıktan Atama", null, null, null, null }
-                });
-
-            migrationBuilder.InsertData(
-                table: "KanGrubu",
-                columns: new[] { "KanGrubuID", "DurumId", "GuncellenmeTarihi", "GuncelleyenPersonelId", "KanGrubuAdi", "OlusturanPersonelId", "OlusturulmaTarihi", "SilenPersonelId", "SilinmeTarihi" },
-                values: new object[,]
-                {
-                    { (short)1, (short)1, null, null, "0 Rh(-)", null, new DateTime(2024, 11, 30, 13, 37, 19, 425, DateTimeKind.Local).AddTicks(6958), null, null },
-                    { (short)2, (short)1, null, null, "0 Rh(+)", null, new DateTime(2024, 11, 30, 13, 37, 19, 425, DateTimeKind.Local).AddTicks(6985), null, null },
-                    { (short)3, (short)1, null, null, "A Rh(-)", null, new DateTime(2024, 11, 30, 13, 37, 19, 425, DateTimeKind.Local).AddTicks(6988), null, null },
-                    { (short)4, (short)1, null, null, "A Rh(+)", null, new DateTime(2024, 11, 30, 13, 37, 19, 425, DateTimeKind.Local).AddTicks(6991), null, null },
-                    { (short)5, (short)1, null, null, "AB Rh(-)", null, new DateTime(2024, 11, 30, 13, 37, 19, 425, DateTimeKind.Local).AddTicks(6993), null, null },
-                    { (short)6, (short)1, null, null, "AB Rh(+)", null, new DateTime(2024, 11, 30, 13, 37, 19, 425, DateTimeKind.Local).AddTicks(6996), null, null },
-                    { (short)7, (short)1, null, null, "B Rh(-)", null, new DateTime(2024, 11, 30, 13, 37, 19, 425, DateTimeKind.Local).AddTicks(6999), null, null },
-                    { (short)8, (short)1, null, null, "B Rh(+)", null, new DateTime(2024, 11, 30, 13, 37, 19, 425, DateTimeKind.Local).AddTicks(7001), null, null }
-                });
-
-            migrationBuilder.InsertData(
-                table: "KurumTipi",
-                columns: new[] { "KurumTipiID", "DurumId", "GuncellenmeTarihi", "GuncelleyenPersonelId", "KurumTipiAdi", "OlusturanPersonelId", "OlusturulmaTarihi", "SilenPersonelId", "SilinmeTarihi" },
-                values: new object[,]
-                {
-                    { (short)1, (short)1, null, null, "Personel Görev Yeri", null, null, null, null },
-                    { (short)2, (short)1, null, null, "Teknik Hizmet Yeri", null, null, null, null },
-                    { (short)3, (short)1, null, null, "Donanım Alınan Yer", null, null, null, null }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Sehir",
-                columns: new[] { "SehirID", "DurumId", "GuncellenmeTarihi", "GuncelleyenPersonelId", "OlusturanPersonelId", "OlusturulmaTarihi", "SehirAdi", "SehirKodu", "SilenPersonelId", "SilinmeTarihi" },
-                values: new object[,]
-                {
-                    { (short)1, (short)1, null, null, null, null, "Adana", (short)1, null, null },
-                    { (short)2, (short)1, null, null, null, null, "Adıyaman", (short)2, null, null },
-                    { (short)3, (short)1, null, null, null, null, "Afyonkarahisar", (short)3, null, null },
-                    { (short)4, (short)1, null, null, null, null, "Ağrı", (short)4, null, null },
-                    { (short)5, (short)1, null, null, null, null, "Amasya", (short)5, null, null },
-                    { (short)6, (short)1, null, null, null, null, "Ankara", (short)6, null, null },
-                    { (short)7, (short)1, null, null, null, null, "Antalya", (short)7, null, null },
-                    { (short)8, (short)1, null, null, null, null, "Artvin", (short)8, null, null },
-                    { (short)9, (short)1, null, null, null, null, "Aydın", (short)9, null, null },
-                    { (short)10, (short)1, null, null, null, null, "Balıkesir", (short)10, null, null },
-                    { (short)11, (short)1, null, null, null, null, "Bilecik", (short)11, null, null },
-                    { (short)12, (short)1, null, null, null, null, "Bingöl", (short)12, null, null },
-                    { (short)13, (short)1, null, null, null, null, "Bitlis", (short)13, null, null },
-                    { (short)14, (short)1, null, null, null, null, "Bolu", (short)14, null, null },
-                    { (short)15, (short)1, null, null, null, null, "Burdur", (short)15, null, null },
-                    { (short)16, (short)1, null, null, null, null, "Bursa", (short)16, null, null },
-                    { (short)17, (short)1, null, null, null, null, "Çanakkale", (short)17, null, null },
-                    { (short)18, (short)1, null, null, null, null, "Çankırı", (short)18, null, null },
-                    { (short)19, (short)1, null, null, null, null, "Çorum", (short)19, null, null },
-                    { (short)20, (short)1, null, null, null, null, "Denizli", (short)20, null, null },
-                    { (short)21, (short)1, null, null, null, null, "Diyarbakır", (short)21, null, null },
-                    { (short)22, (short)1, null, null, null, null, "Edirne", (short)22, null, null },
-                    { (short)23, (short)1, null, null, null, null, "Elazığ", (short)23, null, null },
-                    { (short)24, (short)1, null, null, null, null, "Erzincan", (short)24, null, null },
-                    { (short)25, (short)1, null, null, null, null, "Erzurum", (short)25, null, null },
-                    { (short)26, (short)1, null, null, null, null, "Eskişehir", (short)26, null, null },
-                    { (short)27, (short)1, null, null, null, null, "Gaziantep", (short)27, null, null },
-                    { (short)28, (short)1, null, null, null, null, "Giresun", (short)28, null, null },
-                    { (short)29, (short)1, null, null, null, null, "Gümüşhane", (short)29, null, null },
-                    { (short)30, (short)1, null, null, null, null, "Hakkari", (short)30, null, null },
-                    { (short)31, (short)1, null, null, null, null, "Hatay", (short)31, null, null },
-                    { (short)32, (short)1, null, null, null, null, "Isparta", (short)32, null, null },
-                    { (short)33, (short)1, null, null, null, null, "Mersin", (short)33, null, null },
-                    { (short)34, (short)1, null, null, null, null, "İstanbul", (short)34, null, null },
-                    { (short)35, (short)1, null, null, null, null, "İzmir", (short)35, null, null },
-                    { (short)36, (short)1, null, null, null, null, "Kars", (short)36, null, null },
-                    { (short)37, (short)1, null, null, null, null, "Kastamonu", (short)37, null, null },
-                    { (short)38, (short)1, null, null, null, null, "Kayseri", (short)38, null, null },
-                    { (short)39, (short)1, null, null, null, null, "Kırklareli", (short)39, null, null },
-                    { (short)40, (short)1, null, null, null, null, "Kırşehir", (short)40, null, null },
-                    { (short)41, (short)1, null, null, null, null, "Kocaeli", (short)41, null, null },
-                    { (short)42, (short)1, null, null, null, null, "Konya", (short)42, null, null },
-                    { (short)43, (short)1, null, null, null, null, "Kütahya", (short)43, null, null },
-                    { (short)44, (short)1, null, null, null, null, "Malatya", (short)44, null, null },
-                    { (short)45, (short)1, null, null, null, null, "Manisa", (short)45, null, null },
-                    { (short)46, (short)1, null, null, null, null, "Kahramanmaraş", (short)46, null, null },
-                    { (short)47, (short)1, null, null, null, null, "Mardin", (short)47, null, null },
-                    { (short)48, (short)1, null, null, null, null, "Muğla", (short)48, null, null },
-                    { (short)49, (short)1, null, null, null, null, "Muş", (short)49, null, null },
-                    { (short)50, (short)1, null, null, null, null, "Nevşehir", (short)50, null, null },
-                    { (short)51, (short)1, null, null, null, null, "Niğde", (short)51, null, null },
-                    { (short)52, (short)1, null, null, null, null, "Ordu", (short)52, null, null },
-                    { (short)53, (short)1, null, null, null, null, "Rize", (short)53, null, null },
-                    { (short)54, (short)1, null, null, null, null, "Sakarya", (short)54, null, null },
-                    { (short)55, (short)1, null, null, null, null, "Samsun", (short)55, null, null },
-                    { (short)56, (short)1, null, null, null, null, "Siirt", (short)56, null, null },
-                    { (short)57, (short)1, null, null, null, null, "Sinop", (short)57, null, null },
-                    { (short)58, (short)1, null, null, null, null, "Sivas", (short)58, null, null },
-                    { (short)59, (short)1, null, null, null, null, "Tekirdağ", (short)59, null, null },
-                    { (short)60, (short)1, null, null, null, null, "Tokat", (short)60, null, null },
-                    { (short)61, (short)1, null, null, null, null, "Trabzon", (short)61, null, null },
-                    { (short)62, (short)1, null, null, null, null, "Tunceli", (short)62, null, null },
-                    { (short)63, (short)1, null, null, null, null, "Şanlıurfa", (short)63, null, null },
-                    { (short)64, (short)1, null, null, null, null, "Uşak", (short)64, null, null },
-                    { (short)65, (short)1, null, null, null, null, "Van", (short)65, null, null },
-                    { (short)66, (short)1, null, null, null, null, "Yozgat", (short)66, null, null },
-                    { (short)67, (short)1, null, null, null, null, "Zonguldak", (short)67, null, null },
-                    { (short)68, (short)1, null, null, null, null, "Aksaray", (short)68, null, null },
-                    { (short)69, (short)1, null, null, null, null, "Bayburt", (short)69, null, null },
-                    { (short)70, (short)1, null, null, null, null, "Karaman", (short)70, null, null },
-                    { (short)71, (short)1, null, null, null, null, "Kırıkkale", (short)71, null, null },
-                    { (short)72, (short)1, null, null, null, null, "Batman", (short)72, null, null },
-                    { (short)73, (short)1, null, null, null, null, "Şırnak", (short)73, null, null },
-                    { (short)74, (short)1, null, null, null, null, "Bartın", (short)74, null, null },
-                    { (short)75, (short)1, null, null, null, null, "Ardahan", (short)75, null, null },
-                    { (short)76, (short)1, null, null, null, null, "Iğdır", (short)76, null, null },
-                    { (short)77, (short)1, null, null, null, null, "Yalova", (short)77, null, null },
-                    { (short)78, (short)1, null, null, null, null, "Karabük", (short)78, null, null },
-                    { (short)79, (short)1, null, null, null, null, "Kilis", (short)79, null, null },
-                    { (short)80, (short)1, null, null, null, null, "Osmaniye", (short)80, null, null },
-                    { (short)81, (short)1, null, null, null, null, "Düzce", (short)81, null, null }
                 });
 
             migrationBuilder.CreateIndex(
@@ -1609,6 +1515,36 @@ namespace Sabim.Infrastructure.Persistence.Migrations
                 name: "IX_PersonelGorevlendirilme_SilenPersonelId",
                 table: "PersonelGorevlendirilme",
                 column: "SilenPersonelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PersonelUnvanGecmisi_DurumId",
+                table: "PersonelUnvanGecmisi",
+                column: "DurumId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PersonelUnvanGecmisi_GuncelleyenPersonelId",
+                table: "PersonelUnvanGecmisi",
+                column: "GuncelleyenPersonelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PersonelUnvanGecmisi_OlusturanPersonelId",
+                table: "PersonelUnvanGecmisi",
+                column: "OlusturanPersonelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PersonelUnvanGecmisi_PersonelId",
+                table: "PersonelUnvanGecmisi",
+                column: "PersonelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PersonelUnvanGecmisi_SilenPersonelId",
+                table: "PersonelUnvanGecmisi",
+                column: "SilenPersonelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PersonelUnvanGecmisi_UnvanId",
+                table: "PersonelUnvanGecmisi",
+                column: "UnvanId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Sehir_DurumId",
@@ -2303,6 +2239,9 @@ namespace Sabim.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "PersonelGorevlendirilme");
+
+            migrationBuilder.DropTable(
+                name: "PersonelUnvanGecmisi");
 
             migrationBuilder.DropTable(
                 name: "Ekran");

@@ -3,7 +3,7 @@
 
 <div class="form-group">
     <label for="KadroTuruAdi">Kadro Türleri</label>
-    <select class="form-control" id="kadroTurleri" name="KadroTuruID" style="width: 100%;">
+    <select class="form-control" id="@(ViewBag.Deger ?? "")KadroTurleri" name="KadroTuruID" style="width: 100%;">
         @foreach (var kadroTuru in Model)
         {
             <option value="@kadroTuru.KadroTuruID" selected="@kadroTuru.Selected">@kadroTuru.KadroTuruAdi</option>

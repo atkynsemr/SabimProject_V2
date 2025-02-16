@@ -21,6 +21,8 @@ namespace Sabim.Web.Areas.Admin.ViewComponents.PersonelViewComponents
         {
             var personeller = await _manager.PersonelService
                 .TFindAll(false)
+                .Include(p => p.KatipOlarakCalisilanKatips)  
+                    .ThenInclude(k => k.Katip)               
                 .ProjectTo<ResultPersonelDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
             return View(personeller);

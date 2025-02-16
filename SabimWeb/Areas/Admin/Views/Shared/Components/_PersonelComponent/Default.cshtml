@@ -1,10 +1,36 @@
 ﻿@using Sabim.Domain.DTOs.PersonelDtos
 @model List<ResultPersonelDto>
 
-<tbody class="text-heading">
+<style>
+    #dropdownMenuButton.dropdown-toggle::after {
+        border-top-color: #6c757d; /* Ok işaretinin rengini kırmızı yapar */
+    }
+
+</style>
+<tbody class="text-heading" style="height:210px;" >
     @foreach (var personel in Model)
     {
         <tr>
+            <td class="text-center">
+                <div class="d-flex align-items-center justify-content-center">
+                    @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-showinfo", "", IconHelper.GetInfoIcon(), "Göster", "showInfoPersonel", personel.PersonelID.ToString()))
+                    @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-edit", "", IconHelper.GetEditIcon(), "Düzenle", "editPersonel", personel.PersonelID.ToString()))
+                    @Html.Raw(IconHelper.CreateLink("btn btn-icon btn-delete", "", IconHelper.GetDeleteIcon(), "Sil", "deletePersonel", personel.PersonelID.ToString()))
+                    <div class="dropdown">
+                        <a class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-ellipsis-v text-secondary" title="Personel İşlemleri" aria-hidden="true"></i>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="personelIslemleri">
+                            <a class="dropdown-item" href="@Url.Action("PersonelUnvanlari", "Personel", new { PersonelID = personel.PersonelID})"><i class="fas fa-circle-notch fa-xs"></i> Unvan Bilgileri</a>
+                            <a class="dropdown-item" href=""><i class="fas fa-circle-notch fa-xs"></i> İzin İşlemleri</a>
+                            <a class="dropdown-item" href=""><i class="fas fa-circle-notch fa-xs"></i> Kurum İçi Yer Değişikliği</a>
+                            <a class="dropdown-item" href=""><i class="fas fa-circle-notch fa-xs"></i> Kurum Dışı Geçici Görevlendirme</a>
+                            <a class="dropdown-item" href=""><i class="fas fa-circle-notch fa-xs"></i> Nakil/Emeklilik/Memuriyet Sonlandırılma İşlemleri</a>
+                            <a class="dropdown-item" href=""><i class="fas fa-circle-notch fa-xs"></i> Personel Safahat Bilgileri</a>
+                        </div>
+                    </div>
+                </div>
+            </td>
             <td>@personel.OncelikSirasi</td>
             <td>@personel.AdSoyad</td>
             <td class="text-center">@personel.SicilNumarasi</td>
@@ -19,17 +45,29 @@
             <td>@personel.KadroTuruAdi</td>
             <td>@personel.CalismaDurumAdi</td>
             <td>@personel.GorevlendirilmeTuruAdi</td>
+            <td>@(personel.DogumTarihi.HasValue ? personel.DogumTarihi.Value.ToString("dd/MM/yyyy") : "")</td>
+            <td>@(personel.MeslegeGirisTarihi.HasValue ? personel.MeslegeGirisTarihi.Value.ToString("dd/MM/yyyy") : "")</td>
+            <td>@(personel.BuradaGoreveBaslamaTarihi.HasValue ? personel.BuradaGoreveBaslamaTarihi.Value.ToString("dd/MM/yyyy") : "")</td>
+            <td>@(personel.BirinciSinifaAyrilmaTarihi.HasValue ? personel.BirinciSinifaAyrilmaTarihi.Value.ToString("dd/MM/yyyy") : "")</td>
+            <td>@personel.AracPlakasi</td>
+            <td style="text-align: left;">
+                @if (personel.CalisilanKatipler != null && personel.CalisilanKatipler.Any())
+                {
+                    <ul class="list-inline mb-0">
+                        @foreach (var katip in personel.CalisilanKatipler)
+                        {
+                            <li class="list-inline-item d-inline-flex align-items-center">
+                                <i class="fa fa-user fa-xs mr-2" aria-hidden="true"></i>
+                                <span class="text-nowrap">@katip</span>
+                            </li>
+                        }
+                    </ul>
+                }
+            </td>
             <td class="text-center">
                 <div class="d-flex align-items-center justify-content-center">
                     @Html.Raw(IconHelper.GetStatusNameIcon(personel.DurumAdi))
                     <span class="badge badge-lg @BadgeHelper.GetBadgeClass(personel.DurumId)"> @personel.DurumAdi</span>
-                </div>
-            </td>
-            <td class="text-center">
-                <div class="d-flex align-items-center justify-content-center">
-                    @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-showinfo", "", IconHelper.GetInfoIcon(), "Göster", "showInfoPersonel", personel.PersonelID.ToString()))
-                    @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-edit", "", IconHelper.GetEditIcon(), "Düzenle", "editPersonel", personel.PersonelID.ToString()))
-                    @Html.Raw(IconHelper.CreateLink("btn btn-icon btn-delete", "", IconHelper.GetDeleteIcon(), "Sil", "deletePersonel", personel.PersonelID.ToString()))
                 </div>
             </td>
         </tr>

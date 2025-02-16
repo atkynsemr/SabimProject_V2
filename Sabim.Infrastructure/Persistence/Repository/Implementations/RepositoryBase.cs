@@ -2,11 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Sabim.Domain.Constants;
 using Sabim.Domain.DTOs.HelperDtos;
-using Sabim.Domain.Entities;
 using Sabim.Infrastructure.Persistence.Context;
 using Sabim.Infrastructure.Persistence.Repository.Contracts;
 using System.Globalization;
-using System.Linq;
 using System.Linq.Expressions;
 
 namespace Sabim.Infrastructure.Persistence.Repository.Implementations
@@ -360,6 +358,86 @@ namespace Sabim.Infrastructure.Persistence.Repository.Implementations
                 SilinmeTarihi = entity.GetType().GetProperty(nameof(AuditTrailDto.SilinmeTarihi))?.GetValue(entity) as DateTime? ?? default,
             };
             return auditTrail;
+        }
+        private string GetPrimaryKeyName()
+        {
+            if (!PrimaryKeyCache.TryGetValue(typeof(T), out var keyProperty))
+            {
+                // Primary key'in ismini EF Core'dan alıyoruz
+                keyProperty = _context.Model
+                    .FindEntityType(typeof(T))
+                    ?.FindPrimaryKey()
+                    ?.Properties.FirstOrDefault()?.Name;
+
+                if (string.IsNullOrEmpty(keyProperty))
+                {
+                    throw new InvalidOperationException("Entity'nin birincil anahtarı (primary key) tanımlanmadı.");
+                }
+
+                PrimaryKeyCache[typeof(T)] = keyProperty;
+            }
+
+            return keyProperty;
+        }
+        public async Task<object?> AddAndGetIdAsync(T entity)
+        {
+            try
+            {
+                var keyProperty = GetPrimaryKeyName();
+                await Entity.AddAsync(entity);
+                var affectedRows = await _context.SaveChangesAsync();
+                if (affectedRows > 0)
+                {
+                    var keyValue = typeof(T).GetProperty(keyProperty)?.GetValue(entity);
+                    if (keyValue != null)
+                    {
+                        return OperationStatus.Incomplete;
+                    }
+                    return keyValue;
+                }
+                else
+                {
+                    return OperationStatus.GlobalError;
+                }
+            }
+            catch (DbUpdateException dbEx)
+            {
+                return OperationStatus.GlobalError;
+            }
+            catch (Exception)
+            {
+                return OperationStatus.GlobalError;
+            }
+        }
+        public async Task<string> DeleteRangeByExpressionAsync(Expression<Func<T, bool>> predicate)
+        {
+            try
+            {
+                var entitiesToDelete = await Entity.Where(predicate).ToListAsync();
+                if (entitiesToDelete.Any())
+                {
+                    Entity.RemoveRange(entitiesToDelete);
+                    var affectedRows = await _context.SaveChangesAsync(); // Veritabanına değişiklikleri kaydet
+
+                    if (affectedRows > 0)
+                    {
+                        return OperationStatus.Success; // İşlem başarılı
+                    }
+                    else
+                    {
+                        return OperationStatus.GlobalError; // Satır etkilenmediği durumda hata
+                    }
+                }
+                return OperationStatus.Success;
+            }
+            catch (DbUpdateException dbEx)
+            {
+                return OperationStatus.GlobalError;
+            }
+            catch (Exception)
+            {
+                return OperationStatus.GlobalError;
+            }
         }
     }
 }

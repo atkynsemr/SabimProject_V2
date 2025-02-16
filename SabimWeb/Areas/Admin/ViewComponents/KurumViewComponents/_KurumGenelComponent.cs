@@ -12,17 +12,14 @@ namespace Sabim.Web.Areas.Admin.ViewComponents.KurumViewComponents
         {
             _manager = manager;
         }
-        public async Task<IViewComponentResult> InvokeAsync(int? selectedKurumId = null, int? kurumTipiId = null, int? sehirId = null)
+        public async Task<IViewComponentResult> InvokeAsync(string? deger, int? selectedKurumId = null, int? kurumTipiId = null, int? sehirId = null)
         {
-            // Dinamik filtrelerle veritabanından veriyi alın
             var kurumlarQuery = _manager.KurumService.TFindAllByConditionAsync(
                 x => (!kurumTipiId.HasValue || x.KurumTipiId == kurumTipiId.Value) &&
                      (!sehirId.HasValue || x.SehirId == sehirId.Value),
                 false);
-
+            ViewBag.Deger = deger;
             var kurumlar = await kurumlarQuery;
-
-            // DTO'ya dönüştür
             var kurumDtoList = kurumlar
                 .OrderBy(k => k.KurumAdi)
                 .Select(k => new ResultKurumDto
@@ -32,8 +29,6 @@ namespace Sabim.Web.Areas.Admin.ViewComponents.KurumViewComponents
                     Selected = selectedKurumId.HasValue && selectedKurumId.Value == k.KurumID
                 })
                 .ToList();
-
-            // Veriyi View'e döndür
             return View(kurumDtoList);
         }
     }
