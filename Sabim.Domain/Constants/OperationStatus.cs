@@ -8,5 +8,6 @@
         public const string GlobalError = "İşlem sırasında bilinmeyen bir hata oluştu! Lütfen tekrar deneyiniz.";
         public const string PrimaryKeyNotDefined = "Birincil anahtar tanımlanmamış!";
         public const string Incomplete = "İşleminizi kontrol ediniz. İşlem tamamlanmamış ise lütfen tekrar deneyiniz!";
+        public const string DateConflict = "Girilen tarihler çakışıyor. Lütfen tarihleri kontrol ediniz!";
     }
 }

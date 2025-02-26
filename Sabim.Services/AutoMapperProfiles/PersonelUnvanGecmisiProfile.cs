@@ -9,6 +9,7 @@ namespace Sabim.Services.AutoMapperProfiles
         public PersonelUnvanGecmisiProfile()
         {
             CreateMap<PersonelUnvanGecmisi, CreatePersonelUnvanGecmisiDto>().ReverseMap();
+            CreateMap<PersonelUnvanGecmisi, UpdatePersonelUnvanGecmisiDto>().ReverseMap();
             CreateMap<PersonelUnvanGecmisi, ResultPersonelUnvanGecmisiDto>()
             .ForMember(dest => dest.UnvanAdi, opt => opt.MapFrom(src => src.Unvan.UnvanAdi))
             .ForMember(dest => dest.DurumAdi, opt => opt.MapFrom(src => src.Durum.DurumAdi))

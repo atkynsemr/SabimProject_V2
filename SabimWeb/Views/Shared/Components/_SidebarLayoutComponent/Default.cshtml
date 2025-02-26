@@ -48,6 +48,7 @@
                       ViewContext.RouteData.Values["controller"]?.ToString() == "Cinsiyet" ||
                       ViewContext.RouteData.Values["controller"]?.ToString() == "Durum" ||
                       ViewContext.RouteData.Values["controller"]?.ToString() == "Ekran" ||
+                      ViewContext.RouteData.Values["controller"]?.ToString() == "GorevlendirilmeTipi" ||
                       ViewContext.RouteData.Values["controller"]?.ToString() == "GorevlendirilmeTuru" ||
                       ViewContext.RouteData.Values["controller"]?.ToString() == "KabinetBazliBolum" ||
                       ViewContext.RouteData.Values["controller"]?.ToString() == "KadroTuru" ||
@@ -58,7 +59,8 @@
                       ViewContext.RouteData.Values["controller"]?.ToString() == "RolEkranYetki" ||
                       ViewContext.RouteData.Values["controller"]?.ToString() == "Sehir" ||
                       ViewContext.RouteData.Values["controller"]?.ToString() == "SidebarMenu" ||
-                      ViewContext.RouteData.Values["controller"]?.ToString() == "Unvan" ? "menu-open" : "")">
+                      ViewContext.RouteData.Values["controller"]?.ToString() == "Unvan" ||
+                      ViewContext.RouteData.Values["controller"]?.ToString() == "Ayrılış Nedenleri" ? "menu-open" : "")">
                     <a href="#" class="nav-link @(
                       ViewContext.RouteData.Values["controller"]?.ToString() == "AppRole" ||
                       ViewContext.RouteData.Values["controller"]?.ToString() == "Birim" ||
@@ -67,6 +69,7 @@
                       ViewContext.RouteData.Values["controller"]?.ToString() == "Cinsiyet" ||
                       ViewContext.RouteData.Values["controller"]?.ToString() == "Durum" ||
                       ViewContext.RouteData.Values["controller"]?.ToString() == "Ekran" ||
+                      ViewContext.RouteData.Values["controller"]?.ToString() == "GorevlendirilmeTipi" ||
                       ViewContext.RouteData.Values["controller"]?.ToString() == "GorevlendirilmeTuru" ||
                       ViewContext.RouteData.Values["controller"]?.ToString() == "KabinetBazliBolum" ||
                       ViewContext.RouteData.Values["controller"]?.ToString() == "KadroTuru" ||
@@ -77,7 +80,8 @@
                       ViewContext.RouteData.Values["controller"]?.ToString() == "RolEkranYetki" ||
                       ViewContext.RouteData.Values["controller"]?.ToString() == "Sehir" ||
                       ViewContext.RouteData.Values["controller"]?.ToString() == "SidebarMenu" ||
-                      ViewContext.RouteData.Values["controller"]?.ToString() == "Unvan" ? "active" : "")">
+                      ViewContext.RouteData.Values["controller"]?.ToString() == "Unvan" ||
+                      ViewContext.RouteData.Values["controller"]?.ToString() == "Ayrılış Nedenleri" ? "active" : "")">
                         <i class="nav-icon fas fa-server"></i>
                         <p>
                             Tanımlamalar
@@ -119,6 +123,13 @@
                                class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Durum" ? "active" : "")">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Durum</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-area="Admin" asp-controller="GorevlendirilmeTipi" asp-action="Index"
+                               class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "GorevlendirilmeTipi" ? "active" : "")">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Görevlendirilme Tipi</p>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -210,6 +221,13 @@
                                class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Unvan" ? "active" : "")">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Unvan</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-area="Admin" asp-controller="AyrilisNedenleri" asp-action="Index"
+                               class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "AyrilisNedenleri" ? "active" : "")">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Ayrılış Nedenleri</p>
                             </a>
                         </li>
                     </ul>

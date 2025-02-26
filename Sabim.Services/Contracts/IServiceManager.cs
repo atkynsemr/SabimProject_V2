@@ -26,5 +26,6 @@
         IEmailService EmailService { get; }
         ILoggerService LoggerService { get; }
         ISavciCalisilanKatipService SavciCalisilanKatipService { get; }
+        IPersonelAyrilisNedenleriService PersonelAyrilisNedenleriService { get; }
     }
 }

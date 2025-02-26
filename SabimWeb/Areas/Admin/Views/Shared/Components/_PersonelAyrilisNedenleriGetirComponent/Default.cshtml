@@ -1,0 +1,45 @@
+﻿@using Sabim.Domain.DTOs.PersonelAyrilisNedenleriDtos
+@model List<ResultPersonelAyrilisNedenleriDto>
+<tbody class="text-heading">
+    @foreach (var ayrilisNeden in Model)
+    {
+        <tr>
+            <td>@ayrilisNeden.Aciklama</td>
+            <td class="text-center">
+                <input type="checkbox" class="large-checkbox mr-3 text-success" disabled @(ayrilisNeden.KaliciAyrilisMi ? "checked" : "")>
+                @if (ayrilisNeden.KaliciAyrilisMi)
+                {
+                    <span class="text-success">Kalıcı Ayrılış</span>
+                }
+                else
+                {
+                    <span class="text-danger">Geçici Ayrılış</span>
+                }
+            </td>
+            <td class="text-center">
+                <input type="checkbox" class="large-checkbox mr-3 " disabled @(ayrilisNeden.DonanimUyarisi ? "checked" : "")>
+                @if (ayrilisNeden.DonanimUyarisi)
+                {
+                    <span class="text-success">Uyarı Var</span>
+                }
+                else
+                {
+                    <span class="text-danger">Uyarı Yok</span>
+                }
+            </td>
+            <td class="text-center">
+                <div class="d-flex align-items-center justify-content-center">
+                    @Html.Raw(IconHelper.GetStatusNameIcon(ayrilisNeden.DurumAdi))
+                    <span class="badge badge-lg @BadgeHelper.GetBadgeClass(ayrilisNeden.DurumId)"> @ayrilisNeden.DurumAdi</span>
+                </div>
+            </td>
+            <td class="text-center">
+                <div class="d-flex align-items-center justify-content-center">
+                    @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-showinfo", "", IconHelper.GetInfoIcon(), "Göster", "showInfoAyrilisNedenleri", ayrilisNeden.PersonelAyrilisNedenleriID.ToString()))
+                    @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-edit", "", IconHelper.GetEditIcon(), "Düzenle", "editAyrilisNedenleri", ayrilisNeden.PersonelAyrilisNedenleriID.ToString()))
+                    @Html.Raw(IconHelper.CreateLink("btn btn-icon btn-delete", "", IconHelper.GetDeleteIcon(), "Sil", "deleteAyrilisNedenleri", ayrilisNeden.PersonelAyrilisNedenleriID.ToString()))
+                </div>
+            </td>
+        </tr>
+    }
+</tbody>

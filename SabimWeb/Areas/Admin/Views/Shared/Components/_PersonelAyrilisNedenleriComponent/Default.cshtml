@@ -1,0 +1,14 @@
+﻿@using Sabim.Domain.DTOs.PersonelAyrilisNedenleriDtos
+@model List<ResultPersonelAyrilisNedenleriDto>
+
+<div class="form-group">
+    <label for="Aciklama">Ayrılış Nedeni</label>
+    <select class="form-control" id="@(ViewBag.Deger ?? "")PersonelAyrilisNedenleri" name="PersonelAyrilisNedenleriID" style="width: 100%;">
+        @foreach (var ayrilisNedenleri in Model)
+        {
+            <option value="@ayrilisNedenleri.PersonelAyrilisNedenleriID" selected="@ayrilisNedenleri.Selected" data-kalici-ayrilis="@ayrilisNedenleri.KaliciAyrilisMi" data-donanim-uyarisi="@ayrilisNedenleri.DonanimUyarisi">
+                @ayrilisNedenleri.Aciklama
+            </option>
+        }
+    </select>
+</div>

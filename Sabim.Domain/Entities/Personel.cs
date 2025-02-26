@@ -37,5 +37,6 @@
         public ICollection<PersonelUnvanGecmisi> PersonelUnvanGecmisis { get; set; } = new List<PersonelUnvanGecmisi>();
         public ICollection<SavciCalisilanKatip> SavciOlarakCalisilanKatips { get; set; } = new List<SavciCalisilanKatip>();
         public ICollection<SavciCalisilanKatip> KatipOlarakCalisilanKatips { get; set; } = new List<SavciCalisilanKatip>();
+        public ICollection<PersonelAyrilis> PersonelAyriliss { get; set; } = new List<PersonelAyrilis>();
     }
 }

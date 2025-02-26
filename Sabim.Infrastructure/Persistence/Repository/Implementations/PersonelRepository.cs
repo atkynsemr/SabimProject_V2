@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Sabim.Domain.Constants;
+using Sabim.Domain.DTOs.HelperDtos;
+using Sabim.Domain.DTOs.PersonelAyrilisDtos;
 using Sabim.Domain.DTOs.PersonelDtos;
 using Sabim.Domain.DTOs.PersonelUnvanGecmisiDtos;
 using Sabim.Domain.DTOs.SavciCalisilanKatipDtos;
@@ -21,8 +24,78 @@ namespace Sabim.Infrastructure.Persistence.Repository.Implementations
             _userManager = userManager;
             _mapper = mapper;
         }
+        public async Task<string> AddPersonelIzinleriAsync(CreatePersonelAyrilisDto createPersonelAyrilisDto)
+        {
+            try
+            {
+                // Çakışma kontrolü: Aynı personelin tarihleri çakışan bir kaydı var mı?
+                bool hasConflict = await _context.PersonelAyrilis.AnyAsync(izin =>
+                    izin.PersonelId == createPersonelAyrilisDto.PersonelId &&
+                    (
+                        // 1️⃣ Yeni izin başlangıç tarihi mevcut bir izin aralığına denk geliyorsa
+                        (createPersonelAyrilisDto.BaslangicTarihi.HasValue &&
+                         izin.BaslangicTarihi.HasValue &&
+                         createPersonelAyrilisDto.BaslangicTarihi >= izin.BaslangicTarihi &&
+                         createPersonelAyrilisDto.BaslangicTarihi <= izin.BitisTarihi) ||
+
+                        // 2️⃣ Yeni izin bitiş tarihi mevcut bir izin aralığına denk geliyorsa
+                        (createPersonelAyrilisDto.BitisTarihi.HasValue &&
+                         izin.BitisTarihi.HasValue &&
+                         createPersonelAyrilisDto.BitisTarihi >= izin.BaslangicTarihi &&
+                         createPersonelAyrilisDto.BitisTarihi <= izin.BitisTarihi) ||
+
+                        // 3️⃣ Yeni izin, mevcut bir izni tamamen kapsıyorsa
+                        (createPersonelAyrilisDto.BaslangicTarihi.HasValue &&
+                         createPersonelAyrilisDto.BitisTarihi.HasValue &&
+                         createPersonelAyrilisDto.BaslangicTarihi <= izin.BaslangicTarihi &&
+                         createPersonelAyrilisDto.BitisTarihi >= izin.BitisTarihi) ||
+
+                        // 4️⃣ Sadece başlangıç tarihinin birebir aynı olması durumu
+                        (createPersonelAyrilisDto.BaslangicTarihi.HasValue &&
+                         izin.BaslangicTarihi.HasValue &&
+                         createPersonelAyrilisDto.BaslangicTarihi == izin.BaslangicTarihi) ||
+
+                        // 5️⃣ Sadece bitiş tarihinin birebir aynı olması durumu
+                        (createPersonelAyrilisDto.BitisTarihi.HasValue &&
+                         izin.BitisTarihi.HasValue &&
+                         createPersonelAyrilisDto.BitisTarihi == izin.BitisTarihi)
+                    )
+                );
+
+                if (hasConflict)
+                {
+                    return OperationStatus.DateConflict; // Çakışma varsa işlemi durdur
+                }
+
+                // DTO'dan Entity'ye dönüşüm
+                var personelIzin = _mapper.Map<PersonelAyrilis>(createPersonelAyrilisDto);
+                await _context.PersonelAyrilis.AddAsync(personelIzin);
+
+                // Personel bilgisini çek
+                var personel = await _context.Personel
+                    .SingleOrDefaultAsync(p => p.PersonelID == createPersonelAyrilisDto.PersonelId);
+
+                // Eğer personel bulunduysa çalışma durumunu güncelle
+                if (personel != null)
+                {
+                    personel.CalismaDurumuId = (short)(createPersonelAyrilisDto.KaliciAyrilisMi ? 3 : 2);
+                }
+
+                // Tüm değişiklikleri tek seferde kaydet
+                int affectedRows = await _context.SaveChangesAsync();
+                return affectedRows > 0 ? OperationStatus.Success : OperationStatus.Incomplete;
+            }
+            catch (DbUpdateException)
+            {
+                return OperationStatus.GlobalError; // Veritabanı hatası
+            }
+            catch (Exception)
+            {
+                return OperationStatus.GlobalError; // Genel hata
+            }
+        }
         public async Task<string> AddPersonelUnvanAsync(CreatePersonelUnvanGecmisiDto createPersonelUnvanGecmisiDto)
-         {
+        {
             try
             {
                 var personelUnvanGecmisi = _mapper.Map<PersonelUnvanGecmisi>(createPersonelUnvanGecmisiDto);
@@ -30,7 +103,7 @@ namespace Sabim.Infrastructure.Persistence.Repository.Implementations
                 int affectedRows = await _context.SaveChangesAsync();
                 if (affectedRows > 0)
                 {
-                    var enSonUnvan = await _context.PersonelUnvanGecmisi.Where(p => p.PersonelId == createPersonelUnvanGecmisiDto.PersonelId)
+                    var enSonUnvan = await _context.PersonelUnvanGecmisi.Where(p => p.PersonelId == createPersonelUnvanGecmisiDto.PersonelId && p.DurumId == 1)
                 .OrderByDescending(p => p.UnvanaSahipOlduguTarih).FirstOrDefaultAsync();
                     if (enSonUnvan != null)
                     {
@@ -137,6 +210,103 @@ namespace Sabim.Infrastructure.Persistence.Repository.Implementations
                 return OperationStatus.GlobalError;
             }
         }
+        public async Task<string> DeletePersonelIzinAsync(short personelAyrilisID)
+        {
+            try
+            {
+                var personelIzin = await _context.PersonelAyrilis.FirstOrDefaultAsync(p => p.PersonelAyrilisID == personelAyrilisID);
+                if (personelIzin == null)
+                {
+                    return OperationStatus.NotFound;
+                }
+                _context.PersonelAyrilis.Remove(personelIzin);
+                int affectedRows = await _context.SaveChangesAsync();
+                if (affectedRows > 0)
+                {
+                    var izinSayisi = await _context.PersonelAyrilis
+                        .Where(p => p.PersonelId == personelIzin.PersonelId && p.DurumId == 1)
+                        .CountAsync();
+
+                    if (izinSayisi == 0)
+                    {
+                        var personel = await _context.Personel.SingleOrDefaultAsync(x => x.PersonelID == personelIzin.PersonelId);
+                        if (personel == null)
+                        {
+                            return OperationStatus.NotFound; // Personel bulunamadı
+                        }
+
+                        personel.CalismaDurumuId = 1;
+                        int changedRows = await _context.SaveChangesAsync();
+                        if (changedRows > 0)
+                        {
+                            return OperationStatus.Success; // İşlem başarılı
+                        }
+                        else
+                        {
+                            return OperationStatus.Incomplete;
+                        }
+                    }
+                    return OperationStatus.Success; // İşlem başarılı
+                }
+                else
+                {
+                    return OperationStatus.GlobalError; // Genel hata
+                }
+            }
+            catch (DbUpdateException dbEx) when (dbEx.InnerException is SqlException sqlEx && sqlEx.Number == 547)
+            {
+                // Dış anahtar hatası (SQL 547: Foreign key violation)
+                return OperationStatus.ForeignKeyConflict;
+            }
+            catch (Exception)
+            {
+                // Diğer tüm hatalar
+                return OperationStatus.GlobalError;
+            }
+        }
+        public async Task<string> DeletePersonelUnvanAsync(short PersonelUnvanGecmisiID)
+        {
+            try
+            {
+                var personelUnvan = await _context.PersonelUnvanGecmisi
+                    .FirstOrDefaultAsync(p => p.PersonelUnvanGecmisiID == PersonelUnvanGecmisiID);
+                if (personelUnvan == null)
+                {
+                    return OperationStatus.NotFound;
+                }
+                _context.PersonelUnvanGecmisi.Remove(personelUnvan);
+                int affectedRows = await _context.SaveChangesAsync();
+                if (affectedRows > 0)
+                {
+                    return OperationStatus.Success;
+                }
+                else
+                {
+                    return OperationStatus.GlobalError; // Genel hata
+                }
+            }
+            catch (DbUpdateException dbEx) when (dbEx.InnerException is SqlException sqlEx && sqlEx.Number == 547)
+            {
+                // Dış anahtar hatası (SQL 547: Foreign key violation)
+                return OperationStatus.ForeignKeyConflict;
+            }
+            catch (Exception)
+            {
+                // Diğer tüm hatalar
+                return OperationStatus.GlobalError;
+            }
+        }
+        public async Task<PersonelAyrilis> GetPersonelAyrilisById(short personelAyrilisId, bool trackChanges)
+        {
+            IQueryable<PersonelAyrilis> query = _context.PersonelAyrilis.Where(x => x.PersonelAyrilisID == personelAyrilisId)
+                .Include(x => x.PersonelAyrilisNedenleri);
+            if (!trackChanges)
+            {
+                query = query.AsNoTracking();
+            }
+
+            return await query.FirstOrDefaultAsync(); // Filtrelenmiş query'de ilk kaydı getir
+        }
         public async Task<ResultPersonelDto> GetPersonelByIdAsync(int id, bool trackChanges)
         {
             IQueryable<Personel> query = _context.Personel;
@@ -146,6 +316,154 @@ namespace Sabim.Infrastructure.Persistence.Repository.Implementations
             }
             var result = await query.ProjectTo<ResultPersonelDto>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(x => x.PersonelID == id);
             return result;
+        }
+
+        public async Task<AuditTrailDto?> GetPersonelIzinAuditTrailWithDetailsAsync(short id)
+        {
+            // Entity'yi bul
+            var entity = await _context.PersonelAyrilis
+                .AsNoTracking()
+                .FirstOrDefaultAsync(p => p.PersonelAyrilisID == id);
+
+            if (entity == null) return null; // Eğer kayıt bulunamazsa
+
+            // Safahat bilgilerini al
+            short? olusturanPersonelId = entity.OlusturanPersonelId;
+            short? guncelleyenPersonelId = entity.GuncelleyenPersonelId;
+            short? silenPersonelId = entity.SilenPersonelId;
+
+            // Personel bilgilerini toplu olarak al
+            var personelIds = new List<short?> { olusturanPersonelId, guncelleyenPersonelId, silenPersonelId }
+                .Where(id => id.HasValue)
+                .Select(id => id.Value)
+                .Distinct()
+                .ToList();
+
+            var personeller = await _context.Personel
+                .AsNoTracking()
+                .Where(p => personelIds.Contains(p.PersonelID))
+                .ToDictionaryAsync(p => p.PersonelID, p => new { p.Ad, p.Soyad });
+
+            var olusturanPersonel = olusturanPersonelId.HasValue && personeller.ContainsKey(olusturanPersonelId.Value)
+                ? personeller[olusturanPersonelId.Value]
+                : null;
+
+            var guncelleyenPersonel = guncelleyenPersonelId.HasValue && personeller.ContainsKey(guncelleyenPersonelId.Value)
+                ? personeller[guncelleyenPersonelId.Value]
+                : null;
+
+            var silenPersonel = silenPersonelId.HasValue && personeller.ContainsKey(silenPersonelId.Value)
+                ? personeller[silenPersonelId.Value]
+                : null;
+
+            // Audit trail DTO'sunu oluştur
+            var auditTrail = new AuditTrailDto
+            {
+                Id = id,
+                OlusturanPersonelId = olusturanPersonelId,
+                OlusturanAdSoyad = olusturanPersonel != null ? $"{olusturanPersonel.Ad} {olusturanPersonel.Soyad}" : null,
+                OlusturulmaTarihi = entity.OlusturulmaTarihi ?? default,
+                GuncelleyenPersonelId = guncelleyenPersonelId,
+                GuncelleyenAdSoyad = guncelleyenPersonel != null ? $"{guncelleyenPersonel.Ad} {guncelleyenPersonel.Soyad}" : null,
+                GuncellenmeTarihi = entity.GuncellenmeTarihi ?? default,
+                SilenPersonelId = silenPersonelId,
+                SilenAdSoyad = silenPersonel != null ? $"{silenPersonel.Ad} {silenPersonel.Soyad}" : null,
+                SilinmeTarihi = entity.SilinmeTarihi ?? default,
+            };
+
+            return auditTrail;
+        }
+
+        public async Task<List<ResultPersonelAyrilisDto>> GetPersonelIzinleriByIdAsync(short personelId, bool kaliciAyrilisMi, bool trackChanges)
+        {
+            IQueryable<PersonelAyrilis> query = _context.PersonelAyrilis;
+            if (!trackChanges)
+            {
+                query = query.AsNoTracking();
+            }
+            var result = await query
+                .Where(p => p.PersonelId == personelId && p.PersonelAyrilisNedenleri.KaliciAyrilisMi==kaliciAyrilisMi)
+                .ProjectTo<ResultPersonelAyrilisDto>(_mapper.ConfigurationProvider)
+                .OrderBy(p => p.BaslangicTarihi)
+                .ToListAsync();
+            return result;
+        }
+        public async Task<AuditTrailDto?> GetPersonelUnvanAuditTrailWithDetailsAsync(short id)
+        {
+            // Entity'yi bul
+            var entity = await _context.PersonelUnvanGecmisi
+                .AsNoTracking()
+                .FirstOrDefaultAsync(p => p.PersonelUnvanGecmisiID == id);
+
+            if (entity == null) return null; // Eğer kayıt bulunamazsa
+
+            // Safahat bilgilerini al
+            short? olusturanPersonelId = entity.OlusturanPersonelId;
+            short? guncelleyenPersonelId = entity.GuncelleyenPersonelId;
+            short? silenPersonelId = entity.SilenPersonelId;
+
+            // Personel bilgilerini toplu olarak al
+            var personelIds = new List<short?> { olusturanPersonelId, guncelleyenPersonelId, silenPersonelId }
+                .Where(id => id.HasValue)
+                .Select(id => id.Value)
+                .Distinct()
+                .ToList();
+
+            var personeller = await _context.Personel
+                .AsNoTracking()
+                .Where(p => personelIds.Contains(p.PersonelID))
+                .ToDictionaryAsync(p => p.PersonelID, p => new { p.Ad, p.Soyad });
+
+            var olusturanPersonel = olusturanPersonelId.HasValue && personeller.ContainsKey(olusturanPersonelId.Value)
+                ? personeller[olusturanPersonelId.Value]
+                : null;
+
+            var guncelleyenPersonel = guncelleyenPersonelId.HasValue && personeller.ContainsKey(guncelleyenPersonelId.Value)
+                ? personeller[guncelleyenPersonelId.Value]
+                : null;
+
+            var silenPersonel = silenPersonelId.HasValue && personeller.ContainsKey(silenPersonelId.Value)
+                ? personeller[silenPersonelId.Value]
+                : null;
+
+            // Audit trail DTO'sunu oluştur
+            var auditTrail = new AuditTrailDto
+            {
+                Id = id,
+                OlusturanPersonelId = olusturanPersonelId,
+                OlusturanAdSoyad = olusturanPersonel != null ? $"{olusturanPersonel.Ad} {olusturanPersonel.Soyad}" : null,
+                OlusturulmaTarihi = entity.OlusturulmaTarihi ?? default,
+                GuncelleyenPersonelId = guncelleyenPersonelId,
+                GuncelleyenAdSoyad = guncelleyenPersonel != null ? $"{guncelleyenPersonel.Ad} {guncelleyenPersonel.Soyad}" : null,
+                GuncellenmeTarihi = entity.GuncellenmeTarihi ?? default,
+                SilenPersonelId = silenPersonelId,
+                SilenAdSoyad = silenPersonel != null ? $"{silenPersonel.Ad} {silenPersonel.Soyad}" : null,
+                SilinmeTarihi = entity.SilinmeTarihi ?? default,
+            };
+
+            return auditTrail;
+        }
+        public async Task<ResultPersonelUnvanGecmisiDto> GetPersonelUnvanByIdAsync(short personelUnvanGecmisiId, bool trackChanges)
+        {
+            IQueryable<PersonelUnvanGecmisi> query = _context.PersonelUnvanGecmisi;
+            if (!trackChanges)
+            {
+                query = query.AsNoTracking();
+            }
+            var result = await query.ProjectTo<ResultPersonelUnvanGecmisiDto>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(x => x.PersonelUnvanGecmisiID == personelUnvanGecmisiId);
+            return result;
+        }
+        public async Task<PersonelUnvanGecmisi> GetPersonelUnvanGecmisiByIdAsync(short personelUnvanGecmisiId, bool trackChanges)
+        {
+            IQueryable<PersonelUnvanGecmisi> query = _context.PersonelUnvanGecmisi
+                .Where(x => x.PersonelUnvanGecmisiID == personelUnvanGecmisiId); // Önce filtreleme yapılmalı
+
+            if (!trackChanges)
+            {
+                query = query.AsNoTracking();
+            }
+
+            return await query.FirstOrDefaultAsync(); // Filtrelenmiş query'de ilk kaydı getir
         }
         public async Task<List<ResultPersonelUnvanGecmisiDto>> GetPersonelUnvanlariByIdAsync(short personelId, bool trackChanges)
         {
@@ -199,6 +517,88 @@ namespace Sabim.Infrastructure.Persistence.Repository.Implementations
                 }
             }
             catch
+            {
+                return OperationStatus.GlobalError;
+            }
+        }
+        public async Task<string> UpdatePersonelIzinAsync(PersonelAyrilis updatePersonelAyrilis)
+        {
+            try
+            {
+                _context.PersonelAyrilis.Update(updatePersonelAyrilis);
+                int affectedRows = await _context.SaveChangesAsync();
+                if (affectedRows > 0)
+                {
+                    var izinSayisi = await _context.PersonelAyrilis
+                        .Where(p => p.PersonelId == updatePersonelAyrilis.PersonelId && p.DurumId == 1)
+                        .CountAsync();
+
+                    if (izinSayisi == 0)
+                    {
+                        var personel = await _context.Personel.SingleOrDefaultAsync(x => x.PersonelID == updatePersonelAyrilis.PersonelId);
+                        if (personel == null)
+                        {
+                            return OperationStatus.NotFound; // Personel bulunamadı
+                        }
+
+                        personel.CalismaDurumuId = 1;
+                        int changedRows = await _context.SaveChangesAsync();
+                        if (changedRows > 0)
+                        {
+                            return OperationStatus.Success; // İşlem başarılı
+                        }
+                        else
+                        {
+                            return OperationStatus.Incomplete;
+                        }
+                    }
+                    return OperationStatus.Success; // İşlem başarılı
+                }
+                return OperationStatus.GlobalError; // Eğer affectedRows > 0 değilse
+
+            }
+            catch (DbUpdateException ex)
+            {
+                return OperationStatus.GlobalError;
+            }
+            catch (Exception ex)
+            {
+                return OperationStatus.GlobalError;
+            }
+        }
+        public async Task<string> UpdatePersonelUnvanGecmisiAsync(PersonelUnvanGecmisi personelUnvanGecmisi)
+        {
+            try
+            {
+                // Veritabanında değişiklikleri kaydet
+                _context.PersonelUnvanGecmisi.Update(personelUnvanGecmisi);
+                int affectedRows = await _context.SaveChangesAsync();
+                if (affectedRows > 0)
+                {
+                    var enSonUnvan = await _context.PersonelUnvanGecmisi.Where(p => p.PersonelId == personelUnvanGecmisi.PersonelId && p.DurumId == 1)
+                .OrderByDescending(p => p.UnvanaSahipOlduguTarih).FirstOrDefaultAsync();
+                    if (enSonUnvan != null)
+                    {
+                        // Personel tablosundaki ilgili kaydı bulup, UnvanId'yi güncelleme
+                        var personel = await _context.Personel.FirstOrDefaultAsync(p => p.PersonelID == personelUnvanGecmisi.PersonelId);
+                        if (personel != null)
+                        {
+                            personel.UnvanId = enSonUnvan.UnvanId;
+                            await _context.SaveChangesAsync(); // Personel tablosunu güncelleme
+                        }
+                    }
+                    return OperationStatus.Success; // İşlem başarılı
+                }
+                else
+                {
+                    return OperationStatus.GlobalError; // Satır eklenmediği takdirde hata
+                }
+            }
+            catch (DbUpdateException ex)
+            {
+                return OperationStatus.GlobalError;
+            }
+            catch (Exception ex)
             {
                 return OperationStatus.GlobalError;
             }

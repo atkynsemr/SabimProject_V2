@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Migrations.Operations.Builders;
 using Sabim.Domain.Constants;
-using Sabim.Domain.DTOs.KadroTuruDtos;
-using Sabim.Domain.DTOs.KadroTuruDtos;
 using Sabim.Domain.DTOs.KadroTuruDtos;
 using Sabim.Domain.Entities;
 using Sabim.Services.Contracts;

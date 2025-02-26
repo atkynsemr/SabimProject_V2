@@ -1,0 +1,587 @@
+﻿@model Sabim.Web.ViewModels.GorevlendirilmeTipiViewModel
+@{
+    ViewData["Title"] = "Tanımlamalar / GorevlendirilmeTipi";
+}
+@section StyleCss {
+    <link rel="stylesheet" href="/AdminTemplate/plugins/bootstrap/css/bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.3/css/responsive.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.1.2/css/buttons.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/searchpanes/2.3.3/css/searchPanes.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/select/2.1.0/css/select.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/colreorder/2.0.4/css/colReorder.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/4.0.1/css/fixedHeader.bootstrap4.css">
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/AdminTemplate/dist/css/CustomCss.css">
+}
+
+<!-- Ayrılış Nedenleri Safahat Modal Başlangıç-->
+<div class="modal fade" id="auditTrailModal" tabindex="-1" role="dialog" aria-labelledby="auditTrailModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-secondary">
+                <h5 class="modal-title" id="auditTrailModalLabel">Safahat Bilgileri</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!--Veriler Yüklenecek-->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ./Ayrılış Nedenleri Safahat Modal Başlangıç-->
+<!-- Gorevlendirilme Tipi Ekleme Modal Başlangıç-->
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="overlay" style="display: none;">
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                    <div class="spinner-border text-light" role="status">
+                        <span class="sr-only">Lütfen Bekleyiniz...</span>
+                    </div>
+                    <div>
+                        <span class="text-center text-white">Lütfen Bekleyiniz...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-header primary">
+                <h5 class="modal-title" id="createModalLabel">Görevlendirilme Tipi Ekle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Form Başlangıcı -->
+                <form id="GorevlendirilmeTipiEkleForm">
+                    @Html.AntiForgeryToken()
+                    <div class="form-group">
+                        <label for="GorevlendirilmeTipiAciklama">Görevlendirilme Tipi</label>
+                        <input type="text" class="form-control capitalize-input" id="CreateGorevlendirilmeTipiAciklama" name="GorevlendirilmeTipiAciklama" asp-for="YeniGorevlendirilmeTipi.GorevlendirilmeTipiAciklama" placeholder="Görevlendirilme Tipi Giriniz" maxlength="40" required />
+                        <span asp-validation-for="YeniGorevlendirilmeTipi.GorevlendirilmeTipiAciklama" name="GorevlendirilmeTipiAciklama" class="text-danger"></span>
+                    </div>
+                    <input type="hidden" id="CreateDurumId" name="DurumId" asp-for="YeniGorevlendirilmeTipi.DurumId" value="1" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" id="KaydetGorevlendirilmeTipiButton">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ./Gorevlendirilme Tipi Ekleme Modal Bitiş-->
+<!-- Gorevlendirilme Tipi  Düzenleme Modal Başlangıç-->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="overlay" style="display: none;">
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                    <div class="spinner-border text-light" role="status">
+                        <span class="sr-only">Lütfen Bekleyiniz...</span>
+                    </div>
+                    <div>
+                        <span class="text-center text-white">Lütfen Bekleyiniz...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-header primary">
+                <h5 class="modal-title" id="editModalLabel">Ayrılış Nedeni Ekle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Form Başlangıcı -->
+                <form id="GorevlendirilmeTipiGuncelleForm">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="GorevlendirilmeTipiID" id="UpdateGorevlendirilmeTipiID" asp-for="GuncelleGorevlendirilmeTipi.GorevlendirilmeTipiID" />
+                    <div class="form-group">
+                        <label for="GorevlendirilmeTipiAciklama">Görevlendirilme Tipi</label>
+                        <input type="text" class="form-control capitalize-input" id="UpdateGorevlendirilmeTipiAciklama" name="GorevlendirilmeTipiAciklama" asp-for="GuncelleGorevlendirilmeTipi.GorevlendirilmeTipiAciklama" placeholder="Görevlendirilme Tipi Giriniz" maxlength="40" required />
+                        <span asp-validation-for="GuncelleGorevlendirilmeTipi.GorevlendirilmeTipiAciklama" name="Aciklama" class="text-danger"></span>
+                    </div>
+                    @await Component.InvokeAsync("_DurumListesiGenelComponent", new { deger = "update" })
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" id="GuncelleGorevlendirilmeTipiButton">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ./Gorevlendirilme Tipi  Düzenleme Modal Bitiş-->
+<!-- Gorevlendirilme Tipi  Silme Modal Başlangıç-->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="deleteModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="overlay" style="display: none;">
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                    <div class="spinner-border text-light" role="status">
+                        <span class="sr-only">Lütfen Bekleyiniz...</span>
+                    </div>
+                    <div>
+                        <span class="text-center text-white">Lütfen Bekleyiniz...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-header danger">
+                <h5 class="modal-title" id="deleteModalLabel">Görevlendirilme Tipi Sil</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Form Başlangıcı -->
+                <form id="GorevlendirilmeTipiSilForm">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="GorevlendirilmeTipiID" id="DeleteGorevlendirilmeTipiID" />
+                    <p id="GorevlendirilmeTipiAciklamaLabel">Görevlendirilme Tipi: <strong id="GorevlendirilmeTipiAciklama"></strong> silinecektir. Onaylıyor musunuz?</p>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-danger" id="SilGorevlendirilmeTipiButton">Sil</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ./Gorevlendirilme Tipi Silme Modal Bitiş-->
+
+<div class="card">
+    <div class="card-header text-right">
+        @Html.Raw(IconHelper.CreateButton("btn btn-outline-primary btn-flat my-2", "Yeni Görevlendirilme Tipi", IconHelper.GetAddIcon(), "Yeni Görevlendirilme Tipi Ekle", "createModal"))
+    </div>
+    <div class="card-body mt-2">
+        <div id="GorevlendirilmeTipiTablosu">
+            <table id="example" class="table table-bordered table-hover display text-center mt-3" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Görevlendirilme Tipi</th>
+                        <th>Durum</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </thead>
+                @await Component.InvokeAsync("_GorevlendirilmeTipiComponent")
+                <tfoot>
+                    <tr>
+                        <th>Görevlendirilme Tipi</th>
+                        <th>Durum</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/dataTables.buttons.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/searchpanes/2.3.3/js/dataTables.searchPanes.js"></script>
+    <script src="https://cdn.datatables.net/searchpanes/2.3.3/js/searchPanes.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/select/2.1.0/js/dataTables.select.js"></script>
+    <script src="https://cdn.datatables.net/select/2.1.0/js/select.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/select/2.1.0/js/select.dataTables.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.colVis.min.js"></script>
+    <script src="https://cdn.datatables.net/colreorder/2.0.4/js/dataTables.colReorder.js"></script>
+    <script src="https://cdn.datatables.net/colreorder/2.0.4/js/colReorder.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/responsive/3.0.3/js/dataTables.responsive.js"></script>
+    <script src="https://cdn.datatables.net/responsive/3.0.3/js/responsive.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/fixedheader/4.0.1/js/dataTables.fixedHeader.js"></script>
+    <script src="https://cdn.datatables.net/fixedheader/4.0.1/js/fixedHeader.bootstrap4.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.8/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+    <!-- Toastr -->
+    <script src="/AdminTemplate/dist/js/toastr.min.js"></script>
+    <!-- Custom Toastr JS-->
+    <script src="/AdminTemplate/dist/js/customize/ToastCustom.js"></script>
+    <!-- Custom Capitalize JS-->
+    <script src="/AdminTemplate/dist/js/customize/CapitalizeCustom.js"></script>
+    <!-- Custom SwalAert JS-->
+    <script src="/AdminTemplate/dist/js/customize/SwalAlertCustom.js"></script>
+    <!-- InputMask -->
+    <script src="/AdminTemplate/plugins/jquery/jquery.inputmask.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            initDataTable();
+            //Kayıt İşlemi
+            $('#KaydetGorevlendirilmeTipiButton').click(saveGorevlendirilmeTipi);
+            $(".modal").on("hidden.bs.modal", function() {
+                $('.modal').each(function() {
+                    let modal = $(this);
+                    let form = modal.find('form');
+                    // Eğer form varsa, formu sıfırla
+                    if (form.length) {
+                        form[0].reset();
+                    }
+                    // Hata mesajlarını temizle
+                    modal.find('span.text-danger').text('');
+                });
+                // Overlay (arka plan) elemanını gizle
+                $('.overlay').hide();
+            });
+            $('[data-widget="pushmenu"]').on('click', function() {
+                setTimeout(function() {
+                    var table = $('#example').DataTable();
+                    table.columns.adjust().draw(); // Sütunları yeniden boyutlandır ve yeniden çiz
+                }, 400); // Animasyon tamamlandıktan sonra
+            });
+            $(document).one('click', '.btn-edit', function(event) {
+                event.preventDefault(); // Tekrar tetiklenmesini engelle
+                let id = $(this).data('id');
+                if (id) {
+                    editGorevlendirilmeTipi(id);
+                }
+            });
+            $(document).on('click', '.btn-delete', function(event) {
+                event.preventDefault(); // Sayfanın yeniden yüklenmesini engelle
+                let GorevlendirilmeTipiID = $(this).data('id');
+                $.ajax({
+                    url: `/Admin/GorevlendirilmeTipi/GetGorevlendirilmeTipiById/${GorevlendirilmeTipiID}`,
+                    type: 'GET',
+                    success: function(response) {
+                        if (response.success) {
+                            const gorevlendirilmeTipiData = response.data;
+                            $('#deleteModal #DeleteGorevlendirilmeTipiID').val(gorevlendirilmeTipiData.gorevlendirilmeTipiID);
+                            $('#deleteModal #Aciklama').text(gorevlendirilmeTipiData.gorevlendirilmeTipiAciklama);
+                            $('#deleteModal').modal('show'); // Modalı aç
+                        } else {
+                            showToast('Silinecek veri bulunamadı.', 'Hata!', 'topRight', 3500, 'bg-danger', true);
+                        }
+                    },
+                    error: function() {
+                        showToast('Silme işlemi için veri getirilemedi. Lütfen tekrar deneyiniz.', 'Hata!', 'topRight', 3500, 'bg-danger', true);
+                    }
+                });
+            });
+            $('#GuncelleGorevlendirilmeTipiButton').click(saveUpdatedGorevlendirilmeTipi);
+            $('#SilGorevlendirilmeTipiButton').click(deleteGorevlendirilmeTipi);
+        });
+        function saveGorevlendirilmeTipi() {
+            $('#createModal span.text-danger').text('');
+            $('#createModal .overlay').show();
+            var formData = $('#GorevlendirilmeTipiEkleForm').serialize(); // Form verilerini serialize et
+            $.ajax({
+                url: '/Admin/GorevlendirilmeTipi/EkleGorevlendirilmeTipi', // Hedef URL
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    if (response.success) {
+                        $('#createModal').modal('hide');
+                        reloadTable();
+                        if (response.completeStatus) {
+                            showToast(response.message, 'Bilgi Mesajı', 'topRight', 2500, 'bg-success', true);
+                        }
+                        else {
+                            showToast(response.message, 'Bilgi Mesajı', 'topRight', 3500, 'bg-warning', true);
+                        }
+                    }
+                    else {
+                        // Hataları göster
+                        for (let key in response.errors) {
+                            $(`[name="${key}"]`).next('.text-danger').text(response.errors[key][0]);
+                        }
+                        $('.modal .overlay').hide();
+                    }
+                }
+            });
+        }
+        function initDataTable() {
+                $('#example').DataTable({
+                    "scrollX": true,
+                    "fixedHeader": true,
+                    "responsive": false,
+                    "lengthChange": false,
+                    "autoWidth": false,
+                    "lengthChange": true,
+                    "pageLength": 20,
+                    "order": [[0, 'asc']],
+                    "language": {
+                        "searchPanes": {
+                            "emptyPanes": 'Filtreleme Paneli Bulunamadı',
+                            "title": {
+                                _: 'Seçili Alan - %d',
+                                0: ''
+                            },
+                            "collapseMessage": 'Tümünü Kapat',
+                            "showMessage": 'Hepsini Göster',
+                            "clearMessage": 'Hepsini Temizle',
+                            "collapse": { 0: 'Filtreleme Paneli', _: 'Filtreleme Paneli (%d)' }
+                        },
+                        "sProcessing": "İşleniyor...",
+                        "sLengthMenu": "_MENU_",
+                        "sZeroRecords": "Eşleşen Kayıt Bulunmadı",
+                        "sInfo": "Toplam _TOTAL_ kayıttan _START_ - _END_ arası gösteriliyor",
+                        "sInfoEmpty": "Kayıt Yok",
+                        "emptyTable": "Tabloda veri bulunmamaktadır",
+                        "sInfoFiltered": "(toplam _MAX_ kayıttan filtrelendi)",
+                        "sSearch": "",
+                        "searchPlaceholder": 'Arama Yapınız...',
+                        "oPaginate": {
+                            "sFirst": "İlk",
+                            "sPrevious": "Önceki",
+                            "sNext": "Sonraki",
+                            "sLast": "Son"
+                        }
+                    },
+                    colReorder: true,
+                    layout: {
+                        topStart:
+                        {
+                            buttons:
+                                [
+                                    {
+                                        extend: 'searchPanes',
+                                        text: '<i class="fa fa-filter mr-1"></i>Filtreleme Paneli',
+                                        config: {
+                                            cascadePanes: true,
+                                            layout: 'columns-2',
+                                            orderable: false,
+                                            initCollapsed: true
+                                        }
+                                    },
+                                    {
+                                        extend: 'collection',
+                                        text: '<i class="fas fa-upload mr-1"></i> Aktar',
+                                        buttons:
+                                            [
+                                                {
+                                                    extend: 'excel',
+                                                    text: '<i class="fas fa-file-excel mr-1"></i> Excel',
+                                                    exportOptions: {
+                                                        columns: function(idx, data, node) {
+                                                            var table = $('#example').DataTable();
+                                                            var columnHeader = table.column(idx).header().innerText.trim(); // Sütun başlığını al
+                                                            var excludedColumns = ['İşlemler']; // Dışarıda bırakılacak sütunlar
+
+                                                            return table.column(idx).visible() && !excludedColumns.includes(columnHeader);
+                                                            // Yalnızca görünür ve dışlanmamış sütunları dahil et
+                                                        }
+                                                    }
+                                                },
+                                                {
+                                                    extend: 'pdf',
+                                                    text: '<i class="fas fa-file-pdf mr-1"></i> PDF',
+                                                    exportOptions: {
+                                                        columns: function(idx, data, node) {
+                                                            var table = $('#example').DataTable();
+                                                            var columnHeader = table.column(idx).header().innerText.trim(); // Sütun başlığını al
+
+                                                            var includedColumns = [
+                                                                'Görevlendirilme Tipi'
+                                                            ]; // PDF'e dahil edilmesi gereken sütunlar
+
+                                                            return includedColumns.includes(columnHeader); // Yalnızca seçili başlıkları ekle
+                                                        }
+                                                    },
+                                                    customize: function(doc) {
+                                                        var table = $('#example').DataTable();
+                                                        var includedColumns = [
+                                                            'Görevlendirilme Tipi'
+                                                        ]; // PDF'de görünmesini istediğimiz sıradaki sütunlar
+
+                                                        // PDF için tablo içeriğini yeniden oluştur
+                                                        var newTableBody = [];
+
+                                                        // Başlıkları sıraya göre düzenle
+                                                        var tableHeaders = includedColumns.map(function(colName) {
+                                                            return { text: colName, style: 'tableHeader', alignment: 'center' };
+                                                        });
+                                                        newTableBody.push(tableHeaders);
+
+                                                        // Satırları belirtilen sıraya göre ekle
+                                                        table.rows({ search: 'applied' }).every(function(rowIdx, tableLoop, rowLoop) {
+                                                            var rowData = this.data();
+                                                            var orderedRow = [];
+
+                                                            includedColumns.forEach(function(colName) {
+                                                                var columnIndex = table.column(`:contains("${colName}")`).index(); // Başlık ile indeks bul
+                                                                orderedRow.push({ text: rowData[columnIndex], alignment: 'center' });
+                                                            });
+
+                                                            newTableBody.push(orderedRow);
+                                                        });
+
+                                                        // Yeni tabloyu PDF'e uygula
+                                                        doc.content[1].table.body = newTableBody;
+                                                    }
+                                                },
+
+                                                {
+                                                    extend: 'print',
+                                                    text: '<i class="fas fa-print mr-1"></i> Yazdır',
+                                                    exportOptions: {
+                                                        columns: function(idx, data, node) {
+                                                            var table = $('#example').DataTable();
+                                                            var columnHeader = table.column(idx).header().innerText.trim(); // Sütun başlığını al
+                                                            var excludedColumns = ['İşlemler']; // Dışarıda bırakılacak sütunlar
+                                                            return table.column(idx).visible() && !excludedColumns.includes(columnHeader);// Eşleşen sütun dışarıya aktarılmaz
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                    },
+                                    {
+                                        extend: 'colvis',
+                                        // columns: function(idx, data, node) {
+                                        //     return [1].indexOf(idx) === -1;
+                                        // },
+                                        text: '<i class="fas fa-columns mr-1"></i> Sütun Görünürlüğü'
+                                    }
+                                ]
+                        }
+                    },
+                    columnDefs: [
+                        {
+                            searchPanes: {
+                                show: true,
+                                dtOpts: {
+                                    select: {
+                                        style: 'multi'
+                                    },
+                                    searching: true,
+                                }
+                            },
+                            targets: [1]
+                        },
+                        {
+                            searchPanes: {
+                                show: false
+                            },
+                            targets: '_all'
+                        }
+                    ]
+                });
+            }
+        function editGorevlendirilmeTipi(id) {
+            // event.preventDefault();
+            $.ajax({
+                url: `/Admin/GorevlendirilmeTipi/GetGorevlendirilmeTipiById/${id}`,
+                type: 'GET',
+                success: function(response) {
+                    if (response.success) {
+                        const data = response.data;
+                        $('#editModal #UpdateGorevlendirilmeTipiID').val(data.gorevlendirilmeTipiID);
+                        $('#editModal #UpdateGorevlendirilmeTipiAciklama').val(data.gorevlendirilmeTipiAciklama);
+                        $('#editModal #updateDurumlar option').each(function() {
+                            const optionValue = $(this).val();
+                            if (optionValue == data.durumId) {
+                                $(this).prop('selected', true);
+                            } else {
+                                $(this).prop('selected', false);
+                            }
+                        });
+                        $('#editModal .overlay').hide();
+                        $('#editModal').modal('show');
+                    }
+                    else {
+                        showToast('Seçili olan kayıt gösterilemiyor! Lütfen sayfayı yenileyip tekrar deneyiniz.', 'Hata', 'topRight', 3500, 'bg-danger', true);
+                        $('.modal .overlay').hide();
+                    }
+                },
+                error: function() {
+                    showSwalAlert('Hata!', 'Beklenmeyen bir hata oluştu!', 'error', 3500, true, true);
+                }
+            });
+        }
+        function saveUpdatedGorevlendirilmeTipi() {
+            var formData = $('#GorevlendirilmeTipiGuncelleForm').serialize(); // Form verilerini al
+            $.ajax({
+                url: '/Admin/GorevlendirilmeTipi/GuncelleGorevlendirilmeTipi',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    if (response.success) {
+                        $('#editModal').modal('hide'); // Modalı kapat
+                        reloadTable(); // Tabloyu yeniden yükle
+                        showToast(response.message, 'Bilgi Mesajı', 'topRight', 2500, 'bg-success', true);
+                    }
+                    else {
+                        // Hataları göster
+                        for (let key in response.errors) {
+                            $(`[name="${key}"]`).next('.text-danger').text(response.errors[key][0]);
+                        }
+                        $('.modal .overlay').hide();
+                    }
+                }
+            });
+        }
+        function deleteGorevlendirilmeTipi() {
+            $('#deleteModal .overlay').show();
+            var formData = $('#GorevlendirilmeTipiSilForm').serialize(); // Form verilerini al
+            $.ajax({
+                url: '/Admin/GorevlendirilmeTipi/SilGorevlendirilmeTipi', // Silme işlemi için endpoint
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    if (response.success) {
+                        $('#deleteModal').modal('hide'); // Modalı kapat
+                        reloadTable(); // Tabloyu yeniden yükle
+                        showToast(response.message, 'Bilgi Mesajı', 'topRight', 2500, 'bg-success', true);
+                    }
+                    else {
+                        $('#deleteModal').modal('hide');
+                        showToast(response.message, 'Hata Mesajı', 'topRight', 3500, 'bg-danger', true);
+                    }
+                },
+                error: function(xhr) {
+                    handleError(xhr); // Hata durumunu yönet
+                }
+            });
+        }
+        function showInfoGorevlendirilmeTipi(id) {
+            $.ajax({
+                url: `/Admin/GorevlendirilmeTipi/GetirSafahatBilgi/${id}`,
+                type: 'GET',
+                success: function(response) {
+                    $("#auditTrailModal").find(".modal-body").html(response);
+                    $('#auditTrailModal').modal('show');
+                },
+                error: function() {
+                    showToast('Safahat bilgileri getirilemedi. Lütfen tekrar deneyiniz.', 'Hata!', 'topRight', 3500, 'bg-danger', true);
+                }
+            });
+        }
+        function reloadTable() {
+            // Eski tabloyu kaldır
+            if ($.fn.DataTable.isDataTable('#example')) {
+                $('#example').DataTable().destroy();
+                $('#example').empty(); // DOM'u temizle
+            }
+            // Tabloyu yeniden yükle
+            $('#GorevlendirilmeTipiTablosu').load('/Admin/GorevlendirilmeTipi #GorevlendirilmeTipiTablosu', function(response, status, xhr) {
+                if (status === "success") {
+                    initDataTable(); // DataTable başlat
+                } else if (status === "error") {
+                    showToast("Tablo yüklenemedi. Lütfen sayfayı yenileyin.", "Hata", "topRight", 3500, "bg-danger", true);
+                }
+            });
+        }
+        function handleError(xhr) {
+            $('.modal .overlay').hide();
+            if (xhr.responseJSON && xhr.responseJSON.errors) {
+                for (let key in xhr.responseJSON.errors) {
+                    let errorElement = $(`[name='${key}']`).next('.text-danger');
+                    errorElement.text(xhr.responseJSON.errors[key][0]);
+                }
+            }
+            else {
+                $('.modal').modal('hide'); // Tüm açık modalları kapatır
+                showSwalAlert('Hata!', 'Beklenmeyen bir hata oluştu. Lütfen yaptığınız işlemi tekrar deneyiniz. Hatanın devam etmesi durumunda Bilgi İşlem Birimine bildiriniz.', 'error', 6500, true, true);
+            }
+        }
+    </script>
+}

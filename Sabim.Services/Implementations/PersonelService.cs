@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Sabim.Domain.DTOs.HelperDtos;
+using Sabim.Domain.DTOs.PersonelAyrilisDtos;
 using Sabim.Domain.DTOs.PersonelDtos;
 using Sabim.Domain.DTOs.PersonelUnvanGecmisiDtos;
 using Sabim.Domain.DTOs.PersonelWithUserDto;
@@ -38,6 +40,50 @@ namespace Sabim.Services.Implementations
         public async Task<string> TUpdateCalisilanKatipler(UpdateSavciCalisilanKatipDto updateSavciCalisilanKatipler)
         {
             return await _repositoryManager.Personel.UpdateCalisilanKatipler(updateSavciCalisilanKatipler);
+        }
+        public async Task<PersonelUnvanGecmisi> TGetPersonelUnvanGecmisiByIdAsync(short personelUnvanGecmisiId, bool trackChanges)
+        {
+            return await _repositoryManager.Personel.GetPersonelUnvanGecmisiByIdAsync(personelUnvanGecmisiId, trackChanges);
+        }
+        public async Task<ResultPersonelUnvanGecmisiDto> TGetPersonelUnvanByIdAsync(short personelUnvanGecmisiId, bool trackChanges)
+        {
+            return await _repositoryManager.Personel.GetPersonelUnvanByIdAsync(personelUnvanGecmisiId, trackChanges);
+        }
+        public async Task<string> TUpdatePersonelUnvanGecmisiAsync(PersonelUnvanGecmisi personelUnvanGecmisi)
+        {
+            return await _repositoryManager.Personel.UpdatePersonelUnvanGecmisiAsync(personelUnvanGecmisi);
+        }
+        public async Task<string> TDeletePersonelUnvanAsync(short PersonelUnvanGecmisiID)
+        {
+            return await _repositoryManager.Personel.DeletePersonelUnvanAsync(PersonelUnvanGecmisiID);
+        }
+        public async Task<AuditTrailDto?> TGetPersonelUnvanAuditTrailWithDetailsAsync(short id)
+        {
+            return await _repositoryManager.Personel.GetPersonelUnvanAuditTrailWithDetailsAsync(id);
+        }
+        public async Task<List<ResultPersonelAyrilisDto>> TGetPersonelIzinleriByIdAsync(short personelId, bool kaliciAyrilisMi, bool trackChanges)
+        {
+            return await _repositoryManager.Personel.GetPersonelIzinleriByIdAsync(personelId, kaliciAyrilisMi, trackChanges);
+        }
+        public async Task<string> TAddPersonelIzinleriAsync(CreatePersonelAyrilisDto createPersonelAyrilisDto)
+        {
+            return await _repositoryManager.Personel.AddPersonelIzinleriAsync(createPersonelAyrilisDto);
+        }
+        public async Task<PersonelAyrilis> TGetPersonelAyrilisById(short personelAyrilisId, bool trackChanges)
+        {
+            return await _repositoryManager.Personel.GetPersonelAyrilisById(personelAyrilisId, trackChanges);
+        }
+        public async Task<string> TUpdatePersonelIzinAsync(PersonelAyrilis updatePersonelAyrilis)
+        {
+            return await _repositoryManager.Personel.UpdatePersonelIzinAsync(updatePersonelAyrilis);
+        }
+        public async Task<string> TDeletePersonelIzinAsync(short personelAyrilisID)
+        {
+            return await _repositoryManager.Personel.DeletePersonelIzinAsync(personelAyrilisID);
+        }
+        public async Task<AuditTrailDto?> TGetPersonelIzinAuditTrailWithDetailsAsync(short id)
+        {
+            return await _repositoryManager.Personel.GetPersonelIzinAuditTrailWithDetailsAsync(id);
         }
     }
 }

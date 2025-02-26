@@ -10,7 +10,7 @@ namespace Sabim.Web.Areas.Admin.ViewComponents.PersonelUnvanGecmisiViewComponent
         {
             _manager = manager;
         }
-        public async Task<IViewComponentResult> InvokeAsync(short PersonelID, string? deger, int? selectedSehirId = null)
+        public async Task<IViewComponentResult> InvokeAsync(short PersonelID, string? deger)
         {
             var personelUnvanGecmisi = await _manager.PersonelService.TGetPersonelUnvanlariByIdAsync(PersonelID, false);
             return View(personelUnvanGecmisi);

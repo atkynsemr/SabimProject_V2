@@ -4,10 +4,10 @@ using Sabim.Services.Contracts;
 
 namespace Sabim.Services.Validators.CalismaDurumuValidators
 {
-    public class UpdateGorevlendirilmeTuruDtoValidator : AbstractValidator<UpdateCalismaDurumuDto>
+    public class UpdateCalismaDurumuDtoValidator : AbstractValidator<UpdateCalismaDurumuDto>
     {
         private readonly IServiceManager _manager;
-        public UpdateGorevlendirilmeTuruDtoValidator(IServiceManager manager)
+        public UpdateCalismaDurumuDtoValidator(IServiceManager manager)
         {
             _manager = manager;
             RuleFor(x => x.CalismaDurumuID).NotEmpty().WithMessage("Çalışma Durumu ID alanı boş olamaz.");

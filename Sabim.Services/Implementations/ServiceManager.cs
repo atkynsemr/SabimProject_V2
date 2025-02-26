@@ -28,13 +28,14 @@ namespace Sabim.Services.Implementations
         private readonly IEmailService _emailService;
         private readonly ILoggerService _loggerService;
         private readonly ISavciCalisilanKatipService _savciCalisilanKatipService;
+        private readonly IPersonelAyrilisNedenleriService _personelAyrilisNedenleriService;
 
         public ServiceManager(ICalismaDurumuService calismaDurumuService, ICinsiyetService cinsiyetService, IDurumService durumService,
             IGorevlendirilmeTuruService gorevlendirilmeTuruService, IKadroTuruService kadroTuruService,
             IKanGrubuService kanGrubuService, IKurumService kurumService, IKurumTipiService kurumTipiService, IPersonelService personelService,
             ISehirService sehirService, IUnvanService unvanService, IBolumService bolumService, IBirimService birimService, IKisimService kisimService, IKabinetBazliBolumService kabinetBazliBolumService,
             IGorevlendirilmeTipiService gorevlendirilmeTipiService, IPersonelGorevlendirilmeService personelGorevlendirilmeService, IAppRoleService appRoleService, IAppUserService appUserService,
-            ISidebarMenuService sidebarMenuService, IEkranService ekranService, IEmailService emailService, ILoggerService loggerService, ISavciCalisilanKatipService savciCalisilanKatipService)
+            ISidebarMenuService sidebarMenuService, IEkranService ekranService, IEmailService emailService, ILoggerService loggerService, ISavciCalisilanKatipService savciCalisilanKatipService, IPersonelAyrilisNedenleriService personelAyrilisNedenleriService)
         {
             _calismaDurumuService = calismaDurumuService;
             _cinsiyetService = cinsiyetService;
@@ -60,6 +61,7 @@ namespace Sabim.Services.Implementations
             _emailService = emailService;
             _loggerService = loggerService;
             _savciCalisilanKatipService = savciCalisilanKatipService;
+            _personelAyrilisNedenleriService = personelAyrilisNedenleriService;
         }
 
         public ICalismaDurumuService CalismaDurumuService => _calismaDurumuService;
@@ -86,5 +88,6 @@ namespace Sabim.Services.Implementations
         public IEmailService EmailService => _emailService;
         public ILoggerService LoggerService => _loggerService;
         public ISavciCalisilanKatipService SavciCalisilanKatipService => _savciCalisilanKatipService;
+        public IPersonelAyrilisNedenleriService PersonelAyrilisNedenleriService => _personelAyrilisNedenleriService;
     }
 }

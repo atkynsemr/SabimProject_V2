@@ -1,4 +1,6 @@
-﻿using Sabim.Domain.DTOs.PersonelDtos;
+﻿using Sabim.Domain.DTOs.HelperDtos;
+using Sabim.Domain.DTOs.PersonelAyrilisDtos;
+using Sabim.Domain.DTOs.PersonelDtos;
 using Sabim.Domain.DTOs.PersonelUnvanGecmisiDtos;
 using Sabim.Domain.DTOs.SavciCalisilanKatipDtos;
 using Sabim.Domain.Entities;
@@ -12,5 +14,16 @@ namespace Sabim.Infrastructure.Persistence.Repository.Contracts
         Task<string> UpdateCalisilanKatipler(UpdateSavciCalisilanKatipDto updateSavciCalisilanKatipler);
         Task<string> AddPersonelUnvanAsync(CreatePersonelUnvanGecmisiDto createPersonelUnvanGecmisiDto);
         Task<List<ResultPersonelUnvanGecmisiDto>> GetPersonelUnvanlariByIdAsync(short personelId, bool trackChanges);
+        Task<ResultPersonelUnvanGecmisiDto> GetPersonelUnvanByIdAsync(short personelUnvanGecmisiId, bool trackChanges);
+        Task<PersonelUnvanGecmisi> GetPersonelUnvanGecmisiByIdAsync(short personelUnvanGecmisiId, bool trackChanges);
+        Task<string> UpdatePersonelUnvanGecmisiAsync(PersonelUnvanGecmisi personelUnvanGecmisi);
+        Task<string> DeletePersonelUnvanAsync(short PersonelUnvanGecmisiID);
+        Task<AuditTrailDto?> GetPersonelUnvanAuditTrailWithDetailsAsync(short id);
+        Task<List<ResultPersonelAyrilisDto>> GetPersonelIzinleriByIdAsync(short personelId, bool kaliciAyrilisMi, bool trackChanges);
+        Task<string> AddPersonelIzinleriAsync(CreatePersonelAyrilisDto createPersonelAyrilisDto);
+        Task<PersonelAyrilis> GetPersonelAyrilisById(short personelAyrilisId, bool trackChanges);
+        Task<string> UpdatePersonelIzinAsync(PersonelAyrilis updatePersonelAyrilis);
+        Task<string> DeletePersonelIzinAsync(short personelAyrilisID);
+        Task<AuditTrailDto?> GetPersonelIzinAuditTrailWithDetailsAsync(short id);
     }
 }

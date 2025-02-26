@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Sabim.Domain.Constants;
 using Sabim.Domain.DTOs.AppUserDtos;
+using Sabim.Domain.DTOs.PersonelAyrilisDtos;
 using Sabim.Domain.DTOs.PersonelDtos;
 using Sabim.Domain.DTOs.PersonelUnvanGecmisiDtos;
 using Sabim.Domain.DTOs.PersonelWithUserDto;
@@ -237,6 +238,261 @@ namespace Sabim.Web.Areas.Admin.Controllers
                     return Json(new { success = false, message = "Kaydetme işlemi sırasında bir hata oluştu. Lütfen tekrar deneyin." });
             }
         }
+        [HttpGet]
+        public async Task<IActionResult> GetPersonelUnvanById([FromRoute] short id)
+        {
+            try
+            {
+                var personelUnvan = await _manager.PersonelService.TGetPersonelUnvanByIdAsync(id, false);
+                if (personelUnvan == null)
+                {
+                    return Json(new { success = false });                                                      
+                }
+                return Json(new { success = true, data = personelUnvan });
+            }
+            catch (Exception ex)
+            {
+                var username = User.Identity.IsAuthenticated ? User.Identity.Name : "Unknown User";
+                _manager.LoggerService.LogError($"Area:Admin - Controller:Personel - Action: GetPersonelUnvanById - User: {username} - Hata: {ex.Message}");
+                return Json(new { success = false });
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> GuncellePersonelUnvanGecmisi([FromForm] UpdatePersonelUnvanGecmisiDto updatePersonelUnvanGecmisiDto)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            if (!ModelState.IsValid)
+            {
+                var errors = ValidationHelper.GetModelErrors(ModelState);
+                return Json(new { success = false, errors });
+            }
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var mevcutPersonelUnvanGecmisi = await _manager.PersonelService.TGetPersonelUnvanGecmisiByIdAsync(updatePersonelUnvanGecmisiDto.PersonelUnvanGecmisiID, false);
+            if (mevcutPersonelUnvanGecmisi == null)
+            {
+                return Json(new { success = false, message = "Kayıt Bulunamadı!" });
+            }
+            _mapper.Map(updatePersonelUnvanGecmisiDto, mevcutPersonelUnvanGecmisi);
+            mevcutPersonelUnvanGecmisi.GuncelleyenPersonelId = Convert.ToInt16(userId);
+            mevcutPersonelUnvanGecmisi.GuncellenmeTarihi = DateTime.Now;
+            var status = await _manager.PersonelService.TUpdatePersonelUnvanGecmisiAsync(mevcutPersonelUnvanGecmisi);
+            switch (status)
+            {
+                case OperationStatus.Success:
+                    return Json(new { success = true, message = "Personel unvanı başarılı bir şekilde güncellendi." });
+                case OperationStatus.GlobalError:
+                default:
+                    var username = User.Identity.IsAuthenticated ? User.Identity.Name : "Unknown User";
+                    _manager.LoggerService.LogError($"Area:Admin - Controller:Personel - Action: GuncellePersonelUnvanGecmisi - User: {username} - Hata: Personel Unvan Gecmisi ID : {updatePersonelUnvanGecmisiDto.PersonelUnvanGecmisiID} Güncellenemedi!");
+                    return Json(new { success = false, message = "Güncelleme işlemi sırasında bir hata oluştu. Lütfen tekrar deneyin." });
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SilPersonelUnvanGecmisi(short PersonelUnvanGecmisiID)
+        {
+            var status = _manager.PersonelService.TDeletePersonelUnvanAsync(PersonelUnvanGecmisiID).Result;
+            switch (status)
+            {
+                case OperationStatus.Success:
+                    return Json(new { success = true, message = "Personel unvanı başarılı bir şekilde silindi." });
+                case OperationStatus.NotFound:
+                    return Json(new { success = false, message = "Kayıt bulunamadığı için silme işlemi gerçekleştirilemez!" });
+                case OperationStatus.ForeignKeyConflict:
+                    return Json(new { success = false, message = "Bu Personel başka bir tabloda kullanıldığı için silinemez!" });
+                case OperationStatus.GlobalError:
+                default:
+                    var username = User.Identity.IsAuthenticated ? User.Identity.Name : "Unknown User";
+                    _manager.LoggerService.LogError($"Area:Admin - Controller:Personel - Action: SilPersonelUnvanGecmisi - User: {username} - Hata: Personel Unvan Gecmisi : {PersonelUnvanGecmisiID} Silinemedi!");
+                    return Json(new { success = false, message = "Silme işlemi sırasında bir hata oluştu. Lütfen tekrar deneyin." });
+            }
+        }
+        public async Task<IActionResult> GetirPersonelUnvanSafahatBilgi([FromRoute] short id)
+        {
+            try
+            {
+                var safahatBilgi = await _manager.PersonelService.TGetPersonelUnvanAuditTrailWithDetailsAsync(id);
+                if (safahatBilgi == null)
+                {
+                    return Json(new { success = false });
+                }
+                return PartialView("~/Views/Shared/Partials/_SafahatBilgiPartial.cshtml", safahatBilgi);
+            }
+            catch (Exception ex)
+            {
+                var username = User.Identity.IsAuthenticated ? User.Identity.Name : "Unknown User";
+                _manager.LoggerService.LogError($"Area:Admin - Controller:Personel - Action: GetirSafahatBilgi - User: {username} - Hata: {ex.Message}");
+                return Json(new { success = false });
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> PersonelIzinleri(short PersonelID)
+        {
+            var personel = await _manager.PersonelService.TGetPersonelByIdAsync(PersonelID, false);
+            var personelDto = _mapper.Map<ResultPersonelDto>(personel);
+            var viewModel = new PersonelAyrilisViewModel
+            {
+                YeniPersonelAyrilis = new CreatePersonelAyrilisDto(), // Boş bir DTO örneği
+                GuncellePersonelAyrilis = new UpdatePersonelAyrilisDto(), // Boş bir DTO örneği
+                ListelePersonelAyrilis = personelDto // Personel bilgisi
+            };
+            // ViewModel ile View'a gönder
+            return View(viewModel);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EklePersonelIzin([FromForm] CreatePersonelAyrilisDto createPersonelAyrilisDto)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            if (!ModelState.IsValid)
+            {
+                var errors = ValidationHelper.GetModelErrors(ModelState);
+                return Json(new { success = false, errors });
+            }
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            createPersonelAyrilisDto.OlusturanPersonelId = Convert.ToInt16(userId);
+            createPersonelAyrilisDto.OlusturulmaTarihi = DateTime.Now;
+            var status = await _manager.PersonelService.TAddPersonelIzinleriAsync(createPersonelAyrilisDto);
+            switch (status)
+            {
+                case OperationStatus.Success:
+                    return Json(new { success = true, message = "Yeni personel izni başarılı bir şekilde eklenmiştir.", completeStatus = true });
+                case OperationStatus.DateConflict:
+                    return Json(new { success = true, message = OperationStatus.DateConflict, completeStatus = false });
+                case OperationStatus.GlobalError:
+                default:
+                    var username = User.Identity.IsAuthenticated ? User.Identity.Name : "Unknown User";
+                    _manager.LoggerService.LogError($"Area:Admin - Controller:Personel - Action: EklePersonelIzin - User: {username} - Hata: Yeni Personel İzni Eklenemedi!");
+                    return Json(new { success = false, message = "Kaydetme işlemi sırasında bir hata oluştu. Lütfen tekrar deneyin." });
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetPersonelAyrilisById([FromRoute] short id)
+        {
+            try
+            {
+                var personelIzin = await _manager.PersonelService.TGetPersonelAyrilisById(id, false);
+                if (personelIzin == null)
+                {
+                    return Json(new { success = false });
+                }
+                return Json(new
+                {
+                    success = true,
+                    data = new
+                    {
+                        personelIzin.PersonelAyrilisID,
+                        Aciklama = personelIzin.PersonelAyrilisNedenleri?.Aciklama,
+                        BaslangicTarihi = personelIzin.BaslangicTarihi?.ToString("yyyy-MM-dd"),
+                        BitisTarihi = personelIzin.BitisTarihi?.ToString("yyyy-MM-dd"),
+                        KaliciAyrilisMi = personelIzin.PersonelAyrilisNedenleri?.KaliciAyrilisMi,
+                        DonanimUyarisi = personelIzin.PersonelAyrilisNedenleri?.DonanimUyarisi,
+                        PersonelId = personelIzin.PersonelId,
+                        DurumId=personelIzin.DurumId
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                var username = User.Identity.IsAuthenticated ? User.Identity.Name : "Unknown User";
+                _manager.LoggerService.LogError($"Area:Admin - Controller:Personel - Action: GetPersonelAyrilisById - User: {username} - Hata: {ex.Message}");
+                return Json(new { success = false });
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> GuncellePersonelIzin([FromForm] UpdatePersonelAyrilisDto updatePersonelAyrilisDto)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            if (!ModelState.IsValid)
+            {
+                var errors = ValidationHelper.GetModelErrors(ModelState);
+                return Json(new { success = false, errors });
+            }
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var mevcutPersonelIzin= await _manager.PersonelService.TGetPersonelAyrilisById(updatePersonelAyrilisDto.PersonelAyrilisID, false);
+            if (mevcutPersonelIzin == null)
+            {
+                return Json(new { success = false, message = "Kayıt Bulunamadı!" });
+            }
+            _mapper.Map(updatePersonelAyrilisDto, mevcutPersonelIzin);
+            mevcutPersonelIzin.GuncelleyenPersonelId = Convert.ToInt16(userId);
+            mevcutPersonelIzin.GuncellenmeTarihi = DateTime.Now;
+            var status = await _manager.PersonelService.TUpdatePersonelIzinAsync(mevcutPersonelIzin);
+            switch (status)
+            {
+                case OperationStatus.Success:
+                    return Json(new { success = true, message = "Personel izin başarılı bir şekilde güncellendi." });
+                case OperationStatus.GlobalError:
+                default:
+                    var username = User.Identity.IsAuthenticated ? User.Identity.Name : "Unknown User";
+                    _manager.LoggerService.LogError($"Area:Admin - Controller:Personel - Action: GuncellePersonelIzin - User: {username} - Hata: Personel Ayrilis ID : {updatePersonelAyrilisDto.PersonelAyrilisID} Güncellenemedi!");
+                    return Json(new { success = false, message = "Güncelleme işlemi sırasında bir hata oluştu. Lütfen tekrar deneyin." });
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SilPersonelAyrilis(short PersonelAyrilisID)
+        {
+            var status = _manager.PersonelService.TDeletePersonelIzinAsync(PersonelAyrilisID).Result;
+            switch (status)
+            {
+                case OperationStatus.Success:
+                    return Json(new { success = true, message = "Personel izni başarılı bir şekilde silindi." });
+                case OperationStatus.NotFound:
+                    return Json(new { success = false, message = "Kayıt bulunamadığı için silme işlemi gerçekleştirilemez!" });
+                case OperationStatus.ForeignKeyConflict:
+                    return Json(new { success = false, message = "Bu Personel izni başka bir tabloda kullanıldığı için silinemez!" });
+                case OperationStatus.GlobalError:
+                default:
+                    var username = User.Identity.IsAuthenticated ? User.Identity.Name : "Unknown User";
+                    _manager.LoggerService.LogError($"Area:Admin - Controller:Personel - Action: SilPersonelAyrilis - User: {username} - Hata: Personel İzni : {PersonelAyrilisID} Silinemedi!");
+                    return Json(new { success = false, message = "Silme işlemi sırasında bir hata oluştu. Lütfen tekrar deneyin." });
+            }
+        }
+        public async Task<IActionResult> GetirPersonelIzinSafahatBilgi([FromRoute] short id)
+        {
+            try
+            {
+                var safahatBilgi = await _manager.PersonelService.TGetPersonelIzinAuditTrailWithDetailsAsync(id);
+                if (safahatBilgi == null)
+                {
+                    return Json(new { success = false });
+                }
+                return PartialView("~/Views/Shared/Partials/_SafahatBilgiPartial.cshtml", safahatBilgi);
+            }
+            catch (Exception ex)
+            {
+                var username = User.Identity.IsAuthenticated ? User.Identity.Name : "Unknown User";
+                _manager.LoggerService.LogError($"Area:Admin - Controller:Personel - Action: GetirSafahatBilgi - User: {username} - Hata: {ex.Message}");
+                return Json(new { success = false });
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> PersonelAyrilislari(short PersonelID)
+        {
+            var personel = await _manager.PersonelService.TGetPersonelByIdAsync(PersonelID, false);
+            var personelDto = _mapper.Map<ResultPersonelDto>(personel);
+            var viewModel = new PersonelAyrilisViewModel
+            {
+                YeniPersonelAyrilis = new CreatePersonelAyrilisDto(), // Boş bir DTO örneği
+                GuncellePersonelAyrilis = new UpdatePersonelAyrilisDto(), // Boş bir DTO örneği
+                ListelePersonelAyrilis = personelDto // Personel bilgisi
+            };
+            // ViewModel ile View'a gönder
+            return View(viewModel);
+        }
+
     }
 }
 

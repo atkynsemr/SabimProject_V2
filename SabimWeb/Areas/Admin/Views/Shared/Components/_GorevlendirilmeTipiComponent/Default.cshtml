@@ -1,0 +1,19 @@
+﻿@using Sabim.Domain.DTOs.GorevlendirilmeTipiDtos
+@model List<ResultGorevlendirilmeTipiDto>
+<tbody class="text-heading">
+    @foreach (var gorevlendirilmeTipi in Model)
+    {
+        <tr>
+            <td>@gorevlendirilmeTipi.GorevlendirilmeTipiAciklama</td>
+            <td>
+                @Html.Raw(IconHelper.GetStatusNameIcon(gorevlendirilmeTipi.DurumAdi))
+                <span class="badge badge-lg @BadgeHelper.GetBadgeClass(gorevlendirilmeTipi.DurumId)"> @gorevlendirilmeTipi.DurumAdi</span>
+            </td>
+            <td>
+                @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-showinfo", "", IconHelper.GetInfoIcon(), "Göster", "showInfoGorevlendirilmeTipi", gorevlendirilmeTipi.GorevlendirilmeTipiID.ToString()))
+                @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-edit", "", IconHelper.GetEditIcon(), "Düzenle", "editGorevlendirilmeTipi", gorevlendirilmeTipi.GorevlendirilmeTipiID.ToString()))
+                @Html.Raw(IconHelper.CreateLink("btn btn-icon btn-delete", "", IconHelper.GetDeleteIcon(), "Sil", "deleteGorevlendirilmeTipi", gorevlendirilmeTipi.GorevlendirilmeTipiID.ToString()))
+            </td>
+        </tr>
+    }
+</tbody>

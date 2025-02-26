@@ -15,7 +15,6 @@ namespace Sabim.Services.Validators.KanGrubuValidators
                 .NotEmpty().WithMessage("Kan Grubu boş bırakılamaz.")
                 .MinimumLength(3).WithMessage("Kan Grubu en az 3 karakter olmalıdır.")
                 .MaximumLength(10).WithMessage("Kan Grubu en fazla 10 karakter olmalıdır.")
-                 //.Matches("^[a-zA-ZçÇğĞıİöÖşŞüÜ\\s]+$").WithMessage("Kan Grubu yalnızca harf içermelidir.")
                 .Must((dto, kanGrubuAdi) => BeUniqueName(kanGrubuAdi, dto.KanGrubuID)).WithMessage("Kan Grubu adı zaten kayıtlı!");
         }
         private bool BeUniqueName(string kanGrubuAdi, short? excludeId)

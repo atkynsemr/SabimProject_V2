@@ -1,0 +1,33 @@
+﻿@using Sabim.Domain.DTOs.PersonelAyrilisDtos
+@model List<ResultPersonelAyrilisDto>
+
+<tbody class="text-heading">
+    @foreach (var personelIzinler in Model)
+    {
+        <tr>
+            <td>@personelIzinler.Aciklama</td>
+            <td class="text-center" data-sort="@(personelIzinler.BaslangicTarihi.HasValue ? personelIzinler.BaslangicTarihi.Value.ToString("yyyy-MM-dd") : "")">
+                @(personelIzinler.BaslangicTarihi.HasValue ? personelIzinler.BaslangicTarihi.Value.ToString("dd/MM/yyyy") : "-")
+            </td>
+            <td class="text-center" data-sort="@(personelIzinler.BitisTarihi.HasValue ? personelIzinler.BitisTarihi.Value.ToString("yyyy-MM-dd") : "")">
+                @(personelIzinler.BitisTarihi.HasValue ? personelIzinler.BitisTarihi.Value.ToString("dd/MM/yyyy") : "-")
+            </td>
+            <td class="text-center">
+                <div class="d-flex align-items-center justify-content-center">
+                    @Html.Raw(IconHelper.GetStatusNameIcon(personelIzinler.DurumAdi))
+                    <span class="badge badge-lg @BadgeHelper.GetBadgeClass(personelIzinler.DurumId)"> @personelIzinler.DurumAdi</span>
+                </div>
+            </td>
+            <td class="text-center">
+                <div class="d-flex align-items-center justify-content-center">
+                    @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-showinfo", "", IconHelper.GetInfoIcon(), "Göster", "showInfoPersonelIzin", personelIzinler.PersonelAyrilisID.ToString()))
+                    @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-edit", "", IconHelper.GetEditIcon(), "Düzenle", "editPersonelIzin", personelIzinler.PersonelAyrilisID.ToString()))
+                    @Html.Raw(IconHelper.CreateLink("btn btn-icon btn-delete", "", IconHelper.GetDeleteIcon(), "Sil", "deletePersonelIzin", personelIzinler.PersonelAyrilisID.ToString()))
+                </div>
+            </td>
+        </tr>
+    }
+</tbody>
+
+
+

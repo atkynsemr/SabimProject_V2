@@ -10,5 +10,6 @@
         public Sehir Sehir { get; set; }
         //Navigation property
         public ICollection<Personel> Personels { get; set; } = new List<Personel>();
+        public ICollection<PersonelAyrilis> PersonelAyriliss { get; set; } = new List<PersonelAyrilis>();
     }
 }

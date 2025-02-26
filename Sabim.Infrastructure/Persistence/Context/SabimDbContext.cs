@@ -38,6 +38,8 @@ namespace Sabim.Infrastructure.Persistence.Context
         public DbSet<PersonelGorevlendirilme> PersonelGorevlendirilme { get; set; }
         public DbSet<PersonelUnvanGecmisi> PersonelUnvanGecmisi { get; set; }   
         public DbSet<SavciCalisilanKatip> SavciCalisilanKatip { get; set; }
+        public DbSet<PersonelAyrilis> PersonelAyrilis { get; set; }
+        public DbSet<PersonelAyrilisNedenleri> PersonelAyrilisNedenleri { get; set; }
         public DbSet<SidebarMenu> SidebarMenu { get; set; }
         public DbSet<Ekran> Ekran { get; set; }
         public DbSet<AppRoleClaim> AppRoleClaims { get; set; }
