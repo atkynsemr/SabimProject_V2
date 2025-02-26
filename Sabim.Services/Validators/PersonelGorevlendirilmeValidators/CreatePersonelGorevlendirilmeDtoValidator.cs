@@ -14,7 +14,11 @@ namespace Sabim.Services.Validators.PersonelGorevlendirilmeValidators
 
         public CreatePersonelGorevlendirilmeDtoValidator()
         {
- 
+            RuleFor(x => x.PersonelId).NotEmpty().WithMessage("Personel alanı boş bırakılamaz.");
+            //RuleFor(x => x.GorevlendirilmeTuruId).NotEmpty().WithMessage("Görevlendirilme Türü boş bırakılamaz.");
+            //RuleFor(x => x.KurumId).NotEmpty().WithMessage("Kadrosunun Bulunduğu Kurum boş bırakılamaz.");
+            //RuleFor(x => x.KadroTuruId).NotEmpty().WithMessage("Kadro Türü boş bırakılamaz.");
+            //RuleFor(x => x.CalismaDurumuId).NotEmpty().WithMessage("Çalışma durumu boş bırakılamaz.");
         }
     }
 }
