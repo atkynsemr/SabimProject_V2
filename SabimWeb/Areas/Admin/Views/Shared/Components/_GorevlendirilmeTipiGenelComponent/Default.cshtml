@@ -1,0 +1,12 @@
+﻿@using Sabim.Domain.DTOs.GorevlendirilmeTipiDtos
+@model List<ResultGorevlendirilmeTipiDto>
+
+<div class="form-group">
+    <label for="GorevlendirilmeTipiAdi">Görevlendirilme Tipi</label>
+    <select class="form-control" id="@(ViewBag.Deger ?? "")GorevlendirilmeTurleri" name="GorevlendirilmeTipiID" style="width: 100%;">
+        @foreach (var GorevlendirilmeTipi in Model)
+        {
+            <option value="@GorevlendirilmeTipi.GorevlendirilmeTipiID" selected="@GorevlendirilmeTipi.Selected">@GorevlendirilmeTipi.GorevlendirilmeTipiAciklama</option>
+        }
+    </select>
+</div>

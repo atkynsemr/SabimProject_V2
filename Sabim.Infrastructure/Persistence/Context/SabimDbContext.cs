@@ -43,6 +43,7 @@ namespace Sabim.Infrastructure.Persistence.Context
         public DbSet<SidebarMenu> SidebarMenu { get; set; }
         public DbSet<Ekran> Ekran { get; set; }
         public DbSet<AppRoleClaim> AppRoleClaims { get; set; }
+        public DbSet<PersonelGeciciGorevlendirilme> PersonelGeciciGorevlendirilme { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

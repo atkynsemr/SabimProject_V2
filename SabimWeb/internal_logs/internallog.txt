@@ -6148,3 +6148,303 @@
 2025-02-26 09:31:22.5318 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
 2025-02-26 09:31:22.5471 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
 2025-02-26 09:31:22.5700 Info Configuration initialized.
+2025-02-26 10:54:11.7452 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-26 10:54:11.8307 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-26 10:54:11.8688 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-26 10:54:11.9756 Info Configuration initialized.
+2025-02-26 12:21:46.8952 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-26 12:21:46.9414 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-26 12:21:47.0288 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-26 12:21:47.0532 Info Configuration initialized.
+2025-02-26 12:30:43.9447 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-26 12:30:43.9769 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-26 12:30:43.9908 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-26 12:30:44.0602 Info Configuration initialized.
+2025-02-26 13:27:53.2283 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-26 13:27:53.2799 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-26 13:27:53.3594 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-26 13:27:53.3939 Info Configuration initialized.
+2025-02-26 14:01:12.9801 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-26 14:01:13.0314 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-26 14:01:13.0642 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-26 14:01:13.1673 Info Configuration initialized.
+2025-02-26 14:13:19.1374 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-26 14:13:19.1700 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-26 14:13:19.1899 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-26 14:13:19.2497 Info Configuration initialized.
+2025-02-26 14:16:59.5732 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-26 14:16:59.6016 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-26 14:16:59.6133 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-26 14:16:59.6133 Info Configuration initialized.
+2025-02-26 14:39:48.1779 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-26 14:39:48.2245 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-26 14:39:48.2434 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-26 14:39:48.3134 Info Configuration initialized.
+2025-02-26 15:03:40.7269 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-26 15:03:40.7598 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-26 15:03:40.7761 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-26 15:03:40.8408 Info Configuration initialized.
+2025-02-26 15:14:12.8883 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-26 15:14:12.9387 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-26 15:14:13.0011 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-26 15:14:13.0186 Info Configuration initialized.
+2025-02-26 15:25:23.3337 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-26 15:25:23.3689 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-26 15:25:23.4368 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-26 15:25:23.4592 Info Configuration initialized.
+2025-02-26 15:26:59.4402 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-26 15:26:59.4766 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-26 15:26:59.5415 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-26 15:26:59.5415 Info Configuration initialized.
+2025-02-26 15:32:39.6022 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-26 15:32:39.6543 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-26 15:32:39.6957 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-26 15:32:39.7656 Info Configuration initialized.
+2025-02-26 15:36:00.2818 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-26 15:36:00.3186 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-26 15:36:00.3332 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-26 15:36:00.3463 Info Configuration initialized.
+2025-02-26 15:49:40.0801 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-26 15:49:40.1645 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-26 15:49:40.2032 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-26 15:49:40.2746 Info Configuration initialized.
+2025-02-28 08:42:25.6703 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-28 08:42:26.5351 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-28 08:42:26.6067 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-28 08:42:26.6399 Info Configuration initialized.
+2025-02-28 09:05:52.9176 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-28 09:05:52.9867 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-28 09:05:53.0226 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-28 09:05:53.0416 Info Configuration initialized.
+2025-02-28 09:12:06.4032 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-28 09:12:06.4337 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-28 09:12:06.4927 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-28 09:12:06.5085 Info Configuration initialized.
+2025-02-28 09:19:57.2612 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-28 09:19:57.2858 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-28 09:19:57.3460 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-28 09:19:57.3460 Info Configuration initialized.
+2025-02-28 10:01:59.8875 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-28 10:01:59.9197 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-28 10:01:59.9354 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-28 10:01:59.9545 Info Configuration initialized.
+2025-02-28 10:19:19.4853 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-28 10:19:19.5218 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-28 10:19:19.5717 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-28 10:19:19.5925 Info Configuration initialized.
+2025-02-28 11:02:14.1942 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-28 11:02:14.2471 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-28 11:02:14.2662 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-28 11:02:14.3319 Info Configuration initialized.
+2025-02-28 11:23:25.1214 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-28 11:23:25.2892 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-28 11:23:25.4404 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-28 11:23:25.5600 Info Configuration initialized.
+2025-02-28 11:26:19.9986 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-28 11:26:20.0331 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-28 11:26:20.0514 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-28 11:26:20.1063 Info Configuration initialized.
+2025-02-28 11:35:47.5812 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-28 11:35:47.6082 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-28 11:35:47.6243 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-28 11:35:47.6677 Info Configuration initialized.
+2025-02-28 11:38:09.1094 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-28 11:38:09.1437 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-28 11:38:09.1601 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-28 11:38:09.1891 Info Configuration initialized.
+2025-02-28 13:36:21.2780 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-28 13:36:21.6228 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-28 13:36:21.8187 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-28 13:36:21.9873 Info Configuration initialized.
+2025-02-28 14:11:01.6957 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-28 14:11:01.7817 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-28 14:11:01.8083 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-28 14:11:01.9160 Info Configuration initialized.
+2025-02-28 14:51:29.6351 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-28 14:51:29.6817 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-28 14:51:29.7528 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-28 14:51:29.7995 Info Configuration initialized.
+2025-02-28 14:55:50.7888 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-28 14:55:50.8213 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-28 14:55:50.8512 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-28 14:55:50.9016 Info Configuration initialized.
+2025-02-28 15:00:55.9510 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-28 15:00:55.9860 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-28 15:00:56.0437 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-28 15:00:56.0605 Info Configuration initialized.
+2025-02-28 15:06:53.2056 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-28 15:06:53.2564 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-28 15:06:53.3180 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-28 15:06:53.3460 Info Configuration initialized.
+2025-02-28 15:12:21.3236 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-28 15:12:21.6311 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-28 15:12:21.7131 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-28 15:12:21.7899 Info Configuration initialized.
+2025-02-28 15:18:58.4192 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-28 15:18:58.4941 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-28 15:18:58.6290 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-28 15:18:58.6920 Info Configuration initialized.
+2025-02-28 15:26:35.2513 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-28 15:26:35.3522 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-28 15:26:35.4020 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-28 15:26:35.4418 Info Configuration initialized.
+2025-02-28 15:37:33.8380 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-28 15:37:33.9240 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-28 15:37:33.9929 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-28 15:37:34.0435 Info Configuration initialized.
+2025-02-28 15:44:38.7146 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-28 15:44:38.7657 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-28 15:44:38.7820 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-28 15:44:38.8347 Info Configuration initialized.
+2025-02-28 15:47:04.4764 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-02-28 15:47:04.5985 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-02-28 15:47:04.6165 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-02-28 15:47:04.6611 Info Configuration initialized.
+2025-03-01 10:49:25.0409 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-01 10:49:25.0970 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-01 10:49:25.1245 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-01 10:49:25.1654 Info Configuration initialized.
+2025-03-01 11:03:07.3434 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-01 11:03:07.3701 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-01 11:03:07.3965 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-01 11:03:07.4168 Info Configuration initialized.
+2025-03-01 11:09:45.0664 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-01 11:09:45.0899 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-01 11:09:45.0899 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-01 11:09:45.1218 Info Configuration initialized.
+2025-03-01 11:24:22.7933 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-01 11:24:22.8591 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-01 11:24:22.9897 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-01 11:24:23.1722 Info Configuration initialized.
+2025-03-01 11:31:22.9734 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-01 11:31:22.9911 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-01 11:31:22.9911 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-01 11:31:23.0238 Info Configuration initialized.
+2025-03-01 12:12:27.3006 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-01 12:12:27.3435 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-01 12:12:27.3622 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-01 12:12:27.3808 Info Configuration initialized.
+2025-03-01 12:21:38.8021 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-01 12:21:38.8265 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-01 12:21:38.8372 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-01 12:21:38.8372 Info Configuration initialized.
+2025-03-01 12:27:41.7212 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-01 12:27:41.7476 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-01 12:27:41.7627 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-01 12:27:41.7627 Info Configuration initialized.
+2025-03-01 14:59:10.6186 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-01 14:59:10.8326 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-01 14:59:10.8603 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-01 14:59:10.8840 Info Configuration initialized.
+2025-03-01 15:18:34.2058 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-01 15:18:34.2248 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-01 15:18:34.2401 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-01 15:18:34.2605 Info Configuration initialized.
+2025-03-02 10:46:50.6336 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-02 10:46:50.7552 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-02 10:46:50.7552 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-02 10:46:50.7802 Info Configuration initialized.
+2025-03-02 11:03:37.1750 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-02 11:03:37.2116 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-02 11:03:37.2223 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-02 11:03:37.2223 Info Configuration initialized.
+2025-03-02 11:08:35.5551 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-02 11:08:35.5776 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-02 11:08:35.5886 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-02 11:08:35.6121 Info Configuration initialized.
+2025-03-02 11:09:40.7420 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-02 11:09:40.7552 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-02 11:09:40.7552 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-02 11:09:40.7769 Info Configuration initialized.
+2025-03-02 11:16:42.6663 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-02 11:16:42.6828 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-02 11:16:42.6943 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-02 11:16:42.6943 Info Configuration initialized.
+2025-03-02 11:41:30.8714 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-02 11:41:30.9097 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-02 11:41:30.9255 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-02 11:41:30.9255 Info Configuration initialized.
+2025-03-02 11:53:11.0628 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-02 11:53:11.0811 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-02 11:53:11.0906 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-02 11:53:11.1016 Info Configuration initialized.
+2025-03-02 11:59:45.1444 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-02 11:59:45.1688 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-02 11:59:45.1904 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-02 11:59:45.1904 Info Configuration initialized.
+2025-03-02 12:01:15.7269 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-02 12:01:15.7489 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-02 12:01:15.7639 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-02 12:01:15.7763 Info Configuration initialized.
+2025-03-02 12:08:46.5017 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-02 12:08:46.5243 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-02 12:08:46.5463 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-02 12:08:46.5574 Info Configuration initialized.
+2025-03-02 12:12:20.3461 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-02 12:12:20.3587 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-02 12:12:20.3690 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-02 12:12:20.3690 Info Configuration initialized.
+2025-03-02 12:19:48.9472 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-02 12:19:48.9632 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-02 12:19:48.9855 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-02 12:19:48.9984 Info Configuration initialized.
+2025-03-02 12:28:12.1738 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-02 12:28:12.1970 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-02 12:28:12.1970 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-02 12:28:12.2201 Info Configuration initialized.
+2025-03-02 12:30:40.6842 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-02 12:30:40.7090 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-02 12:30:40.7241 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-02 12:30:40.7403 Info Configuration initialized.
+2025-03-03 07:23:23.5249 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-03 07:23:23.7239 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-03 07:23:23.7751 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-03 07:23:23.7911 Info Configuration initialized.
+2025-03-03 07:29:53.2244 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-03 07:29:53.5271 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-03 07:29:53.6649 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-03 07:29:53.7108 Info Configuration initialized.
+2025-03-03 07:47:42.2292 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-03 07:47:42.2789 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-03 07:47:42.2975 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-03 07:47:42.3556 Info Configuration initialized.
+2025-03-03 08:06:02.9652 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-03 08:06:02.9979 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-03 08:06:03.0142 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-03 08:06:03.0722 Info Configuration initialized.
+2025-03-03 08:15:28.9766 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-03 08:15:29.0061 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-03 08:15:29.0207 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-03 08:15:29.0707 Info Configuration initialized.
+2025-03-03 08:28:38.7720 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-03 08:28:38.8220 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-03 08:28:38.8924 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-03 08:28:38.9188 Info Configuration initialized.
+2025-03-03 08:31:47.9790 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-03 08:31:48.0376 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-03 08:31:48.0973 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-03 08:31:48.1138 Info Configuration initialized.
+2025-03-03 08:33:26.9222 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-03 08:33:26.9503 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-03 08:33:26.9642 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-03 08:33:27.0168 Info Configuration initialized.
+2025-03-03 10:12:28.4989 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-03 10:12:28.6134 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-03 10:12:28.6855 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-03 10:12:28.8168 Info Configuration initialized.
+2025-03-03 10:12:37.4163 Info AppDomain Shutting down. LogFactory closing...
+2025-03-03 10:12:37.4445 Info LogFactory has been closed.
+2025-03-03 10:13:06.8788 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-03 10:13:06.9025 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-03 10:13:06.9025 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-03 10:13:06.9325 Info Configuration initialized.
+2025-03-03 10:13:11.6062 Info AppDomain Shutting down. LogFactory closing...
+2025-03-03 10:13:11.6456 Info LogFactory has been closed.
+2025-03-03 10:16:47.3180 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-03 10:16:47.3684 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-03 10:16:47.3832 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-03 10:16:47.4399 Info Configuration initialized.
+2025-03-03 10:56:53.3548 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2025-03-03 10:56:53.4382 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.3.4.2778. Product version: 5.3.4+73d83d3161d31288ca5c554cc50d27b6bed5f28b. GlobalAssemblyCache: False
+2025-03-03 10:56:53.4612 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=E:\SabimProject-master\SabimWeb\nlog.config
+2025-03-03 10:56:53.5088 Info Configuration initialized.

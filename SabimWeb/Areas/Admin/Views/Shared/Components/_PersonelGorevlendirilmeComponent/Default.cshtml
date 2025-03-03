@@ -1,0 +1,47 @@
+﻿@using Sabim.Domain.DTOs.PersonelGorevlendirilmeDtos
+@model List<ResultPersonelGorevlendirilmeDto>
+<tbody class="text-heading">
+    @foreach (var personelGorevlendirme in Model)
+    {
+        <tr>
+            <td class="text-center" data-sort="@(personelGorevlendirme.GorevlendirilmeBaslangicTarihi.ToString("yyyy-MM-dd"))">
+                @(personelGorevlendirme.GorevlendirilmeBaslangicTarihi.ToString("dd/MM/yyyy"))
+            </td>
+            <td class="text-center" data-sort="@(personelGorevlendirme.GorevlendirilmeBitisTarihi.HasValue ? personelGorevlendirme.GorevlendirilmeBitisTarihi.Value.ToString("yyyy-MM-dd") : "")">
+                @(personelGorevlendirme.GorevlendirilmeBitisTarihi.HasValue ? personelGorevlendirme.GorevlendirilmeBitisTarihi.Value.ToString("dd/MM/yyyy") : "-")
+            </td>
+            <td class="text-center text-nowrap">
+                <div class="d-flex align-items-center justify-content-center gap-2">
+                    @Html.Raw(IconHelper.GetStatusIcon(personelGorevlendirme.AsilGorevlendirilmeYeriMi))
+                    @Html.Raw(BadgeHelper.GetBadgeStatus(personelGorevlendirme.AsilGorevlendirilmeYeriMi))
+                </div>
+            </td>
+            <td class="text-center text-nowrap">
+                <div class="d-flex align-items-center justify-content-center gap-2">
+                    @Html.Raw(IconHelper.GetStatusIcon(personelGorevlendirme.GorevlendirilmeAktifMi))
+                    @Html.Raw(BadgeHelper.GetBadge(personelGorevlendirme.GorevlendirilmeAktifMi))
+                </div>
+            </td>
+            <td>@personelGorevlendirme.BolumAdi</td>
+            <td>@personelGorevlendirme.BirimAdi</td>
+            <td>@personelGorevlendirme.KisimAdi</td>
+            <td class="text-nowrap">
+                <!-- Bootstrap ile nowrap -->
+                <div class="d-flex align-items-center gap-2">
+                    <!-- Bootstrap ile flexbox -->
+                    @Html.Raw(IconHelper.GetStatusNameIcon(personelGorevlendirme.DurumAdi))
+                    <span class="badge badge-lg @BadgeHelper.GetBadgeClass(personelGorevlendirme.DurumId)">@personelGorevlendirme.DurumAdi</span>
+                </div>
+            </td>
+            <td class="text-nowrap">
+                <!-- Bootstrap ile nowrap -->
+                <div class="d-flex align-items-center gap-2">
+                    <!-- Bootstrap ile flexbox -->
+                    @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-showinfo", "", IconHelper.GetInfoIcon(), "Göster", "showInfoPersonelGorevlendirilme", personelGorevlendirme.PersonelGorevlendirilmeID.ToString()))
+                    @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-edit", "", IconHelper.GetEditIcon(), "Düzenle", "editPersonelGorevlendirilme", personelGorevlendirme.PersonelGorevlendirilmeID.ToString()))
+                    @Html.Raw(IconHelper.CreateLink("btn btn-icon btn-delete", "", IconHelper.GetDeleteIcon(), "Sil", "deletePersonelGorevlendirilme", personelGorevlendirme.PersonelGorevlendirilmeID.ToString()))
+                </div>
+            </td>
+        </tr>
+    }
+</tbody>

@@ -12,14 +12,19 @@ namespace Sabim.Web.Areas.Admin.ViewComponents.BirimViewComponents
         {
             _manager = manager;
         }
-        public async Task<IViewComponentResult> InvokeAsync(int? selectedBirimId = null)
+        public async Task<IViewComponentResult> InvokeAsync(string? deger, int? selectedBolumId = null, int? selectedBirimId = null)
         {
-            var birimler = await _manager.BirimService.TFindAllAsync(false);
+            // Veritabanından sadece gerekli verileri çek
+            var birimler = selectedBolumId.HasValue
+                ? await _manager.BirimService.TFindAllByConditionAsync(c => c.BolumId == selectedBolumId.Value, false)
+                : await _manager.BirimService.TFindAllAsync(false);
+            ViewBag.Deger = deger;
             // Alfabetik sıralama
             var birimDtoList = birimler
                 .OrderBy(b => b.BirimAdi)
                 .Select(b => new ResultBirimDto
                 {
+                    BolumId = b.BolumId,
                     BirimID = b.BirimID,
                     BirimAdi = b.BirimAdi,
                     Selected = selectedBirimId.HasValue && selectedBirimId.Value == b.BirimID

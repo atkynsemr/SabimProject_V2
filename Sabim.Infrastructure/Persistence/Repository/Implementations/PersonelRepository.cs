@@ -7,6 +7,7 @@ using Sabim.Domain.Constants;
 using Sabim.Domain.DTOs.HelperDtos;
 using Sabim.Domain.DTOs.PersonelAyrilisDtos;
 using Sabim.Domain.DTOs.PersonelDtos;
+using Sabim.Domain.DTOs.PersonelGeciciGorevlendirilmeDtos;
 using Sabim.Domain.DTOs.PersonelUnvanGecmisiDtos;
 using Sabim.Domain.DTOs.SavciCalisilanKatipDtos;
 using Sabim.Domain.Entities;
@@ -296,6 +297,46 @@ namespace Sabim.Infrastructure.Persistence.Repository.Implementations
                 return OperationStatus.GlobalError;
             }
         }
+        public async Task<ResultPersonelWithGorevYeriDto> GetByIdWithPersonelInfoAsync(short personelId, bool trankChanges)
+        {
+            var query = await _context.Personel
+                    .Where(p => p.PersonelID == personelId)
+                    .Include(p => p.Unvan) // Unvan tablosunu dahil et
+                    .Include(p => p.CalismaDurumu) // Çalışma durumu tablosunu dahil et
+                    .Include(p => p.Kurum) // Kurum tablosunu dahil et
+                    .Include(p => p.PersonelGorevlendirilmes) // Görevlendirme tablosunu dahil et
+                    .ThenInclude(pg => pg.Kisim) // Görevlendirmeden Kisim tablosuna git
+                    .ThenInclude(k => k.Birim) // Kisim'den Birim tablosuna git
+                    .ThenInclude(b => b.Bolum) // Birim'den Bolum tablosuna git
+                    .Select(p => new
+                    {
+                        p.Ad,
+                        p.Soyad,
+                        p.SicilNumarasi,
+                        UnvanAdi = p.Unvan.UnvanAdi,
+                        CalismaDurumAdi = p.CalismaDurumu.CalismaDurumAdi,
+                        KurumAdi = p.Kurum.KurumAdi,
+                        Gorevlendirme = p.PersonelGorevlendirilmes
+                            .Where(pg => pg.AsilGorevlendirilmeYeriMi && pg.GorevlendirilmeAktifMi)
+                            .OrderBy(pg => pg.PersonelGorevlendirilmeID)
+                            .FirstOrDefault()
+                    }) .FirstOrDefaultAsync();
+                    if (query == null) throw new Exception("Personel bulunamadı!");
+
+                    return new ResultPersonelWithGorevYeriDto
+                    {
+                        PersonelID = personelId,
+                        Ad = query.Ad,
+                        Soyad = query.Soyad,
+                        SicilNumarasi = query.SicilNumarasi,
+                        UnvanAdi = query.UnvanAdi,
+                        CalismaDurumAdi = query.CalismaDurumAdi,
+                        KurumAdi = query.KurumAdi,
+                        KisimAdi = query.Gorevlendirme?.Kisim?.KisimAdi,
+                        BirimAdi = query.Gorevlendirme?.Kisim?.Birim?.BirimAdi,
+                        BolumAdi = query.Gorevlendirme?.Kisim?.Birim?.Bolum?.BolumAdi
+                    };
+        }
         public async Task<PersonelAyrilis> GetPersonelAyrilisById(short personelAyrilisId, bool trackChanges)
         {
             IQueryable<PersonelAyrilis> query = _context.PersonelAyrilis.Where(x => x.PersonelAyrilisID == personelAyrilisId)
@@ -315,6 +356,21 @@ namespace Sabim.Infrastructure.Persistence.Repository.Implementations
                 query = query.AsNoTracking();
             }
             var result = await query.ProjectTo<ResultPersonelDto>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(x => x.PersonelID == id);
+            return result;
+        }
+
+        public async Task<List<ResultPersonelGeciciGorevlendirilmeDto>> GetPersonelGeciciGorevlendirilmeByIdAsync(short personelId, bool trackChanges)
+        {
+            IQueryable<PersonelGeciciGorevlendirilme> query = _context.PersonelGeciciGorevlendirilme;
+            if (!trackChanges)
+            {
+                query = query.AsNoTracking();
+            }
+            var result = await query
+                .Where(p => p.PersonelId == personelId)
+                .ProjectTo<ResultPersonelGeciciGorevlendirilmeDto>(_mapper.ConfigurationProvider)
+                .OrderBy(p => p.BaslangicTarihi)
+                .ToListAsync();
             return result;
         }
 
@@ -382,7 +438,7 @@ namespace Sabim.Infrastructure.Persistence.Repository.Implementations
                 query = query.AsNoTracking();
             }
             var result = await query
-                .Where(p => p.PersonelId == personelId && p.PersonelAyrilisNedenleri.KaliciAyrilisMi==kaliciAyrilisMi)
+                .Where(p => p.PersonelId == personelId && p.PersonelAyrilisNedenleri.KaliciAyrilisMi == kaliciAyrilisMi)
                 .ProjectTo<ResultPersonelAyrilisDto>(_mapper.ConfigurationProvider)
                 .OrderBy(p => p.BaslangicTarihi)
                 .ToListAsync();

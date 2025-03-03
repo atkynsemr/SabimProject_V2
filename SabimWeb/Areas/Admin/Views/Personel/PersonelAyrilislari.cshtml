@@ -222,7 +222,7 @@
                 @Html.Raw(IconHelper.CreateButton("btn btn-outline-primary btn-flat my-2 ml-auto", "Personel Ayrılış", IconHelper.GetAddIcon(), "Personel Ayrılış Ekle", "createModal"))
             </div>
             <div class="card-body mt-2">
-                <div id="PersonelIzinTablosu">
+                <div id="PersonelAyrilisTablosu">
                     <table id="example" class="table table-striped table-bordered table-hover display text-center mt-3" style="width:100%">
                         <thead>
                             <tr>
@@ -691,7 +691,7 @@
             }
             var personelID = $('#CreatePersonelId').val();
             // Tabloyu yeniden yükle
-            $('#PersonelIzinTablosu').load('/Admin/Personel/PersonelIzinleri?PersonelID=' + personelID + ' #PersonelIzinTablosu', function(response, status, xhr) {
+            $('#PersonelAyrilisTablosu').load('/Admin/Personel/PersonelAyrilislari?PersonelID=' + personelID + ' #PersonelAyrilisTablosu', function(response, status, xhr) {
                 if (status === "success") {
                     initDataTable(); // DataTable başlat
                 } else if (status === "error") {

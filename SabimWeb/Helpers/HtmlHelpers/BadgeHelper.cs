@@ -19,5 +19,11 @@
             var badgeText = isActive ? "Aktif" : "Pasif";
             return $"<span class=\"badge {badgeClass}\">{badgeText}</span>";
         }
+        public static string GetBadgeStatus(bool isActive)
+        {
+            var badgeClass = isActive ? "badge-lg bg-label-success badge-success" : "badge-lg bg-label-secondary badge-secondary";
+            var badgeText = isActive ? "Evet" : "Hayır";
+            return $"<span class=\"badge {badgeClass}\">{badgeText}</span>";
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Sabim.Domain.DTOs.HelperDtos;
+﻿using NLog.Filters;
+using Sabim.Domain.DTOs.HelperDtos;
 using Sabim.Infrastructure.Persistence.Repository.Contracts;
 using Sabim.Services.Contracts;
 using System.Linq.Expressions;
@@ -78,6 +79,16 @@ namespace Sabim.Services.Implementations
         public async Task<string> TDeleteRangeByExpressionAsync(Expression<Func<T, bool>> predicate)
         {
             return await _repository.DeleteRangeByExpressionAsync(predicate);
+        }
+
+        public async Task<List<T>> TFindByIdAsyncWithEntities(bool trackChanges, Expression<Func<T, bool>>? filter = null, params Expression<Func<T, object>>[] childrens)
+        {
+            return await _repository.FindByIdAsyncWithEntities(trackChanges,filter, childrens);
+        }
+
+        public async Task<T> TFindByIdWithIncludesAsync<TKey>(TKey id, bool trackChanges,params Expression<Func<T, object>>[] childrens)
+        {
+            return await _repository.FindByIdWithIncludesAsync(id,trackChanges, childrens);
         }
     }
 }

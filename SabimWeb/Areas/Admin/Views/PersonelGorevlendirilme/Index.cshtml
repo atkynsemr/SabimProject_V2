@@ -1,0 +1,896 @@
+﻿@model Sabim.Web.ViewModels.PersonelGorevlendirilmeViewModel
+@{
+    ViewData["Title"] = "Personel Görevlendirilme";
+}
+@section StyleCss {
+    <link rel="stylesheet" href="/AdminTemplate/plugins/bootstrap/css/bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.3/css/responsive.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.1.2/css/buttons.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/searchpanes/2.3.3/css/searchPanes.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/select/2.1.0/css/select.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/colreorder/2.0.4/css/colReorder.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/4.0.1/css/fixedHeader.bootstrap4.css">
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/AdminTemplate/dist/css/CustomCss.css">
+}
+ <!-- Personel Görevlendirilme Ekleme Modal Başlangıç-->
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel">
+    <div class="modal-dialog mw-100 w-75" role="document">
+        <div class="modal-content">
+            <div class="overlay" style="display: none;">
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                    <div class="spinner-border text-light" role="status">
+                        <span class="sr-only">Lütfen Bekleyiniz...</span>
+                    </div>
+                    <div>
+                        <span class="text-center text-white">Lütfen Bekleyiniz...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-header primary">
+                <h5 class="modal-title" id="createModalLabel">Personel Görevlendirilme Ekle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Form Başlangıcı -->
+                <form id="PersonelGorevlendirilmeEkleForm">
+                    @Html.AntiForgeryToken()
+                    @await Component.InvokeAsync("_GorevlendirilmeTipiGenelComponent", new { deger = "create" })
+                    <div class="form-group">
+                        <label>Başlangıç Tarihi</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                            </div>
+                            <input type="text" class="form-control" id="CreateGorevlendirilmeBaslangicTarihi" name="GorevlendirilmeBaslangicTarihi" asp-for="YeniPersonelGorevlendirilme.GorevlendirilmeBaslangicTarihi" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask />
+                            <span asp-validation-for="YeniPersonelGorevlendirilme.GorevlendirilmeBaslangicTarihi" name="GorevlendirilmeBaslangicTarihi" class="col-sm-12 text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Bitiş Tarihi</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                            </div>
+                            <input type="text" class="form-control" id="CreateGorevlendirilmeBitisTarihi" name="GorevlendirilmeBitisTarihi" asp-for="YeniPersonelGorevlendirilme.GorevlendirilmeBitisTarihi" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask />
+                            <span asp-validation-for="YeniPersonelGorevlendirilme.GorevlendirilmeBitisTarihi" name="GorevlendirilmeBitisTarihi" class="col-sm-12 text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="AsilGorevlendirilmeYeriMi">Asıl Görev Yeri Mi</label>
+                        <div class="form-check">
+                            <input type="checkbox" id="CreateAsilGorevlendirilmeYeriMi" name="AsilGorevlendirilmeYeriMi"   data-width="100" data-height="30" data-toggle="toggle" data-on="Evet" data-off="Hayır"
+                                   data-onstyle="success" data-offstyle="danger" asp-for="YeniPersonelGorevlendirilme.AsilGorevlendirilmeYeriMi">
+                        </div>
+                    </div>
+@*                     <div class="form-group">
+                        <label for="GorevlendirilmeAktifMi">Görevlendirilme Aktif Mi</label>
+                        <div class="form-check">
+                            <input type="checkbox" id="CreateGorevlendirilmeAktifMi" name="GorevlendirilmeAktifMi" data-width="100" data-height="30" data-toggle="toggle" data-on="Evet" data-off="Hayır"
+                                   data-onstyle="success" data-offstyle="danger" asp-for="YeniPersonelGorevlendirilme.GorevlendirilmeAktifMi">
+                        </div>
+                    </div> *@
+                    <div id="bolumComponent">
+                        @await Component.InvokeAsync("_BolumGenelComponent", new { deger = "create" })
+                    </div>
+                    <div id="birimComponent">
+                        @await Component.InvokeAsync("_BirimGenelComponent", new { deger = "create", selectedBolumId = (int?)null })
+                    </div>
+                    <div id="kisimComponent">
+                        @await Component.InvokeAsync("_KisimGenelComponent", new { deger = "create", selectedBirimId = (int?)null })
+                    </div>
+                    <input type="hidden" id="CreatePersonelId" name="PersonelId" asp-for="YeniPersonelGorevlendirilme.PersonelId" value="@Model.ListelePersonelBilgileri.PersonelID" />
+                    <input type="hidden" id="CreateDurumId" name="DurumId" asp-for="YeniPersonelGorevlendirilme.DurumId" value="1" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" id="KaydetPersonelGorevlendirilmeleriButton">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ./Personel Görevlendirilme Ekleme Modal Bitiş-->
+
+<!-- Personel Görevlendirilme Düzenleme Modal Başlangıç-->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel">
+    <div class="modal-dialog mw-100 w-75" role="document">
+        <div class="modal-content">
+            <div class="overlay">
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                    <div class="spinner-border text-light" role="status">
+                        <span class="sr-only">Lütfen Bekleyiniz...</span>
+                    </div>
+                    <div>
+                        <span class="text-center text-white">Lütfen Bekleyiniz...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-header warning">
+                <h5 class="modal-title" id="editModalLabel">PersonelGörevlendirilmeDüzenle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Form Başlangıcı -->
+                <form id="PersonelGorevlendirilmeGuncelleForm">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="PersonelGorevlendirilmeID" id="UpdatePersonelGorevlendirilmeID" asp-for="GuncellePersonelGorevlendirilme.PersonelGorevlendirilmeID" />
+                    @await Component.InvokeAsync("_GorevlendirilmeTipiGenelComponent", new { deger = "update" })
+                    <div class="form-group">
+                        <label>Başlangıç Tarihi</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                            </div>
+                            <input type="text" class="form-control" id="UpdateGorevlendirilmeBaslangicTarihi" name="GorevlendirilmeBaslangicTarihi" asp-for="GuncellePersonelGorevlendirilme.GorevlendirilmeBaslangicTarihi" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask />
+                            <span asp-validation-for="GuncellePersonelGorevlendirilme.GorevlendirilmeBaslangicTarihi" name="GorevlendirilmeBaslangicTarihi" class="col-sm-12 text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Bitiş Tarihi</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                            </div>
+                            <input type="text" class="form-control" id="UpdateGorevlendirilmeBitisTarihi" name="GorevlendirilmeBitisTarihi" asp-for="GuncellePersonelGorevlendirilme.GorevlendirilmeBitisTarihi" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask />
+                            <span asp-validation-for="GuncellePersonelGorevlendirilme.GorevlendirilmeBitisTarihi" name="GorevlendirilmeBitisTarihi" class="col-sm-12 text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="AsilGorevlendirilmeYeriMi">Asıl Görev Yeri Mi</label>
+                        <div class="form-check">
+                            <input type="checkbox" id="UpdateAsilGorevlendirilmeYeriMi" name="AsilGorevlendirilmeYeriMi" data-width="100" data-height="30" data-toggle="toggle" data-on="Evet" data-off="Hayır"
+                                   data-onstyle="success" data-offstyle="danger" asp-for="GuncellePersonelGorevlendirilme.AsilGorevlendirilmeYeriMi">
+                        </div>
+                    </div>
+                    @*<div class="form-group">
+                    <label for="GorevlendirilmeAktifMi">Görevlendirilme Aktif Mi</label>
+                    <div class="form-check">
+                    <input type="checkbox" id="UpdateGorevlendirilmeAktifMi" name="GorevlendirilmeAktifMi" data-width="100" data-height="30" data-toggle="toggle" data-on="Evet" data-off="Hayır"
+                    data-onstyle="success" data-offstyle="danger" asp-for="GuncellePersonelGorevlendirilme.GorevlendirilmeAktifMi">
+                    </div>
+                    </div> *@
+                    <div id="bolumUpdateComponent">
+                        @await Component.InvokeAsync("_BolumGenelComponent", new { deger = "update" })
+                    </div>
+                    <div id="birimUpdateComponent">
+                        @await Component.InvokeAsync("_BirimGenelComponent", new { deger = "update", selectedBolumId = (int?)null })
+                    </div>
+                    <div id="kisimUpdateComponent">
+                        @await Component.InvokeAsync("_KisimGenelComponent", new { deger = "update", selectedBirimId = (int?)null })
+                        <span asp-validation-for="GuncellePersonelGorevlendirilme.KisimId" name="KisimId" class="col-sm-12 text-danger"></span>
+                    </div>     
+                    @await Component.InvokeAsync("_DurumListesiGenelComponent", new { deger = "update" })
+                    <input type="hidden" id="UpdatePersonelId" name="PersonelId" asp-for="GuncellePersonelGorevlendirilme.PersonelId" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-warning" id="GuncellePersonelGorevlendirilmeButton">Güncelle</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ./Personel Görevlendirilme Düzenleme Modal Bitiş-->
+
+<!-- Personel Görevlendirilme Silme Modal Başlangıç-->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="deleteModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="overlay" style="display: none;">
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                    <div class="spinner-border text-light" role="status">
+                        <span class="sr-only">Lütfen Bekleyiniz...</span>
+                    </div>
+                    <div>
+                        <span class="text-center text-white">Lütfen Bekleyiniz...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-header danger">
+                <h5 class="modal-title" id="deleteModalLabel">Personel Görevlendirilme Sil</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Form Başlangıcı -->
+                <form id="PersonelGorevlendirilmeSilForm">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="PersonelGorevlendirilmeID" id="DeletePersonelGorevlendirilmeID" />
+                    <p id="PersonelGorevlendirilmeLabel">
+                        Başlangıç Tarihi: <strong id="PersonelGorevlendirilmeGorevlendirilmeBaslangicTarihi"></strong> - Bitiş Tarihi:<strong id="PersonelGorevlendirilmeGorevlendirilmeBitisTarihi"></strong> -
+                        Birim: <strong id="PersonelGorevlendirilmeGorevlendirilmeBirimAdi"></strong> - Kısım: <strong id="PersonelGorevlendirilmeGorevlendirilmeKisimAdi"></strong> görevlendirilme silinecektir. Onaylıyor musunuz?</p>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-danger" id="SilPersonelGorevlendirilmeButton">Sil</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ./Personel Görevlendirilme Silme Modal Bitiş-->
+
+<!-- Personel Görevlendirilme Safahat Modal Başlangıç-->
+<div class="modal fade" id="auditTrailModal" tabindex="-1" role="dialog" aria-labelledby="auditTrailModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-secondary">
+                <h5 class="modal-title" id="auditTrailModalLabel">Safahat Bilgileri</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!--Veriler Yüklenecek-->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ./Personel Görevlendirilme Safahat Modal Bitiş--> 
+<div class="row">
+    <div class="col-md-3">
+        <div class="card card-primary card-outline">
+            <div class="card-body box-profile">
+                <div class="text-center">
+                    <img class="profile-user-img img-fluid img-circle" src="https://demos.themeselection.com/sneat-bootstrap-html-admin-template/assets/img/avatars/1.png" alt="User profile picture">
+                </div>
+                <h3 id="PersonelAdiSoyadi" class="profile-username text-center">@Model.ListelePersonelBilgileri.AdSoyad</h3>
+                <p class="text-muted text-center">@Model.ListelePersonelBilgileri.UnvanAdi</p>
+                <ul class="list-group list-group-unbordered mb-3">
+                    <li class="list-group-item">
+                        <b>Sicil Numarası</b> <a class="float-right">@Model.ListelePersonelBilgileri.SicilNumarasi</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Çalışma Durumu</b> <a class="float-right">@Model.ListelePersonelBilgileri.CalismaDurumAdi</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Kadro Yeri</b> <a class="float-right">@Model.ListelePersonelBilgileri.KurumAdi</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Bölüm</b> <a class="float-right">@Model.ListelePersonelBilgileri.BolumAdi</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Birim</b> <a class="float-right">@Model.ListelePersonelBilgileri.BirimAdi</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Kısım</b> <a class="float-right">@Model.ListelePersonelBilgileri.KisimAdi</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </div>
+    <!-- /.col -->
+    <div class="col-md-9">
+        <div class="card">
+            <div class="d-flex card-header">
+                <a asp-area="Admin" asp-controller="Personel" asp-action="Index" class="btn btn-outline-dark btn-flat my-2">
+                    <i class="fa fa-arrow-circle-left mr-1"></i> Personeller Sayfasına Dön
+                </a>
+                @Html.Raw(IconHelper.CreateButton("btn btn-outline-primary btn-flat my-2 ml-auto", "Yeni Personel Görevlendirilme", IconHelper.GetAddIcon(), "Yeni Personel Görevlendirilme Ekle", "createModal"))
+            </div>
+            <div class="card-body mt-2">
+                <div id="PersonelGorevlendirilmeTablosu">
+                    <table id="example" class="table table-striped table-bordered table-hover display text-center mt-3" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Başlangıç Tarihi</th>
+                                <th>Bitiş Tarihi</th>
+                                <th>Asıl Görev Yeri Mi</th>
+                                <th>Görevlendirilme Durumu</th>
+                                <th>Bölüm</th>
+                                <th>Birim</th>
+                                <th>Kısım</th>
+                                <th>Durum</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        @await Component.InvokeAsync("_PersonelGorevlendirilmeComponent", new { personelID = Model.ListelePersonelBilgileri.PersonelID, deger = "result" })
+                        <tfoot>
+                            <tr>
+                                <th>Başlangıç Tarihi</th>
+                                <th>Bitiş Tarihi</th>
+                                <th>Asıl Görev Yeri Mi</th>
+                                <th>Görevlendirilme Durumu</th>
+                                <th>Bölüm</th>
+                                <th>Birim</th>
+                                <th>Kısım</th>
+                                <th>Durum</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- /.card -->
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/dataTables.buttons.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/searchpanes/2.3.3/js/dataTables.searchPanes.js"></script>
+    <script src="https://cdn.datatables.net/searchpanes/2.3.3/js/searchPanes.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/select/2.1.0/js/dataTables.select.js"></script>
+    <script src="https://cdn.datatables.net/select/2.1.0/js/select.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/select/2.1.0/js/select.dataTables.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.colVis.min.js"></script>
+    <script src="https://cdn.datatables.net/colreorder/2.0.4/js/dataTables.colReorder.js"></script>
+    <script src="https://cdn.datatables.net/colreorder/2.0.4/js/colReorder.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/responsive/3.0.3/js/dataTables.responsive.js"></script>
+    <script src="https://cdn.datatables.net/responsive/3.0.3/js/responsive.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/fixedheader/4.0.1/js/dataTables.fixedHeader.js"></script>
+    <script src="https://cdn.datatables.net/fixedheader/4.0.1/js/fixedHeader.bootstrap4.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.8/dist/sweetalert2.all.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+    <!-- Toastr -->
+    <script src="/AdminTemplate/dist/js/toastr.min.js"></script>
+    <!-- Custom Toastr JS-->
+    <script src="/AdminTemplate/dist/js/customize/ToastCustom.js"></script>
+    <!-- Custom Capitalize JS-->
+    <script src="/AdminTemplate/dist/js/customize/CapitalizeCustom.js"></script>
+    <!-- Custom SwalAert JS-->
+    <script src="/AdminTemplate/dist/js/customize/SwalAlertCustom.js"></script>
+    <!-- InputMask -->
+    <script src="/AdminTemplate/plugins/jquery/jquery.inputmask.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            initDataTable();
+            var selectedBolumId = $('#createBolumler').val();
+            if (selectedBolumId) {
+                loadBirimComponent(selectedBolumId);
+            }
+            // Birim bileşenini yükle
+            $(document).on("change", "#createBolumler", function() {
+                var selectedBolumId = $(this).val();
+                if (selectedBolumId) {
+                    loadBirimComponent(selectedBolumId);                 
+                } 
+                else {
+                   // $("#birimComponent, #kisimComponent").html(''); // Seçim kaldırılırsa alanları temizle
+                    showSwalAlert('Hata!', 'Beklenmeyen bir hata oluştu. Lütfen yaptığınız işlemi tekrar deneyiniz. Hatanın devam etmesi durumunda Bilgi İşlem Personeline bildiriniz.', 'error', 6500, true, true);
+                }
+            });
+            // Birim seçildiğinde kısım componentini yükle
+            $(document).on("change", "#createBirimler", function() {
+                var selectedBirimId = $(this).val();
+                if (selectedBirimId) {
+                    loadKisimComponent(selectedBirimId);
+                } else {
+                    $("#kisimComponent").html(''); // Seçim kaldırılırsa kısım bileşeni temizle
+                }
+            });
+            $(document).on("change", "#updateBolumler", function () {
+                var selectedBolumId = $(this).val();
+                if (selectedBolumId) {
+                    loadUpdateBirimComponent(selectedBolumId);
+                }
+                else {
+                    // $("#birimComponent, #kisimComponent").html(''); // Seçim kaldırılırsa alanları temizle
+                    showSwalAlert('Hata!', 'Beklenmeyen bir hata oluştu. Lütfen yaptığınız işlemi tekrar deneyiniz. Hatanın devam etmesi durumunda Bilgi İşlem Personeline bildiriniz.', 'error', 6500, true, true);
+                }
+            });
+            // Birim seçildiğinde kısım componentini yükle
+            $(document).on("change", "#updateBirimler", function () {
+                var selectedBirimId = $(this).val();
+                if (selectedBirimId) {
+                    loadUpdateKisimComponent(selectedBirimId);
+                } else {
+                    $("#kisimUpdateComponent").html(''); // Seçim kaldırılırsa kısım bileşeni temizle
+                }
+            });
+            //Kayıt İşlemi
+            $('#KaydetPersonelGorevlendirilmeleriButton').click(savePersonelGorevlendirilmeleri);
+            $(".modal").on("hidden.bs.modal", function() {
+                $('.modal').each(function() {
+                    let modal = $(this);
+                    let form = modal.find('form');
+                    // Eğer form varsa, formu sıfırla
+                    if (form.length) {
+                        form[0].reset();
+                    }
+                    // Hata mesajlarını temizle
+                    modal.find('span.text-danger').text('');
+                });
+                $('#createModal .nav-pills .nav-link').removeClass('active'); // Tüm tab'ları deaktif yap
+                $('#createModal .tab-content .tab-pane').removeClass('active'); // Tüm içerik alanlarını deaktif yap
+                // İlk tab'ı aktif yap
+                $('#createModal .nav-pills .nav-link:first').addClass('active');
+                $('#createModal .tab-content .tab-pane:first').addClass('active');
+               
+                // Overlay (arka plan) elemanını gizle
+                $('.overlay').hide();
+            });
+            $('[data-widget="pushmenu"]').on('click', function() {
+                setTimeout(function() {
+                    var table = $('#example').DataTable();
+                    table.columns.adjust().draw(); // Sütunları yeniden boyutlandır ve yeniden çiz
+                }, 400); // Animasyon tamamlandıktan sonra
+            });
+            $(document).one('click', '.btn-edit', function(event) {
+                event.preventDefault();
+                let id = $(this).data('id');
+                if (id) {
+                    editPersonelGorevlendirilme(id);
+                }
+            });
+            $(document).on('click', '.btn-showinfo', function(event) {
+                event.preventDefault(); // Sayfanın yeniden yüklenmesini engelle
+                let id = $(this).data('id');
+                if (id) {
+                    showInfoPersonelGorevlendirilme(id);
+                }
+            });
+            $(document).on('click', '.btn-delete', function(event) {
+                event.preventDefault(); // Sayfanın yeniden yüklenmesini engelle
+                let PersonelGorevlendirilmeID = $(this).data('id');
+                $.ajax({
+                    url: `/Admin/PersonelGorevlendirilme/GetPersonelGorevlendirilmeById/${PersonelGorevlendirilmeID}`,
+                    type: 'GET',
+                    success: function(response) {
+                        if (response.success) {
+                            const personelData = response.data;
+                            $('#deleteModal #DeletePersonelGorevlendirilmeID').val(personelData.personelGorevlendirilmeID);
+                            $('#deleteModal #PersonelGorevlendirilmeGorevlendirilmeBirimAdi').text(personelData.birimAdi);
+                            $('#deleteModal #PersonelGorevlendirilmeGorevlendirilmeKisimAdi').text(personelData.kisimAdi);
+                            $('#deleteModal #PersonelGorevlendirilmeGorevlendirilmeBaslangicTarihi').text(changeDateFormatTo(personelData.gorevlendirilmeBaslangicTarihi));
+                            $('#deleteModal #PersonelGorevlendirilmeGorevlendirilmeBitisTarihi').text(changeDateFormatTo(personelData.gorevlendirilmeBitisTarihi));
+                            $('#deleteModal').modal('show'); // Modalı aç
+                        } else {
+                            showToast('Silinecek veri bulunamadı.', 'Hata!', 'topRight', 3500, 'bg-danger', true);
+                        }
+                    },
+                    error: function() {
+                        showToast('Silme işlemi için veri getirilemedi. Lütfen tekrar deneyiniz.', 'Hata!', 'topRight', 3500, 'bg-danger', true);
+                    }
+                });
+            });
+            $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' });
+            $('[data-mask]').inputmask();
+            // Düzenle Kaydet Butonu
+            $('#GuncellePersonelGorevlendirilmeButton').click(saveUpdatedPersonelGorevlendirilme);
+            // Sil Modal'ı
+            $('#SilPersonelGorevlendirilmeButton').click(deletePersonelGorevlendirilme);
+        });
+        function initDataTable() {
+            var personelAdiSoyadi = $("#PersonelAdiSoyadi").text().trim();
+            $('#example').DataTable({
+                "scrollX": true,
+                "fixedHeader": true,
+                "responsive": false,
+                "lengthChange": false,
+                "autoWidth": false,
+                "lengthChange": true,
+                "pageLength": 15,
+                "order": [0, 'asc'],
+                "language": {
+                    "searchPanes": {
+                        "emptyPanes": 'Filtreleme Paneli Bulunamadı',
+                        "title": {
+                            _: 'Seçili Alan - %d',
+                            0: ''
+                        },
+                        "collapseMessage": 'Tümünü Kapat',
+                        "showMessage": 'Hepsini Göster',
+                        "clearMessage": 'Hepsini Temizle',
+                        "collapse": { 0: 'Filtreleme Paneli', _: 'Filtreleme Paneli (%d)' }
+                    },
+                    "sProcessing": "İşleniyor...",
+                    "sLengthMenu": "_MENU_",
+                    "sZeroRecords": "Eşleşen Kayıt Bulunmadı",
+                    "sInfo": "Toplam _TOTAL_ kayıttan _START_ - _END_ arası gösteriliyor",
+                    "sInfoEmpty": "Kayıt Yok",
+                    "emptyTable": "Tabloda veri bulunmamaktadır",
+                    "sInfoFiltered": "(toplam _MAX_ kayıttan filtrelendi)",
+                    "sSearch": "",
+                    "searchPlaceholder": 'Arama Yapınız...',
+                    "oPaginate": {
+                        "sFirst": "İlk",
+                        "sPrevious": "Önceki",
+                        "sNext": "Sonraki",
+                        "sLast": "Son"
+                    }
+                },
+                colReorder: true,
+                layout: {
+                    topStart:
+                    {
+                        buttons:
+                            [
+                                {
+                                    extend: 'searchPanes',
+                                    text: '<i class="fa fa-filter mr-1"></i>Filtreleme Paneli',
+                                    titleAttr: 'Filtreleme Paneli',
+                                    config: {
+                                        cascadePanes: true,
+                                        layout: 'columns-2',
+                                        orderable: false,
+                                        initCollapsed: true
+                                    }
+                                },
+                                {
+                                    extend: 'collection',
+                                    text: '<i class="fas fa-upload mr-1"></i> Aktar',
+                                    buttons:
+                                        [
+                                            {
+                                                extend: 'excel',
+                                                text: '<i class="fas fa-file-excel mr-1"></i> Excel',
+                                                title: personelAdiSoyadi + ' - Unvan Geçmişi', // Dinamik başlık ekleme
+                                                exportOptions: {
+                                                    columns: function(idx, data, node) {
+                                                        var table = $('#example').DataTable();
+                                                        var columnHeader = table.column(idx).header().innerText.trim(); // Sütun başlığını al
+                                                        var excludedColumns = ['İşlemler']; // Dışarıda bırakılacak sütunlar
+
+                                                        return table.column(idx).visible() && !excludedColumns.includes(columnHeader);
+                                                        // Yalnızca görünür ve dışlanmamış sütunları dahil et
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                extend: 'pdf',
+                                                text: '<i class="fas fa-file-pdf mr-1"></i> PDF',
+                                                title: personelAdiSoyadi + ' - Unvan Geçmişi', // Dinamik başlık ekleme
+                                                exportOptions: {
+                                                    columns: function(idx, data, node) {
+                                                        var table = $('#example').DataTable();
+                                                        var columnHeader = table.column(idx).header().innerText.trim(); // Sütun başlığını al
+
+                                                        var includedColumns = [
+                                                            'Unvan Adı',
+                                                            'Unvana Sahip Olduğu Tarihi',
+                                                            'Bitiş Tarihii'
+                                                        ]; // PDF'e dahil edilmesi gereken sütunlar
+
+                                                        return includedColumns.includes(columnHeader); // Yalnızca seçili başlıkları ekle
+                                                    }
+                                                },
+                                                customize: function(doc) {
+                                                    var table = $('#example').DataTable();
+                                                    var includedColumns = [
+                                                        'Unvan Adı',
+                                                        'Unvana Sahip Olduğu Tarihi',
+                                                        'Bitiş Tarihii'
+                                                    ]; // PDF'de görünmesini istediğimiz sıradaki sütunlar
+
+                                                    // PDF için tablo içeriğini yeniden oluştur
+                                                    var newTableBody = [];
+
+                                                    // Başlıkları sıraya göre düzenle
+                                                    var tableHeaders = includedColumns.map(function(colName) {
+                                                        return { text: colName, style: 'tableHeader', alignment: 'center' };
+                                                    });
+                                                    newTableBody.push(tableHeaders);
+
+                                                    // Satırları belirtilen sıraya göre ekle
+                                                    table.rows({ search: 'applied' }).every(function(rowIdx, tableLoop, rowLoop) {
+                                                        var rowData = this.data();
+                                                        var orderedRow = [];
+
+                                                        includedColumns.forEach(function(colName) {
+                                                            var columnIndex = table.column(`:contains("${colName}")`).index(); // Başlık ile indeks bul
+                                                            orderedRow.push({ text: rowData[columnIndex], alignment: 'center' });
+                                                        });
+
+                                                        newTableBody.push(orderedRow);
+                                                    });
+
+                                                    // Yeni tabloyu PDF'e uygula
+                                                    doc.content[1].table.body = newTableBody;
+                                                }
+                                            },
+
+                                            {
+                                                extend: 'print',
+                                                text: '<i class="fas fa-print mr-1"></i> Yazdır',
+                                                exportOptions: {
+                                                    columns: function(idx, data, node) {
+                                                        var table = $('#example').DataTable();
+                                                        var columnHeader = table.column(idx).header().innerText.trim(); // Sütun başlığını al
+                                                        var excludedColumns = ['İşlemler']; // Dışarıda bırakılacak sütunlar
+                                                        return table.column(idx).visible() && !excludedColumns.includes(columnHeader);// Eşleşen sütun dışarıya aktarılmaz
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                },
+                                {
+                                    extend: 'colvis',
+                                    columns: function(idx, data, node) {
+                                        return [1].indexOf(idx) === -1;
+                                    },
+                                    text: '<i class="fas fa-columns mr-1"></i> Sütun Görünürlüğü'
+                                }
+                            ]
+                    }
+                },
+                columnDefs: [
+
+                    {
+                        searchPanes: {
+                            show: true
+                        },
+                        targets: [2, 3, 4, 5, 6]
+                    },
+                    {
+                        searchPanes: {
+                            show: false
+                        },
+                        targets: '_all'
+                    }
+                ]
+            });
+        }
+        const changeDateFormatTo = date => {
+            if (!date) return ''; // Eğer tarih yoksa boş döner
+            const onlyDate = date.split("T")[0];
+            const [yy, mm, dd] = onlyDate.split("-");
+            return `${dd}/${mm}/${yy}`;
+        };
+        // Birim bileşenini yükleyen AJAX fonksiyonu
+        function loadBirimComponent(selectedBolumId) {
+            $.ajax({
+                url: '/Admin/PersonelGorevlendirilme/GetBirimComponent',
+                type: 'GET',
+                data: { selectedBolumId: selectedBolumId },
+                success: function(result) {
+                    $('#birimComponent').html(result); // Yeni birim bileşenini güncelle
+                    var firstBirimId = $('#birimComponent select').first().val();
+                    if (firstBirimId) {
+                        loadKisimComponent(firstBirimId);
+                    } else {
+                        showSwalAlert('Hata!', 'Beklenmeyen bir hata oluştu. Lütfen yaptığınız işlemi tekrar deneyiniz. Hatanın devam etmesi durumunda Bilgi İşlem Personeline bildiriniz.', 'error', 6500, true, true);
+                    }
+                }
+            });
+        }
+        function loadUpdateBirimComponent(selectedBolumId) {
+            $.ajax({
+                url: '/Admin/PersonelGorevlendirilme/GetBirimComponent',
+                type: 'GET',
+                data: { selectedBolumId: selectedBolumId },
+                success: function (result) {
+                    $('#birimUpdateComponent').html(result); // Yeni birim bileşenini güncelle
+                    var firstBirimId = $('#birimUpdateComponent select').first().val();
+                    if (firstBirimId) {
+                        loadUpdateKisimComponent(firstBirimId);
+                    } else {
+                        showSwalAlert('Hata!', 'Beklenmeyen bir hata oluştu. Lütfen yaptığınız işlemi tekrar deneyiniz. Hatanın devam etmesi durumunda Bilgi İşlem Personeline bildiriniz.', 'error', 6500, true, true);
+                    }
+                }
+            });
+        }
+        // Kısım bileşenini yükleyen AJAX fonksiyonu
+        function loadKisimComponent(selectedBirimId) {
+            $.ajax({
+                url: '/Admin/PersonelGorevlendirilme/GetKisimComponent',
+                type: 'GET',
+                data: { selectedBirimId: selectedBirimId },
+                success: function(result) {
+                    $('#kisimComponent').html(result); // Kısım bileşenini güncelle
+                }
+            });
+        }
+        function loadUpdateKisimComponent(selectedBirimId) {
+            $.ajax({
+                url: '/Admin/PersonelGorevlendirilme/GetKisimComponent',
+                type: 'GET',
+                data: { selectedBirimId: selectedBirimId },
+                success: function (result) {
+                    $('#kisimUpdateComponent').html(result); // Kısım bileşenini güncelle
+                }
+            });
+        }
+        function savePersonelGorevlendirilmeleri() {
+            $('#createModal span.text-danger').text('');
+            $('#createModal .overlay').show();
+            var formData = $('#PersonelGorevlendirilmeEkleForm').serialize(); // Form verilerini serialize et
+            $.ajax({
+                url: '/Admin/PersonelGorevlendirilme/EklePersonelGorevlendirilme', // Hedef URL
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    if (response.success) {
+                        $('#createModal').modal('hide');
+                        reloadTable();
+                        if (response.completeStatus) {
+                            showToast(response.message, 'Bilgi Mesajı', 'topRight', 2500, 'bg-success', true);
+                        }
+                        else {
+                            showToast(response.message, 'Bilgi Mesajı', 'topRight', 3500, 'bg-warning', true);
+                        }
+                    }
+                    else {
+                        // Hataları göster
+                        for (let key in response.errors) {
+                            $(`[name="${key}"]`).next('.text-danger').text(response.errors[key][0]);
+                        }
+                        $('.modal .overlay').hide();
+                    }
+                }
+            });
+        }
+        function editPersonelGorevlendirilme(id) {
+            // event.preventDefault();
+            $.ajax({
+                url: `/Admin/PersonelGorevlendirilme/GetPersonelGorevlendirilmeById/${id}`,
+                type: 'GET',
+                success: function(response) {
+                    if (response.success) {
+                        const data = response.data;
+                         console.log(data);
+                        $('#editModal #UpdatePersonelId').val(data.personelId);
+                        $('#editModal #UpdatePersonelGorevlendirilmeID').val(data.personelGorevlendirilmeID);
+                        $('#editModal #updateGorevlendirilmeTurleri option').each(function () {
+                            const optionValue = $(this).val();
+                            if (optionValue == data.gorevlendirilmeTipiId) {
+                                $(this).prop('selected', true);
+                            } else {
+                                $(this).prop('selected', false);
+                            }
+                        });
+                        $('#editModal #UpdateAsilGorevlendirilmeYeriMi').prop('checked', data.asilGorevlendirilmeYeriMi).bootstrapToggle('destroy').bootstrapToggle();
+                        $('#editModal #updateBolumler option').each(function () {
+                            const optionValue = $(this).val();
+                            if (optionValue == data.bolumId) {
+                                $(this).prop('selected', true);
+                            } else {
+                                $(this).prop('selected', false);
+                            }
+                        });
+                        $('#editModal #updateBirimler option').each(function () {
+                            const optionValue = $(this).val();
+                            if (optionValue == data.birimId) {
+                                $(this).prop('selected', true);
+                            } else {
+                                $(this).prop('selected', false);
+                            }
+                        });
+                        $('#editModal #updateKisimlar option').each(function () {
+                            const optionValue = $(this).val();
+                            if (optionValue == data.kisimId) {
+                                $(this).prop('selected', true);
+                            } else {
+                                $(this).prop('selected', false);
+                            }
+                        });
+                        $('#editModal #UpdateGorevlendirilmeBaslangicTarihi').val(changeDateFormatTo(data.gorevlendirilmeBaslangicTarihi));
+                        $('#editModal #UpdateGorevlendirilmeBitisTarihi').val(changeDateFormatTo(data.gorevlendirilmeBitisTarihi));
+                        $('#editModal #updateDurumlar option').each(function() {
+                            const optionValue = $(this).val();
+                            if (optionValue == data.durumId) {
+                                $(this).prop('selected', true);
+                            } else {
+                                $(this).prop('selected', false);
+                            }
+                        });
+                        $('#editModal .overlay').hide();
+                        $('#editModal').modal('show');
+                    }
+                    else {
+                        showToast('Seçili olan kayıt gösterilemiyor! Lütfen sayfayı yenileyip tekrar deneyiniz.', 'Hata', 'topRight', 3500, 'bg-danger', true);
+                        $('.modal .overlay').hide();
+                    }
+                },
+                error: function() {
+                    showSwalAlert('Hata!', 'Beklenmeyen bir hata oluştu!', 'error', 3500, true, true);
+                }
+            });
+        }
+        function saveUpdatedPersonelGorevlendirilme() {
+            var formData = $('#PersonelGorevlendirilmeGuncelleForm').serialize(); // Form verilerini al
+            $.ajax({
+                url: '/Admin/PersonelGorevlendirilme/GuncellePersonelGorevlendirilme',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    if (response.success) {
+                        $('#editModal').modal('hide'); // Modalı kapat
+                        reloadTable(); // Tabloyu yeniden yükle
+                        showToast(response.message, 'Bilgi Mesajı', 'topRight', 2500, 'bg-success', true);
+                    }
+                    else {
+                        // Hataları göster
+                        for (let key in response.errors) {
+                            $(`[name="${key}"]`).next('.text-danger').text(response.errors[key][0]);
+                        }
+                        $('.modal .overlay').hide();
+                    }
+                }
+            });
+        }
+        function deletePersonelGorevlendirilme() {
+            $('#deleteModal .overlay').show();
+            var formData = $('#PersonelGorevlendirilmeSilForm').serialize(); // Form verilerini al
+            $.ajax({
+                url: '/Admin/PersonelGorevlendirilme/SilPersonelGorevlendirilme', // Silme işlemi için endpoint
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    if (response.success) {
+                        $('#deleteModal').modal('hide'); // Modalı kapat
+                        reloadTable(); // Tabloyu yeniden yükle
+                        showToast(response.message, 'Bilgi Mesajı', 'topRight', 2500, 'bg-success', true);
+                    }
+                    else {
+                        $('#deleteModal').modal('hide');
+                        showToast(response.message, 'Hata Mesajı', 'topRight', 3500, 'bg-danger', true);
+                    }
+                },
+                error: function(xhr) {
+                    handleError(xhr); // Hata durumunu yönet
+                }
+            });
+        }
+        function showInfoPersonelGorevlendirilme(id) {
+            $.ajax({
+                url: `/Admin/PersonelGorevlendirilme/GetirSafahatBilgi/${id}`,
+                type: 'GET',
+                success: function(response) {
+                    $("#auditTrailModal").find(".modal-body").html(response);
+                    $('#auditTrailModal').modal('show');
+                },
+                error: function() {
+                    showToast('Safahat bilgileri getirilemedi. Lütfen tekrar deneyiniz.', 'Hata!', 'topRight', 3500, 'bg-danger', true);
+                }
+            });
+        }
+        function reloadComponent(componentSelector, url) {
+            $(componentSelector).load(url, function(response, status, xhr) {
+                if (status === "error") {
+                    setTimeout(function() {
+                        window.location.reload(); // Sayfayı yeniden yükle
+                    }, 1500);
+                }
+            });
+        }
+        function reloadTable() {
+            // Eski tabloyu kaldır
+            if ($.fn.DataTable.isDataTable('#example')) {
+                $('#example').DataTable().destroy();
+                $('#example').empty(); // DOM'u temizle
+            }
+            var personelID = $('#CreatePersonelId').val();
+            // Tabloyu yeniden yükle
+            $('#PersonelGorevlendirilmeTablosu').load('/Admin/PersonelGorevlendirilme/Index?personelId=' + personelID + ' #PersonelGorevlendirilmeTablosu', function (response, status, xhr) {
+                if (status === "success") {
+                    initDataTable(); // DataTable başlat
+                } else if (status === "error") {
+                    showToast("Tablo yüklenemedi. Lütfen sayfayı yenileyin.", "Hata", "topRight", 3500, "bg-danger", true);
+                }
+            });
+        }
+        function handleError(xhr) {
+            $('.modal .overlay').hide();
+            if (xhr.responseJSON && xhr.responseJSON.errors) {
+                for (let key in xhr.responseJSON.errors) {
+                    let errorElement = $(`[name='${key}']`).next('.text-danger');
+                    errorElement.text(xhr.responseJSON.errors[key][0]);
+                }
+            }
+            else {
+                $('.modal').modal('hide'); // Tüm açık modalları kapatır
+                showSwalAlert('Hata!', 'Beklenmeyen bir hata oluştu. Lütfen yaptığınız işlemi tekrar deneyiniz. Hatanın devam etmesi durumunda Bilgi İşlem Personeline bildiriniz.', 'error', 6500, true, true);
+            }
+        }
+    </script>
+}

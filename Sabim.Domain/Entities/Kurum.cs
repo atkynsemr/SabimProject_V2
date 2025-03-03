@@ -11,5 +11,6 @@
         //Navigation property
         public ICollection<Personel> Personels { get; set; } = new List<Personel>();
         public ICollection<PersonelAyrilis> PersonelAyriliss { get; set; } = new List<PersonelAyrilis>();
+        public ICollection<PersonelGeciciGorevlendirilme> PersonelGeciciGorevlendirilmes { get; set; } = new List<PersonelGeciciGorevlendirilme>();
     }
 }

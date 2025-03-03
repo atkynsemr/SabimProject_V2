@@ -1,0 +1,13 @@
+﻿@using Sabim.Domain.DTOs.KisimDtos
+@model List<ResultKisimDto>
+
+<div class="form-group">
+    <label for="KisimAdi">Kısımlar</label>
+    <select class="form-control" id="@(ViewBag.Deger ?? "")Kisimlar" name="KisimID" style="width: 100%;">
+        @foreach (var kisim in Model)
+        {
+            <option value="@kisim.KisimID" selected="@kisim.Selected">@kisim.KisimAdi</option>
+        }
+    </select>
+</div>
+

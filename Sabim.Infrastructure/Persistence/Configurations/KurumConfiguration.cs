@@ -15,6 +15,7 @@ namespace Sabim.Infrastructure.Persistence.Configurations
             //Relationship
             builder.HasOne(k => k.KurumTipi).WithMany(kt => kt.Kurums).HasForeignKey(k =>k.KurumTipiId).OnDelete(DeleteBehavior.Restrict);
             builder.HasOne(k => k.Sehir).WithMany(s => s.Kurums).HasForeignKey(k => k.SehirId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasMany(k => k.PersonelGeciciGorevlendirilmes).WithOne(pg => pg.PersonelAyrilisYeri).HasForeignKey(pg => pg.PersonelAyrilisYeriId).OnDelete(DeleteBehavior.Restrict);
             var config= new BaseEntityConfiguration<Kurum>();
             config.Configure(builder);
         }

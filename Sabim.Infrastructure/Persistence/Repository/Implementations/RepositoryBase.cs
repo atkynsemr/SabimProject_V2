@@ -439,5 +439,75 @@ namespace Sabim.Infrastructure.Persistence.Repository.Implementations
                 return OperationStatus.GlobalError;
             }
         }
+        public async Task<List<T>> FindByIdAsyncWithEntities(bool trackChanges, Expression<Func<T, bool>>? filter = null, params Expression<Func<T, object>>[] childrens)
+        {
+            IQueryable<T> query = Entity;
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+            if (childrens.Any())
+            {
+                foreach (var includeExpression in childrens)
+                {
+                    query = query.Include(includeExpression);
+                }
+            }
+            return trackChanges
+                ? await query.ToListAsync()
+                : await query.AsNoTracking().ToListAsync();
+        }
+
+        public async Task<T> FindByIdWithIncludesAsync<TKey>(TKey id, bool trackChanges, params Expression<Func<T, object>>[] childrens)
+        {
+            if (!PrimaryKeyCache.TryGetValue(typeof(T), out var keyProperty))
+            {
+                keyProperty = _context.Model
+                    .FindEntityType(typeof(T))
+                    ?.FindPrimaryKey()
+                    ?.Properties.FirstOrDefault()?.Name;
+
+                if (string.IsNullOrEmpty(keyProperty))
+                {
+                    throw new InvalidOperationException(OperationStatus.PrimaryKeyNotDefined);
+                }
+
+                PrimaryKeyCache[typeof(T)] = keyProperty;
+            }
+
+            IQueryable<T> query = trackChanges ? Entity : Entity.AsNoTracking();
+
+            // İlişkili tabloları dahil et
+            foreach (var include in childrens)
+            {
+                query = query.Include(include);
+            }
+
+            // Doğru türü kullanarak filtreleme yap
+            if (typeof(TKey) == typeof(int))
+            {
+                return await query.FirstOrDefaultAsync(e => EF.Property<int>(e, keyProperty) == (int)(object)id);
+            }
+            else if (typeof(TKey) == typeof(short))
+            {
+                return await query.FirstOrDefaultAsync(e => EF.Property<short>(e, keyProperty) == (short)(object)id);
+            }
+            else if (typeof(TKey) == typeof(long))
+            {
+                return await query.FirstOrDefaultAsync(e => EF.Property<long>(e, keyProperty) == (long)(object)id);
+            }
+            else if (typeof(TKey) == typeof(Guid))
+            {
+                return await query.FirstOrDefaultAsync(e => EF.Property<Guid>(e, keyProperty) == (Guid)(object)id);
+            }
+            else if (typeof(TKey) == typeof(string))
+            {
+                return await query.FirstOrDefaultAsync(e => EF.Property<string>(e, keyProperty) == (string)(object)id);
+            }
+            else
+            {
+                throw new InvalidOperationException($"Desteklenmeyen tür: {typeof(TKey)}");
+            }
+        }
     }
 }

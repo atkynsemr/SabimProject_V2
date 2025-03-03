@@ -2,6 +2,7 @@
 using Sabim.Domain.DTOs.HelperDtos;
 using Sabim.Domain.DTOs.PersonelAyrilisDtos;
 using Sabim.Domain.DTOs.PersonelDtos;
+using Sabim.Domain.DTOs.PersonelGeciciGorevlendirilmeDtos;
 using Sabim.Domain.DTOs.PersonelUnvanGecmisiDtos;
 using Sabim.Domain.DTOs.PersonelWithUserDto;
 using Sabim.Domain.DTOs.SavciCalisilanKatipDtos;
@@ -84,6 +85,16 @@ namespace Sabim.Services.Implementations
         public async Task<AuditTrailDto?> TGetPersonelIzinAuditTrailWithDetailsAsync(short id)
         {
             return await _repositoryManager.Personel.GetPersonelIzinAuditTrailWithDetailsAsync(id);
+        }
+
+        public async Task<ResultPersonelWithGorevYeriDto> TGetByIdWithPersonelInfoAsync(short personelId, bool trankChanges)
+        {
+            return await _repositoryManager.Personel.GetByIdWithPersonelInfoAsync(personelId, trankChanges);
+        }
+
+        public async Task<List<ResultPersonelGeciciGorevlendirilmeDto>> TGetPersonelGeciciGorevlendirilmeByIdAsync(short personelId, bool trackChanges)
+        {
+            return await _repositoryManager.Personel.GetPersonelGeciciGorevlendirilmeByIdAsync(personelId, trankChanges); 
         }
     }
 }

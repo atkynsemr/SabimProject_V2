@@ -18,6 +18,7 @@ namespace Sabim.Infrastructure.Persistence.Repository.Contracts
         bool IsAny(Expression<Func<T, bool>> predicate, short? excludeId = null);
         Task<AuditTrailDto?> GetAuditTrailWithDetailsAsync<TKey>(TKey id);
         Task<object?> AddAndGetIdAsync(T entity);
-
+        Task<List<T>> FindByIdAsyncWithEntities(bool trackChanges, Expression<Func<T, bool>>? filter = null, params Expression<Func<T, object>>[] childrens);
+        Task<T> FindByIdWithIncludesAsync<TKey>(TKey id, bool trackChanges, params Expression<Func<T, object>>[] childrens);
     }
 }

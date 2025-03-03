@@ -23,9 +23,9 @@
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="personelIslemleri">
                             <a class="dropdown-item" href="@Url.Action("PersonelUnvanlari", "Personel", new { PersonelID = personel.PersonelID})"><i class="fas fa-circle-notch fa-xs"></i> Unvan Bilgileri</a>
                             <a class="dropdown-item" href="@Url.Action("PersonelIzinleri", "Personel", new { PersonelID = personel.PersonelID})"><i class="fas fa-circle-notch fa-xs"></i> İzin İşlemleri</a>
-                            <a class="dropdown-item" href=""><i class="fas fa-circle-notch fa-xs"></i> Kurum İçi Yer Değişikliği</a>
+                            <a class="dropdown-item" href="@Url.Action("Index", "PersonelGorevlendirilme", new { PersonelID = personel.PersonelID})"><i class="fas fa-circle-notch fa-xs"></i> Kurum İçi Yer Değişikliği</a>
                             <a class="dropdown-item" href=""><i class="fas fa-circle-notch fa-xs"></i> Kurum Dışı Geçici Görevlendirme</a>
-                            <a class="dropdown-item" href=""><i class="fas fa-circle-notch fa-xs"></i> Nakil/Emeklilik/Memuriyet Sonlandırılma İşlemleri</a>
+                            <a class="dropdown-item" href="@Url.Action("PersonelAyrilislari", "Personel", new { PersonelID = personel.PersonelID})"><i class="fas fa-circle-notch fa-xs"></i> Nakil/Emeklilik/Memuriyet Sonlandırılma İşlemleri</a>
                             <a class="dropdown-item" href=""><i class="fas fa-circle-notch fa-xs"></i> Personel Safahat Bilgileri</a>
                         </div>
                     </div>

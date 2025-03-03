@@ -45,6 +45,7 @@ namespace Sabim.Infrastructure.Persistence.Configurations
                 .HasForeignKey(sck => sck.KatipId) // KatipId üzerinden ilişkiyi tanımlar
                 .OnDelete(DeleteBehavior.NoAction); // Eğer Personel (Katip) silinirse, ilgili kayıtları da sil
 
+            builder.HasMany(p => p.PersonelGeciciGorevlendirilmes).WithOne(pg => pg.Personel).HasForeignKey(pg => pg.PersonelId).OnDelete(DeleteBehavior.Restrict);
 
             var config = new BaseEntityConfiguration<Personel>();
             config.Configure(builder);

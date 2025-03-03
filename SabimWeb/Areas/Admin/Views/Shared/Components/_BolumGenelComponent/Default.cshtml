@@ -3,7 +3,7 @@
 
 <div class="form-group">
     <label for="BolumAdi">Bağlı Olduğu Bölüm</label>
-    <select class="form-control" id="bolumler" name="BolumID" style="width: 100%;">
+    <select class="form-control" id="@(ViewBag.Deger ?? "")Bolumler" name="BolumID" style="width: 100%;">
         @foreach (var bolum in Model)
         {
             <option value="@bolum.BolumID" selected="@bolum.Selected">@bolum.BolumAdi</option>

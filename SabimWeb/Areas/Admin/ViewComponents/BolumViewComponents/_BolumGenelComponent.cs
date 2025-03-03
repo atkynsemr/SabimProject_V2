@@ -11,9 +11,10 @@ namespace Sabim.Web.Areas.Admin.ViewComponents.BolumViewComponent
         {
             _manager = manager;
         }
-        public async Task<IViewComponentResult> InvokeAsync(int? selectedBolumId = null)
+        public async Task<IViewComponentResult> InvokeAsync(string? deger, int? selectedBolumId = null)
         {
             var bolumler = await _manager.BolumService.TFindAllAsync(false);
+            ViewBag.Deger = deger;
             // Alfabetik sıralama
             var bolumDtoList = bolumler
                 .OrderBy(b => b.BolumAdi)

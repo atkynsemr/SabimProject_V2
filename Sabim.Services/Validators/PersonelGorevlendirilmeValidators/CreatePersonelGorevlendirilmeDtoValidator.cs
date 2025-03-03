@@ -1,24 +1,20 @@
 ﻿using FluentValidation;
 using Sabim.Domain.DTOs.PersonelGorevlendirilmeDtos;
-using Sabim.Services.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sabim.Services.Validators.PersonelGorevlendirilmeValidators
 {
     public class CreatePersonelGorevlendirilmeDtoValidator : AbstractValidator<CreatePersonelGorevlendirilmeDto>
     {
-
         public CreatePersonelGorevlendirilmeDtoValidator()
         {
             RuleFor(x => x.PersonelId).NotEmpty().WithMessage("Personel alanı boş bırakılamaz.");
-            //RuleFor(x => x.GorevlendirilmeTuruId).NotEmpty().WithMessage("Görevlendirilme Türü boş bırakılamaz.");
-            //RuleFor(x => x.KurumId).NotEmpty().WithMessage("Kadrosunun Bulunduğu Kurum boş bırakılamaz.");
-            //RuleFor(x => x.KadroTuruId).NotEmpty().WithMessage("Kadro Türü boş bırakılamaz.");
-            //RuleFor(x => x.CalismaDurumuId).NotEmpty().WithMessage("Çalışma durumu boş bırakılamaz.");
+            RuleFor(x => x.KisimId).NotEmpty().WithMessage("Kısım alanı boş bırakılamaz.");
+            RuleFor(x => x.GorevlendirilmeTipiId).NotEmpty().WithMessage("Görevlendirilme Tipi boş bırakılamaz.");
+            RuleFor(x => x.DurumId).NotEmpty().WithMessage("Durum alanı boş bırakılamaz.");
+            RuleFor(x => x.AsilGorevlendirilmeYeriMi).NotNull().WithMessage("Asıl görevlendirilme yeri mi? bilgisi boş olamaz.");
+            RuleFor(x => x.GorevlendirilmeAktifMi).NotNull().WithMessage("Görevlendirilme aktif mi? bilgisi boş olamaz.");
+            RuleFor(x => x.GorevlendirilmeBaslangicTarihi).NotEmpty().WithMessage("Görevlendirilme başlangıç tarihi boş olamaz.");
+            RuleFor(x => x.GorevlendirilmeBaslangicTarihi).LessThanOrEqualTo(x => x.GorevlendirilmeBitisTarihi.Value).When(x => x.GorevlendirilmeBitisTarihi.HasValue).WithMessage("Başlangıç tarihi, bitiş tarihinden sonra olamaz.");
         }
     }
 }

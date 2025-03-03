@@ -14,6 +14,7 @@ namespace Sabim.Infrastructure.Persistence.Configurations
             builder.HasIndex(gt => gt.GorevlendirilmeTipiAciklama).IsUnique();
             //Relationship
             builder.HasMany(gt => gt.PersonelGorevlendirilmes).WithOne(pg => pg.GorevlendirilmeTipi).HasForeignKey(pg => pg.GorevlendirilmeTipiId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasMany(gt => gt.PersonelGeciciGorevlendirilmes).WithOne(pg => pg.GorevlendirilmeTipi).HasForeignKey(pg => pg.GorevlendirilmeTipiId).OnDelete(DeleteBehavior.Restrict);
             var config = new BaseEntityConfiguration<GorevlendirilmeTipi>();
             config.Configure(builder);
         }

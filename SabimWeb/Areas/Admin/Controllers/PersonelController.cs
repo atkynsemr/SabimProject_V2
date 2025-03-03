@@ -6,6 +6,7 @@ using Sabim.Domain.Constants;
 using Sabim.Domain.DTOs.AppUserDtos;
 using Sabim.Domain.DTOs.PersonelAyrilisDtos;
 using Sabim.Domain.DTOs.PersonelDtos;
+using Sabim.Domain.DTOs.PersonelGeciciGorevlendirilmeDtos;
 using Sabim.Domain.DTOs.PersonelUnvanGecmisiDtos;
 using Sabim.Domain.DTOs.PersonelWithUserDto;
 using Sabim.Domain.DTOs.SavciCalisilanKatipDtos;
@@ -492,7 +493,19 @@ namespace Sabim.Web.Areas.Admin.Controllers
             // ViewModel ile View'a gönder
             return View(viewModel);
         }
-
+        public async Task<IActionResult> PersonelGeciciGorevlendirilme(short PersonelID)
+        {
+            var personel = await _manager.PersonelService.TGetPersonelByIdAsync(PersonelID, false);
+            var personelDto = _mapper.Map<ResultPersonelDto>(personel);
+            var viewModel = new PersonelGeciciGorevlendirilmeViewModel
+            {
+                YeniPersonelGeciciGorevlendirilme = new CreatePersonelGeciciGorevlendirilmeDto(), // Boş bir DTO örneği
+                GuncellePersonelGeciciGorevlendirilme = new UpdatePersonelGeciciGorevlendirilmeDto(), // Boş bir DTO örneği
+                ListelePersonelGeciciGorevlendirilme = personelDto // Personel bilgisi
+            };
+            // ViewModel ile View'a gönder
+            return View(viewModel);
+        }
     }
 }
 

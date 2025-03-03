@@ -1,0 +1,33 @@
+﻿@using Sabim.Domain.DTOs.PersonelGeciciGorevlendirilmeDtos
+@model List<ResultPersonelGeciciGorevlendirilmeDto>
+
+<tbody class="text-heading">
+    @foreach (var geciciGorevlendirilme in Model)
+    {
+        <tr>
+            <td class="text-center" data-sort="@geciciGorevlendirilme.BaslangicTarihi.ToString("yyyy-MM-dd")">
+                @geciciGorevlendirilme.BaslangicTarihi.ToString("dd/MM/yyyy")
+            </td>
+            <td class="text-center" data-sort="@(geciciGorevlendirilme.BitisTarihi.HasValue ? geciciGorevlendirilme.BitisTarihi.Value.ToString("yyyy-MM-dd") : "")">
+                @(geciciGorevlendirilme.BitisTarihi.HasValue ? geciciGorevlendirilme.BitisTarihi.Value.ToString("dd/MM/yyyy") : "-")
+            </td>
+            <td>@geciciGorevlendirilme.GorevlendirilmeTipiAciklama</td>
+            <td class="text-center">
+                <div class="d-flex align-items-center justify-content-center">
+                    @Html.Raw(IconHelper.GetStatusNameIcon(geciciGorevlendirilme.DurumAdi))
+                    <span class="badge badge-lg @BadgeHelper.GetBadgeClass(geciciGorevlendirilme.DurumId)"> @geciciGorevlendirilme.DurumAdi</span>
+                </div>
+            </td>
+            <td class="text-center">
+                <div class="d-flex align-items-center justify-content-center">
+                    @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-showinfo", "", IconHelper.GetInfoIcon(), "Göster", "showInfoPersonelGorevlendirilme", geciciGorevlendirilme.PersonelGeciciGorevlendirilmeID.ToString()))
+                    @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-edit", "", IconHelper.GetEditIcon(), "Düzenle", "editPersonelGorevlendirilme", geciciGorevlendirilme.PersonelGeciciGorevlendirilmeID.ToString()))
+                    @Html.Raw(IconHelper.CreateLink("btn btn-icon btn-delete", "", IconHelper.GetDeleteIcon(), "Sil", "deletePersonelGorevlendirilme", geciciGorevlendirilme.PersonelGeciciGorevlendirilmeID.ToString()))
+                </div>
+            </td>
+        </tr>
+    }
+</tbody>
+
+
+

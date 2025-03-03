@@ -38,5 +38,6 @@
         public ICollection<SavciCalisilanKatip> SavciOlarakCalisilanKatips { get; set; } = new List<SavciCalisilanKatip>();
         public ICollection<SavciCalisilanKatip> KatipOlarakCalisilanKatips { get; set; } = new List<SavciCalisilanKatip>();
         public ICollection<PersonelAyrilis> PersonelAyriliss { get; set; } = new List<PersonelAyrilis>();
+        public ICollection<PersonelGeciciGorevlendirilme> PersonelGeciciGorevlendirilmes { get; set; } = new List<PersonelGeciciGorevlendirilme>();
     }
 }

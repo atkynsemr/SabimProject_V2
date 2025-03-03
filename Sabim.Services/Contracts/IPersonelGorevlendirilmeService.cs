@@ -1,4 +1,5 @@
-﻿using Sabim.Domain.Entities;
+﻿using Sabim.Domain.DTOs.PersonelGorevlendirilmeDtos;
+using Sabim.Domain.Entities;
 
 namespace Sabim.Services.Contracts
 {
