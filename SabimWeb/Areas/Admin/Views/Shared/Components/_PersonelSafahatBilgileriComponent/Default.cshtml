@@ -1,0 +1,50 @@
+﻿@using Sabim.Domain.DTOs.HelperDtos
+@model List<PersonnelHistoryDto>
+<tbody class="text-center">
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @if (item.IslemTuru == "Mesleğe İlk Başlama")
+                    {
+                    <p class="fw-normal mb-1 text-success"><i class="fas fa-user-graduate"></i> @item.IslemTuru</p>
+                    }
+                    else if (item.IslemTuru == "Burada Göreve Başlama")
+                    {
+                    <p class="fw-normal mb-1 text-primary"><i class="fas fa-user-plus"></i> @item.IslemTuru</p>
+                    }
+                    else if (item.IslemTuru == "Personel Geçici Ayrılış")
+                    {
+                    <p class="fw-normal mb-1 text-orange"><i class="fas fa-user-clock"></i> @item.IslemTuru</p>
+                    }
+                    else if (item.IslemTuru == "Kurum İçi Görevlendirilme")
+                    {
+                    <p class="fw-normal mb-1 text-info"><i class="fas fa-people-arrows"></i> @item.IslemTuru</p>
+                    }
+                    else if (item.IslemTuru == "Kurum Dışı Geçici Görevlendirme")
+                    {
+                    <p class="fw-normal mb-1 text-dark"><i class="fas fa-map-marked-alt"></i> @item.IslemTuru</p>
+                    }
+                    else if (item.IslemTuru == "Personel Kalıcı Ayrılış")
+                    {
+                    <p class="fw-normal mb-1 text-danger"><i class="fas fa-user-minus"></i> @item.IslemTuru</p>
+                    }
+                    else
+                    {
+                        <p class="fw-normal mb-1">@item.IslemTuru</p>
+                    }
+                </td>
+                <td class="text-center" data-sort="@item.BaslamaTarihi.Value.ToString("yyyy-MM-dd")">
+                    @item.BaslamaTarihi.Value.ToString("dd/MM/yyyy")
+                </td>
+                <td class="text-center" data-sort="@(item.BitisTarihi.HasValue ? item.BitisTarihi.Value.ToString("yyyy-MM-dd") : "")">
+                    @(item.BitisTarihi.HasValue ? item.BitisTarihi.Value.ToString("dd/MM/yyyy") : "-")
+                </td>
+                <td>
+                    <p class="fw-normal mb-1">@Html.Raw(item.Aciklama)</p>
+                </td>
+            </tr>
+        }
+</tbody>
+

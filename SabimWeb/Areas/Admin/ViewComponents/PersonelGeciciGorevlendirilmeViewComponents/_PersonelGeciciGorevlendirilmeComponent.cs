@@ -12,8 +12,8 @@ namespace Sabim.Web.Areas.Admin.ViewComponents.PersonelGeciciGorevlendirilmeView
         }
         public async Task<IViewComponentResult> InvokeAsync(short PersonelID, string? deger)
         {
-            var personelIzinleri = await _manager.PersonelService.TGetPersonelGeciciGorevlendirilmeByIdAsync(PersonelID, false);
-            return View(personelIzinleri);
+            var personelGeciciGorevlendirilme= await _manager.PersonelService.TGetPersonelGeciciGorevlendirilmeByIdAsync(PersonelID, false);
+            return View(personelGeciciGorevlendirilme);
         }
     }
 }

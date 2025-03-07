@@ -1,0 +1,238 @@
+﻿@model Sabim.Web.ViewModels.PersonnelHistoryViewModel
+@{
+    ViewData["Title"] = "Personel İzinleri";
+}
+@section StyleCss {
+    <link rel="stylesheet" href="/AdminTemplate/plugins/bootstrap/css/bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.3/css/responsive.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.1.2/css/buttons.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/searchpanes/2.3.3/css/searchPanes.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/select/2.1.0/css/select.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/colreorder/2.0.4/css/colReorder.bootstrap4.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/4.0.1/css/fixedHeader.bootstrap4.css">
+    <link rel="stylesheet" href="/AdminTemplate/dist/css/CustomCss.css">
+}
+<div class="row">
+    <div class="col-md-3">
+        <div class="card card-primary card-outline">
+            <div class="card-body box-profile">
+                <div class="text-center">
+                    <img class="profile-user-img img-fluid img-circle" src="https://demos.themeselection.com/sneat-bootstrap-html-admin-template/assets/img/avatars/1.png" alt="User profile picture">
+                </div>
+                <h3 id="PersonelAdiSoyadi" class="profile-username text-center">@Model.ListelePersonel.AdSoyad</h3>
+                <p class="text-muted text-center">@Model.ListelePersonel.UnvanAdi</p>
+                <ul class="list-group list-group-unbordered mb-3">
+                    <li class="list-group-item">
+                        <b>Sicil Numarası</b> <a class="float-right">@Model.ListelePersonel.SicilNumarasi</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Çalışma Durumu</b> <a class="float-right">@Model.ListelePersonel.CalismaDurumAdi</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Kadro Yeri</b> <a class="float-right">@Model.ListelePersonel.KurumAdi</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </div>
+    <!-- /.col -->
+    <div class="col-md-9">
+        <div class="card">
+            <div class="d-flex card-header">
+                <a asp-area="Admin" asp-controller="Personel" asp-action="Index" class="btn btn-outline-dark btn-flat my-2">
+                    <i class="fa fa-arrow-circle-left mr-1"></i> Personeller Sayfasına Dön
+                </a>             
+            </div>
+            <div class="card-body mt-2">
+                <div id="PersonelIzinTablosu">
+                    <table id="example" class="table table-striped table-bordered table-hover display text-center mt-3" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>İşlem Türü</th>
+                                <th>Başlama Tarihi</th>
+                                <th>Bitiş Tarihi</th>
+                                <th>Açıklama</th>
+                            </tr>
+                        </thead>
+                        @await Component.InvokeAsync("_PersonelSafahatBilgileriComponent", new { PersonelID = Model.ListelePersonel.PersonelID })
+                        <tfoot>
+                            <tr>
+                                <th>İşlem Türü</th>
+                                <th>Başlama Tarihi</th>
+                                <th>Bitiş Tarihi</th>
+                                <th>Açıklama</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- /.card -->
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/dataTables.buttons.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/searchpanes/2.3.3/js/dataTables.searchPanes.js"></script>
+    <script src="https://cdn.datatables.net/searchpanes/2.3.3/js/searchPanes.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/select/2.1.0/js/dataTables.select.js"></script>
+    <script src="https://cdn.datatables.net/select/2.1.0/js/select.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/select/2.1.0/js/select.dataTables.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.colVis.min.js"></script>
+    <script src="https://cdn.datatables.net/colreorder/2.0.4/js/dataTables.colReorder.js"></script>
+    <script src="https://cdn.datatables.net/colreorder/2.0.4/js/colReorder.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/responsive/3.0.3/js/dataTables.responsive.js"></script>
+    <script src="https://cdn.datatables.net/responsive/3.0.3/js/responsive.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/fixedheader/4.0.1/js/dataTables.fixedHeader.js"></script>
+    <script src="https://cdn.datatables.net/fixedheader/4.0.1/js/fixedHeader.bootstrap4.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.8/dist/sweetalert2.all.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            initDataTable();
+        });
+        function initDataTable() {
+            $('#example').DataTable({
+                "scrollX": true,
+                "fixedHeader": true,
+                "responsive": false,
+                "lengthChange": false,
+                "autoWidth": false,
+                "lengthChange": true,
+                "pageLength": 50,
+                "order": [[1, 'asc'], [2, 'asc']],
+                "language": {
+                    "searchPanes": {
+                        "emptyPanes": 'Filtreleme Paneli Bulunamadı',
+                        "title": {
+                            _: 'Seçili Alan - %d',
+                            0: ''
+                        },
+                        "collapseMessage": 'Tümünü Kapat',
+                        "showMessage": 'Hepsini Göster',
+                        "clearMessage": 'Hepsini Temizle',
+                        "collapse": { 0: 'Filtreleme Paneli', _: 'Filtreleme Paneli (%d)' }
+                    },
+                    "sProcessing": "İşleniyor...",
+                    "sLengthMenu": "_MENU_",
+                    "sZeroRecords": "Eşleşen Kayıt Bulunmadı",
+                    "sInfo": "Toplam _TOTAL_ kayıttan _START_ - _END_ arası gösteriliyor",
+                    "sInfoEmpty": "Kayıt Yok",
+                    "emptyTable": "Tabloda veri bulunmamaktadır",
+                    "sInfoFiltered": "(toplam _MAX_ kayıttan filtrelendi)",
+                    "sSearch": "",
+                    "searchPlaceholder": 'Arama Yapınız...',
+                    "oPaginate": {
+                        "sFirst": "İlk",
+                        "sPrevious": "Önceki",
+                        "sNext": "Sonraki",
+                        "sLast": "Son"
+                    }
+                },
+                colReorder: true,
+                layout: {
+                    topStart:
+                    {
+                        buttons:
+                            [
+                                {
+                                    extend: 'searchPanes',
+                                    text: '<i class="fa fa-filter mr-1"></i>Filtreleme Paneli',
+                                    config: {
+                                        cascadePanes: true,
+                                        layout: 'columns-2',
+                                        orderable: false,
+                                        initCollapsed: true
+                                    }
+                                },
+                                {
+                                    extend: 'collection',
+                                    text: '<i class="fas fa-upload mr-1"></i> Aktar',
+                                    buttons:
+                                        [
+                                            {
+                                                extend: 'excel',
+                                                text: '<i class="fas fa-file-excel mr-1"></i> Excel',
+                                                exportOptions: {
+                                                    columns: function(idx, data, node) {
+                                                        var table = $('#example').DataTable();
+                                                        var columnHeader = table.column(idx).header().innerText.trim(); // Sütun başlığını al
+                                                        return table.column(idx).visible();
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                extend: 'pdf',
+                                                text: '<i class="fas fa-file-pdf mr-1"></i> PDF',
+                                                exportOptions: {
+                                                    columns: function(idx, data, node) {
+                                                        var table = $(node).closest('table').DataTable();
+                                                        var columnHeader = $(node).closest('table').find('thead th').eq(idx).text().trim();
+                                                        return $(node).is(':visible');
+                                                    }
+                                                },
+                                                customize: function(doc) {
+                                                    // Tablonun başlıklarını ve içeriğini ortala
+                                                    doc.styles.tableHeader.alignment = 'center';
+                                                    doc.content[1].table.body.forEach(function(row) {
+                                                        row.forEach(function(cell) {
+                                                            cell.alignment = 'center';
+                                                        });
+                                                    });
+                                                    doc.content[1].table.widths = new Array(doc.content[1].table.body[0].length).fill('*');
+                                                }
+                                            },
+
+                                            {
+                                                extend: 'print',
+                                                text: '<i class="fas fa-print mr-1"></i> Yazdır',
+                                                exportOptions: {
+                                                    columns: function(idx, data, node) {
+                                                        var table = $('#example').DataTable();
+                                                        var columnHeader = table.column(idx).header().innerText.trim(); // Sütun başlığını al
+                                                        return table.column(idx).visible();// Eşleşen sütun dışarıya aktarılmaz
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                },
+                                {
+                                    extend: 'colvis',
+                                    text: '<i class="fas fa-columns mr-1"></i> Sütun Görünürlüğü'
+                                }
+                            ]
+                    }
+                },
+                columnDefs: [
+                    {
+                        searchPanes: {
+                            show: true,
+                            dtOpts: {
+                                select: {
+                                    style: 'multi'
+                                },
+                                searching: true,
+                            }
+                        },
+                        targets: [0]
+                    },
+                    {
+                        searchPanes: {
+                            show: false
+                        },
+                        targets: '_all'
+                    }
+                ]
+            });
+        }
+    </script>
+}

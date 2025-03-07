@@ -24,11 +24,17 @@ namespace Sabim.Services.Contracts
         Task<AuditTrailDto?> TGetPersonelUnvanAuditTrailWithDetailsAsync(short id);
         Task<List<ResultPersonelAyrilisDto>> TGetPersonelIzinleriByIdAsync(short personelId, bool kaliciAyrilisMi, bool trackChanges);
         Task<List<ResultPersonelGeciciGorevlendirilmeDto>> TGetPersonelGeciciGorevlendirilmeByIdAsync(short personelId, bool trackChanges);
+        Task<PersonelGeciciGorevlendirilme> TGetPersonelGeciciGorevlendirilmeWithIdAsync(short personelGeciciGorevlendirilmeID, bool trackChanges);
         Task<string> TAddPersonelIzinleriAsync(CreatePersonelAyrilisDto createPersonelAyrilisDto);
         Task<PersonelAyrilis> TGetPersonelAyrilisById(short personelAyrilisId, bool trackChanges);
         Task<string> TUpdatePersonelIzinAsync(PersonelAyrilis updatePersonelAyrilis);
         Task<string> TDeletePersonelIzinAsync(short personelAyrilisID);
         Task<AuditTrailDto?> TGetPersonelIzinAuditTrailWithDetailsAsync(short id);
         Task<ResultPersonelWithGorevYeriDto> TGetByIdWithPersonelInfoAsync(short personelId, bool trankChanges);
+        Task<string> TAddPersonelGeciciGorevlendirilmeAsync(CreatePersonelGeciciGorevlendirilmeDto createPersonelGeciciGorevlendirilmeDto);
+        Task<string> TUpdatePersonelGeciciGorevlendirilmeAsync(PersonelGeciciGorevlendirilme updatePersonelGeciciGorevlendirilme);
+        Task<string> TDeletePersonelGeciciGorevlendirilmeAsync(short personelGeciciGorevlendirilmeID);
+        Task<AuditTrailDto?> TGetGeciciGorevlendirilmeAuditTrailWithDetailsAsync(short id);
+        Task<List<PersonnelHistoryDto?>> TGetPersonnelHistoryAsync(short id);
     }
 }

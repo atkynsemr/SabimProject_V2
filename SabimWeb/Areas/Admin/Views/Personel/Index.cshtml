@@ -655,6 +655,7 @@
                     success: function (response) {
                         if (response.success) {
                             const personelData = response.data;
+                                console.log(personelData);
                             $('#deleteModal #DeletePersonelID').val(personelData.personelID);
                             $('#deleteModal #PersonelAdSoyad').text(personelData.adSoyad + " (" + personelData.sicilNumarasi + ")");
                             $('#deleteModal').modal('show'); // Modalı aç

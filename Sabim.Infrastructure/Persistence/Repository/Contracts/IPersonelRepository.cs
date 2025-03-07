@@ -27,6 +27,12 @@ namespace Sabim.Infrastructure.Persistence.Repository.Contracts
         Task<string> UpdatePersonelIzinAsync(PersonelAyrilis updatePersonelAyrilis);
         Task<string> DeletePersonelIzinAsync(short personelAyrilisID);
         Task<AuditTrailDto?> GetPersonelIzinAuditTrailWithDetailsAsync(short id);
-        Task<ResultPersonelWithGorevYeriDto> GetByIdWithPersonelInfoAsync(short personelId, bool trankChanges);
+        Task<ResultPersonelWithGorevYeriDto> GetByIdWithPersonelInfoAsync(short personelId, bool trackChanges);
+        Task<string> AddPersonelGeciciGorevlendirilmeAsync(CreatePersonelGeciciGorevlendirilmeDto createPersonelGeciciGorevlendirilmeDto);
+        Task<PersonelGeciciGorevlendirilme> GetPersonelGeciciGorevlendirilmeWithIdAsync(short personelGeciciGorevlendirilmeID, bool trackChanges);
+        Task<string> UpdatePersonelGeciciGorevlendirilmeAsync(PersonelGeciciGorevlendirilme updatePersonelGeciciGorevlendirilme);
+        Task<string> DeletePersonelGeciciGorevlendirilmeAsync(short personelGeciciGorevlendirilmeID);
+        Task<AuditTrailDto?> GetGeciciGorevlendirilmeAuditTrailWithDetailsAsync(short id);
+        Task<List<PersonnelHistoryDto?>> GetPersonnelHistoryAsync(short id);
     }
 }

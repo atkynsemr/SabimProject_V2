@@ -94,7 +94,37 @@ namespace Sabim.Services.Implementations
 
         public async Task<List<ResultPersonelGeciciGorevlendirilmeDto>> TGetPersonelGeciciGorevlendirilmeByIdAsync(short personelId, bool trackChanges)
         {
-            return await _repositoryManager.Personel.GetPersonelGeciciGorevlendirilmeByIdAsync(personelId, trankChanges); 
+            return await _repositoryManager.Personel.GetPersonelGeciciGorevlendirilmeByIdAsync(personelId, trackChanges); 
+        }
+
+        public async Task<string> TAddPersonelGeciciGorevlendirilmeAsync(CreatePersonelGeciciGorevlendirilmeDto createPersonelGeciciGorevlendirilmeDto)
+        {
+            return await _repositoryManager.Personel.AddPersonelGeciciGorevlendirilmeAsync(createPersonelGeciciGorevlendirilmeDto);
+        }
+
+        public async Task<PersonelGeciciGorevlendirilme> TGetPersonelGeciciGorevlendirilmeWithIdAsync(short personelGeciciGorevlendirilmeID, bool trackChanges)
+        {
+            return await _repositoryManager.Personel.GetPersonelGeciciGorevlendirilmeWithIdAsync(personelGeciciGorevlendirilmeID, trackChanges);
+        }
+
+        public async Task<string> TUpdatePersonelGeciciGorevlendirilmeAsync(PersonelGeciciGorevlendirilme updatePersonelGeciciGorevlendirilme)
+        {
+            return await _repositoryManager.Personel.UpdatePersonelGeciciGorevlendirilmeAsync(updatePersonelGeciciGorevlendirilme);
+        }
+
+        public async Task<string> TDeletePersonelGeciciGorevlendirilmeAsync(short personelGeciciGorevlendirilmeID)
+        {
+            return await _repositoryManager.Personel.DeletePersonelGeciciGorevlendirilmeAsync(personelGeciciGorevlendirilmeID);
+        }
+
+        public async Task<AuditTrailDto?> TGetGeciciGorevlendirilmeAuditTrailWithDetailsAsync(short id)
+        {
+            return await _repositoryManager.Personel.GetGeciciGorevlendirilmeAuditTrailWithDetailsAsync(id);
+        }
+
+        public async Task<List<PersonnelHistoryDto?>> TGetPersonnelHistoryAsync(short id)
+        {
+            return await _repositoryManager.Personel.GetPersonnelHistoryAsync(id);
         }
     }
 }

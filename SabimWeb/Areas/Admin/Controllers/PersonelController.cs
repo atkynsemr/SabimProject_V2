@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Sabim.Domain.Constants;
 using Sabim.Domain.DTOs.AppUserDtos;
+using Sabim.Domain.DTOs.HelperDtos;
 using Sabim.Domain.DTOs.PersonelAyrilisDtos;
 using Sabim.Domain.DTOs.PersonelDtos;
 using Sabim.Domain.DTOs.PersonelGeciciGorevlendirilmeDtos;
+using Sabim.Domain.DTOs.PersonelGorevlendirilmeDtos;
 using Sabim.Domain.DTOs.PersonelUnvanGecmisiDtos;
 using Sabim.Domain.DTOs.PersonelWithUserDto;
 using Sabim.Domain.DTOs.SavciCalisilanKatipDtos;
@@ -197,8 +199,9 @@ namespace Sabim.Web.Areas.Admin.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> PersonelUnvanlari(short PersonelID) {
-            var personel = await _manager.PersonelService.TGetPersonelByIdAsync(PersonelID,false);
+        public async Task<IActionResult> PersonelUnvanlari(short PersonelID)
+        {
+            var personel = await _manager.PersonelService.TGetPersonelByIdAsync(PersonelID, false);
             var personelDto = _mapper.Map<ResultPersonelDto>(personel);
             var viewModel = new PersonelUnvanGecmisiViewModel
             {
@@ -231,7 +234,7 @@ namespace Sabim.Web.Areas.Admin.Controllers
             {
                 case OperationStatus.Success:
                     return Json(new { success = true, message = "Yeni personel unvanı başarılı bir şekilde eklenmiştir.", completeStatus = true });
-               
+
                 case OperationStatus.GlobalError:
                 default:
                     var username = User.Identity.IsAuthenticated ? User.Identity.Name : "Unknown User";
@@ -247,7 +250,7 @@ namespace Sabim.Web.Areas.Admin.Controllers
                 var personelUnvan = await _manager.PersonelService.TGetPersonelUnvanByIdAsync(id, false);
                 if (personelUnvan == null)
                 {
-                    return Json(new { success = false });                                                      
+                    return Json(new { success = false });
                 }
                 return Json(new { success = true, data = personelUnvan });
             }
@@ -396,7 +399,7 @@ namespace Sabim.Web.Areas.Admin.Controllers
                         KaliciAyrilisMi = personelIzin.PersonelAyrilisNedenleri?.KaliciAyrilisMi,
                         DonanimUyarisi = personelIzin.PersonelAyrilisNedenleri?.DonanimUyarisi,
                         PersonelId = personelIzin.PersonelId,
-                        DurumId=personelIzin.DurumId
+                        DurumId = personelIzin.DurumId
                     }
                 });
             }
@@ -421,7 +424,7 @@ namespace Sabim.Web.Areas.Admin.Controllers
                 return Json(new { success = false, errors });
             }
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var mevcutPersonelIzin= await _manager.PersonelService.TGetPersonelAyrilisById(updatePersonelAyrilisDto.PersonelAyrilisID, false);
+            var mevcutPersonelIzin = await _manager.PersonelService.TGetPersonelAyrilisById(updatePersonelAyrilisDto.PersonelAyrilisID, false);
             if (mevcutPersonelIzin == null)
             {
                 return Json(new { success = false, message = "Kayıt Bulunamadı!" });
@@ -504,6 +507,189 @@ namespace Sabim.Web.Areas.Admin.Controllers
                 ListelePersonelGeciciGorevlendirilme = personelDto // Personel bilgisi
             };
             // ViewModel ile View'a gönder
+            return View(viewModel);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EklePersonelGeciciGorevlendirilme([FromForm] CreatePersonelGeciciGorevlendirilmeDto createPersonelGeciciGorevlendirilmeDto)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            if (!ModelState.IsValid)
+            {
+                var errors = ValidationHelper.GetModelErrors(ModelState);
+                return Json(new { success = false, errors });
+            }
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            createPersonelGeciciGorevlendirilmeDto.OlusturanPersonelId = Convert.ToInt16(userId);
+            createPersonelGeciciGorevlendirilmeDto.OlusturulmaTarihi = DateTime.Now;
+            createPersonelGeciciGorevlendirilmeDto.PersonelAyrilisYeriId = createPersonelGeciciGorevlendirilmeDto.KurumId;
+            if (createPersonelGeciciGorevlendirilmeDto.BitisTarihi == null)
+            {
+                createPersonelGeciciGorevlendirilmeDto.GorevlendirilmeAktifMi = true;
+            }
+            else
+            {
+                if (createPersonelGeciciGorevlendirilmeDto.BitisTarihi.Value.Date >= DateTime.Now.Date)
+                {
+                    createPersonelGeciciGorevlendirilmeDto.GorevlendirilmeAktifMi = true;
+                }
+                else
+                {
+                    createPersonelGeciciGorevlendirilmeDto.GorevlendirilmeAktifMi = false;
+                }
+            }
+            var status = await _manager.PersonelService.TAddPersonelGeciciGorevlendirilmeAsync(createPersonelGeciciGorevlendirilmeDto);
+            switch (status)
+            {
+                case OperationStatus.Success:
+                    return Json(new { success = true, message = "Yeni geçici görevlendirilme başarılı bir şekilde eklenmiştir.", completeStatus = true });
+                case OperationStatus.DateConflict:
+                    return Json(new { success = true, message = OperationStatus.DateConflict, completeStatus = false });
+                case OperationStatus.GlobalError:
+                default:
+                    var username = User.Identity.IsAuthenticated ? User.Identity.Name : "Unknown User";
+                    _manager.LoggerService.LogError($"Area:Admin - Controller:Personel - Action: EklePersonelGeciciGorevlendirilme - User: {username} - Hata: Yeni geçici görevlendirilme Eklenemedi!");
+                    return Json(new { success = false, message = "Kaydetme işlemi sırasında bir hata oluştu. Lütfen tekrar deneyin." });
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> GuncellePersonelGeciciGorevlendirilme([FromForm] UpdatePersonelGeciciGorevlendirilmeDto updatePersonelGeciciGorevlendirilmeDto)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            if (!ModelState.IsValid)
+            {
+                var errors = ValidationHelper.GetModelErrors(ModelState);
+                return Json(new { success = false, errors });
+            }
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var mevcutPersonelGeciciGorevlendirme = await _manager.PersonelService.TGetPersonelGeciciGorevlendirilmeWithIdAsync(updatePersonelGeciciGorevlendirilmeDto.PersonelGeciciGorevlendirilmeID, false);
+            if (mevcutPersonelGeciciGorevlendirme == null)
+            {
+                return Json(new { success = false, message = "Kayıt Bulunamadı!" });
+            }
+            _mapper.Map(updatePersonelGeciciGorevlendirilmeDto, mevcutPersonelGeciciGorevlendirme);
+            mevcutPersonelGeciciGorevlendirme.GuncelleyenPersonelId = Convert.ToInt16(userId);
+            mevcutPersonelGeciciGorevlendirme.GuncellenmeTarihi = DateTime.Now;
+            mevcutPersonelGeciciGorevlendirme.PersonelAyrilisYeriId = updatePersonelGeciciGorevlendirilmeDto.KurumId;
+            if (updatePersonelGeciciGorevlendirilmeDto.BitisTarihi == null)
+            {
+                updatePersonelGeciciGorevlendirilmeDto.GorevlendirilmeAktifMi = true;
+            }
+            else
+            {
+                if (updatePersonelGeciciGorevlendirilmeDto.BitisTarihi.Value.Date >= DateTime.Now.Date)
+                {
+                    updatePersonelGeciciGorevlendirilmeDto.GorevlendirilmeAktifMi = true;
+                }
+                else
+                {
+                    updatePersonelGeciciGorevlendirilmeDto.GorevlendirilmeAktifMi = false;
+                }
+            }
+            var status = await _manager.PersonelService.TUpdatePersonelGeciciGorevlendirilmeAsync(mevcutPersonelGeciciGorevlendirme);
+            switch (status)
+            {
+                case OperationStatus.Success:
+                    return Json(new { success = true, message = "Personel geçici görevlendirilme başarılı bir şekilde güncellendi.", completeStatus = true });
+                case OperationStatus.DateConflict:
+                    return Json(new { success = true, message = OperationStatus.DateConflict, completeStatus = false });
+                case OperationStatus.GlobalError:
+                default:
+                    var username = User.Identity.IsAuthenticated ? User.Identity.Name : "Unknown User";
+                    _manager.LoggerService.LogError($"Area:Admin - Controller:Personel - Action: GuncellePersonelGeciciGorevlendirilme - User: {username} - Hata: Personel Gecici Gorevlendirilme ID : {updatePersonelGeciciGorevlendirilmeDto.PersonelGeciciGorevlendirilmeID} Güncellenemedi!");
+                    return Json(new { success = false, message = "Güncelleme işlemi sırasında bir hata oluştu. Lütfen tekrar deneyin." });
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetPersonelGeciciGorevlendirilmeByIdAsync([FromRoute] short id)
+        {
+            try
+            {
+                var personelGeciciGorevlendirilme = await _manager.PersonelService.TGetPersonelGeciciGorevlendirilmeWithIdAsync(id, false);
+                if (personelGeciciGorevlendirilme == null)
+                {
+                    return Json(new { success = false });
+                }
+                return Json(new
+                {
+                    success = true,
+                    data = new
+                    {
+                        personelGeciciGorevlendirilme.PersonelGeciciGorevlendirilmeID,
+                        GorevlendirilmeTipi = personelGeciciGorevlendirilme.GorevlendirilmeTipi.GorevlendirilmeTipiID,
+                        SehirId = personelGeciciGorevlendirilme.PersonelAyrilisYeri.SehirId,
+                        BaslangicTarihi = personelGeciciGorevlendirilme.BaslangicTarihi.ToString("yyyy-MM-dd"),
+                        BitisTarihi = personelGeciciGorevlendirilme.BitisTarihi?.ToString("yyyy-MM-dd"),
+                        PersonelAyrilisYeri = personelGeciciGorevlendirilme.PersonelAyrilisYeri.KurumID,
+                        PersonelId = personelGeciciGorevlendirilme.PersonelId,
+                        DurumId = personelGeciciGorevlendirilme.DurumId,
+                        KurumAdi = personelGeciciGorevlendirilme.PersonelAyrilisYeri.KurumAdi,
+                        GorevlendirilmeTipiAciklama = personelGeciciGorevlendirilme.GorevlendirilmeTipi.GorevlendirilmeTipiAciklama
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                var username = User.Identity.IsAuthenticated ? User.Identity.Name : "Unknown User";
+                _manager.LoggerService.LogError($"Area:Admin - Controller:PersonelGorevlendirilme - Action: GetPersonelGorevlendirilmeById - User: {username} - Hata: {ex.Message}");
+                return Json(new { success = false });
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SilPersonelGeciciGorevlendirilme(short personelGeciciGorevlendirilmeID)
+        {
+            var status = _manager.PersonelService.TDeletePersonelGeciciGorevlendirilmeAsync(personelGeciciGorevlendirilmeID).Result;
+            switch (status)
+            {
+                case OperationStatus.Success:
+                    return Json(new { success = true, message = "Personel geçici görevlendirme başarılı bir şekilde silindi." });
+                case OperationStatus.NotFound:
+                    return Json(new { success = false, message = "Kayıt bulunamadığı için silme işlemi gerçekleştirilemez!" });
+                case OperationStatus.ForeignKeyConflict:
+                    return Json(new { success = false, message = "Bu Personel başka bir tabloda kullanıldığı için silinemez!" });
+                case OperationStatus.GlobalError:
+                default:
+                    var username = User.Identity.IsAuthenticated ? User.Identity.Name : "Unknown User";
+                    _manager.LoggerService.LogError($"Area:Admin - Controller:Personel - Action: SilPersonelGeciciGorevlendirilme - User: {username} - Hata: Personel Gecici Gorevlendirilme ID : {personelGeciciGorevlendirilmeID} Silinemedi!");
+                    return Json(new { success = false, message = "Silme işlemi sırasında bir hata oluştu. Lütfen tekrar deneyin." });
+            }
+        }
+        public async Task<IActionResult> GetirPersonelGeciciGorevlendirilmeSafahatBilgi([FromRoute] short id)
+        {
+            try
+            {
+                var safahatBilgi = await _manager.PersonelService.TGetGeciciGorevlendirilmeAuditTrailWithDetailsAsync(id);
+                if (safahatBilgi == null)
+                {
+                    return Json(new { success = false });
+                }
+                return PartialView("~/Views/Shared/Partials/_SafahatBilgiPartial.cshtml", safahatBilgi);
+            }
+            catch (Exception ex)
+            {
+                var username = User.Identity.IsAuthenticated ? User.Identity.Name : "Unknown User";
+                _manager.LoggerService.LogError($"Area:Admin - Controller:Personel - Action: GetirPersonelGeciciGorevlendirilmeSafahatBilgi - User: {username} - Hata: {ex.Message}");
+                return Json(new { success = false });
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> PersonelSafahatBilgileri(short id)
+        {
+            var personel = await _manager.PersonelService.TGetPersonelByIdAsync(id, false);
+            var personelDto = _mapper.Map<ResultPersonelDto>(personel);
+            var viewModel = new PersonnelHistoryViewModel
+            {
+                PersonelSafahatBilgi = new List<PersonnelHistoryDto>(), // Boş bir DTO örneği
+                ListelePersonel = personelDto // Personel bilgisi
+            };
             return View(viewModel);
         }
     }

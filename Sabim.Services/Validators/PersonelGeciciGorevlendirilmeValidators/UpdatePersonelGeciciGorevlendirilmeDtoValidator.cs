@@ -1,10 +1,5 @@
 ﻿using FluentValidation;
 using Sabim.Domain.DTOs.PersonelGeciciGorevlendirilmeDtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sabim.Services.Validators.PersonelGeciciGorevlendirilmeValidators
 {
@@ -17,7 +12,8 @@ namespace Sabim.Services.Validators.PersonelGeciciGorevlendirilmeValidators
             RuleFor(x => x.GorevlendirilmeTipiId).NotEmpty().WithMessage("Görevlendirme Tipi boş olamaz.").GreaterThan((short)0).WithMessage("Görevlendirme Tipi ID geçerli bir değer olmalıdır.");
             RuleFor(x => x.BaslangicTarihi).NotEmpty().WithMessage("Başlangıç Tarihi boş olamaz.");
             RuleFor(x => x.BitisTarihi).GreaterThan(x => x.BaslangicTarihi).When(x => x.BitisTarihi.HasValue).WithMessage("Bitiş Tarihi, Başlangıç Tarihi'nden küçük olamaz.");
-            RuleFor(x => x.PersonelAyrilisYeriId).NotEmpty().WithMessage("Personel Görevlendirilme Yeri boş olamaz.").GreaterThan((short)0).WithMessage("Personel Ayrılış Yeri ID geçerli bir değer olmalıdır.");
+            RuleFor(x => x.KurumId).NotEmpty().WithMessage("Personel Görevlendirilme Kurumu boş olamaz.").GreaterThan((short)0).WithMessage("Kurum ID geçerli bir değer olmalıdır.");
+            //RuleFor(x => x.PersonelAyrilisYeriId).NotEmpty().WithMessage("Personel Görevlendirilme Yeri boş olamaz.").GreaterThan((short)0).WithMessage("Personel Ayrılış Yeri ID geçerli bir değer olmalıdır.");
         }
     }
 }

@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/4.0.1/css/fixedHeader.bootstrap4.css">
     <link rel="stylesheet" href="/AdminTemplate/dist/css/CustomCss.css">
 }
-@* <!-- Personel İzin Ekleme Modal Başlangıç-->
+<!-- Personel Geçici Görevlendirme Ekleme Modal Başlangıç-->
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel">
     <div class="modal-dialog mw-100 w-75" role="document">
         <div class="modal-content">
@@ -28,16 +28,16 @@
                 </div>
             </div>
             <div class="modal-header primary">
-                <h5 class="modal-title" id="createModalLabel">Personel İzin Ekle</h5>
+                <h5 class="modal-title" id="createModalLabel">Personel Geçici Görevlendirme Ekle</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <!-- Form Başlangıcı -->
-                <form id="PersonelIzinEkleForm">
+                <form id="PersonelGeciciGorevlendirilmeEkleForm">
                     @Html.AntiForgeryToken()
-                    @await Component.InvokeAsync("_PersonelGeciciGorevlendirilmeComponent", new { deger = "create" })
+                    @await Component.InvokeAsync("_GorevlendirilmeTipiGenelComponent", new { deger = "create" })
                     <div class="form-group">
                         <label>Başlangıç Tarihi</label>
                         <div class="input-group">
@@ -58,20 +58,23 @@
                             <span asp-validation-for="YeniPersonelGeciciGorevlendirilme.BitisTarihi" name="BitisTarihi" class="col-sm-12 text-danger"></span>
                         </div>
                     </div>
-                    <input type="hidden" id="CreateKaliciAyrilisMi" name="KaliciAyrilisMi" asp-for="YeniPersonelGeciciGorevlendirilme.KaliciAyrilisMi" />
-                    <input type="hidden" id="CreateDonanimUyarisi" name="DonanimUyarisi" asp-for="YeniPersonelGeciciGorevlendirilme.DonanimUyarisi" />
+                    @await Component.InvokeAsync("_SehirListesiGenelComponent", new { deger = "create"})
+                    <div id="createKurumComponent">
+                        @await Component.InvokeAsync("_KurumGenelComponent", new { deger = "create", kurumTipiId = 1 })
+                    </div>
                     <input type="hidden" id="CreateDurumId" name="DurumId" asp-for="YeniPersonelGeciciGorevlendirilme.DurumId" value="1" />
                     <input type="hidden" id="CreatePersonelId" name="PersonelId" asp-for="YeniPersonelGeciciGorevlendirilme.PersonelId" value="@Model.ListelePersonelGeciciGorevlendirilme.PersonelID" />
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                <button type="button" class="btn btn-primary" id="KaydetPersonelIzinleriButton">Kaydet</button>
+                <button type="button" class="btn btn-primary" id="KaydetPersonelGeciciGorevlendirilmeButton">Kaydet</button>
             </div>
         </div>
     </div>
 </div>
-<!-- ./Personel İzin Ekleme Modal Bitiş-->
+<!-- ./Personel Geçici Görevlendirme Ekleme Modal Bitiş-->
+
 <!-- Personel Unvan Düzenleme Modal Başlangıç-->
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel">
     <div class="modal-dialog mw-100 w-75" role="document">
@@ -87,16 +90,18 @@
                 </div>
             </div>
             <div class="modal-header warning">
-                <h5 class="modal-title" id="editModalLabel">Personel İzin Düzenle</h5>
+                <h5 class="modal-title" id="editModalLabel">Personel Geçici Görevlendirme Düzenle</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <!-- Form Başlangıcı -->
-                <form id="PersonelIzinGuncelleForm">
+                <form id="PersonelGeciciGorevlendirilmeGuncelleForm">
                     @Html.AntiForgeryToken()
-                    @await Component.InvokeAsync("_PersonelGeciciGorevlendirilmeComponent", new { deger = "update" })
+                    <input type="hidden" id="UpdatePersonelId" name="PersonelId" asp-for="GuncellePersonelGeciciGorevlendirilme.PersonelId" />
+                    <input type="hidden" id="UpdatePersonelGeciciGorevlendirilmeID" name="PersonelGeciciGorevlendirilmeID" asp-for="GuncellePersonelGeciciGorevlendirilme.PersonelGeciciGorevlendirilmeID" />
+                    @await Component.InvokeAsync("_GorevlendirilmeTipiGenelComponent", new { deger = "update"})
                     <div class="form-group">
                         <label>Başlangıç Tarihi</label>
                         <div class="input-group">
@@ -104,7 +109,7 @@
                                 <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                             </div>
                             <input type="text" class="form-control" id="UpdateBaslangicTarihi" name="BaslangicTarihi" asp-for="GuncellePersonelGeciciGorevlendirilme.BaslangicTarihi" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask />
-                            <span asp-validation-for="GuncellePersonelGeciciGorevlendirilme .BaslangicTarihi" name="BaslangicTarihi" class="col-sm-12 text-danger"></span>
+                            <span asp-validation-for="GuncellePersonelGeciciGorevlendirilme.BaslangicTarihi" name="BaslangicTarihi" class="col-sm-12 text-danger"></span>
                         </div>
                     </div>
                     <div class="form-group">
@@ -117,22 +122,23 @@
                             <span asp-validation-for="GuncellePersonelGeciciGorevlendirilme.BitisTarihi" name="BitisTarihi" class="col-sm-12 text-danger"></span>
                         </div>
                     </div>
+                    @await Component.InvokeAsync("_SehirListesiGenelComponent", new { deger = "update" })
+                    <div id="updateKurumComponent">
+                        @await Component.InvokeAsync("_KurumGenelComponent", new { deger = "update", kurumTipiId = 1 })
+                    </div>
                     @await Component.InvokeAsync("_DurumListesiGenelComponent", new { deger = "update" })
-                    <input type="hidden" id="UpdateKaliciAyrilisMi" name="KaliciAyrilisMi" asp-for="GuncellePersonelGeciciGorevlendirilme.KaliciAyrilisMi" />
-                    <input type="hidden" id="UpdateDonanimUyarisi" name="DonanimUyarisi" asp-for="GuncellePersonelGeciciGorevlendirilme.DonanimUyarisi" />
-                    <input type="hidden" id="UpdatePersonelId" name="PersonelId" asp-for="GuncellePersonelGeciciGorevlendirilme.PersonelId" value="@Model.ListelePersonelGeciciGorevlendirilme.PersonelID" />
-                    <input type="hidden" id="UpdatePersonelGeciciGorevlendirilmeID" name="PersonelGeciciGorevlendirilmeID" asp-for="GuncellePersonelGeciciGorevlendirilme.PersonelGeciciGorevlendirilmeID" />
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                <button type="button" class="btn btn-warning" id="GuncellePersonelIzinButton">Güncelle</button>
+                <button type="button" class="btn btn-warning" id="GuncellePersonelGeciciGorevlendirilmeButton">Güncelle</button>
             </div>
         </div>
     </div>
 </div>
-<!-- ./Personel İzin Düzenleme Modal Bitiş-->
-<!-- Personel İzin Silme Modal Başlangıç-->
+<!-- ./Personel Geçici Görevlendirme Düzenleme Modal Bitiş-->
+
+<!-- Personel Geçici Görevlendirme Silme Modal Başlangıç-->
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="deleteModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -147,7 +153,7 @@
                 </div>
             </div>
             <div class="modal-header danger">
-                <h5 class="modal-title" id="deleteModalLabel">Personel İzin Sil</h5>
+                <h5 class="modal-title" id="deleteModalLabel">Personel Geçici Görevlendirme Sil</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -157,7 +163,7 @@
                 <form id="PersonelGeciciGorevlendirilmeSilForm">
                     @Html.AntiForgeryToken()
                     <input type="hidden" name="PersonelGeciciGorevlendirilmeID" id="DeletePersonelGeciciGorevlendirilmeID" />
-                    <p id="PersonelGeciciGorevlendirilmeLabel">İzin Türü: <strong id="PersonelGeciciGorevlendirilmeIzinTur"></strong> Başlangıç Tarihi<strong id="PersonelGeciciGorevlendirilmeBaslangicTarihi"></strong> Bitiş Tarihi<strong id="PersonelGeciciGorevlendirilmeBitisTarihi"></strong>  silinecektir. Onaylıyor musunuz?</p>
+                    <p id="PersonelGeciciGorevlendirilmeLabel">Geçici Görevlendirme Tipi: <strong id="PersonelGeciciGorevlendirilmeGorevlendirilmeTipiAciklama"></strong> Görevlendirildiği Kurum: <strong id="PersonelGeciciGorevlendirilmeKurumAdi"></strong> Başlangıç Tarihi: <strong id="PersonelGeciciGorevlendirilmeBaslangicTarihi"></strong> Bitiş Tarihi: <strong id="PersonelGeciciGorevlendirilmeBitisTarihi"></strong>  silinecektir. Onaylıyor musunuz?</p>
                 </form>
             </div>
             <div class="modal-footer">
@@ -167,8 +173,8 @@
         </div>
     </div>
 </div>
-<!-- ./Personel İzin Silme Modal Bitiş-->
-<!-- Personel İzin Safahat Modal Başlangıç-->
+<!-- ./Personel Geçici Görevlendirme Silme Modal Bitiş-->
+<!-- Personel Geçici Görevlendirme Safahat Modal Başlangıç-->
 <div class="modal fade" id="auditTrailModal" tabindex="-1" role="dialog" aria-labelledby="auditTrailModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -187,7 +193,7 @@
         </div>
     </div>
 </div>
-<!-- ./Personel İzin Safahat Modal Bitiş--> *@
+<!-- ./Personel Geçici Görevlendirme Safahat Modal Bitiş-->
 <div class="row">
     <div class="col-md-3">
         <div class="card card-primary card-outline">
@@ -219,7 +225,7 @@
                 <a asp-area="Admin" asp-controller="Personel" asp-action="Index" class="btn btn-outline-dark btn-flat my-2">
                     <i class="fa fa-arrow-circle-left mr-1"></i> Personeller Sayfasına Dön
                 </a>
-                @Html.Raw(IconHelper.CreateButton("btn btn-outline-primary btn-flat my-2 ml-auto", "Personel Ayrılış", IconHelper.GetAddIcon(), "Personel Ayrılış Ekle", "createModal"))
+                @Html.Raw(IconHelper.CreateButton("btn btn-outline-primary btn-flat my-2 ml-auto", "Geçici Görevlendirilme", IconHelper.GetAddIcon(), "Geçici  Görevlendirilme", "createModal"))
             </div>
             <div class="card-body mt-2">
                 <div id="PersonelGeciciGorevlendirilmeTablosu">
@@ -229,6 +235,8 @@
                                 <th class="text-center">Başlangıç Tarihi</th>
                                 <th class="text-center">Bitiş Tarihii</th>
                                 <th>Görevlendirilme Tipi</th>
+                                <th>Görevlendirilme Durumu</th>
+                                <th>Görevlendirildiği Kurum</th>
                                 <th>Durum</th>
                                 <th>İşlemler</th>
                             </tr>
@@ -239,6 +247,8 @@
                                 <th class="text-center">Başlangıç Tarihi</th>
                                 <th class="text-center">Bitiş Tarihii</th>
                                 <th>Görevlendirilme Tipi</th>
+                                <th>Görevlendirildiği Kurum</th>
+                                <th>Görevlendirilme Durumu</th>
                                 <th>Durum</th>
                                 <th>İşlemler</th>
                             </tr>
@@ -288,7 +298,9 @@
         $(document).ready(function () {
             initDataTable();
             //Kayıt İşlemi
-            $('#KaydetPersonelIzinleriButton').click(savePersonelIzinleri);
+            var selectedSehirId = $("#createSehirler").val();
+            changeKurum(null, selectedSehirId, "create");
+            $('#KaydetPersonelGeciciGorevlendirilmeButton').click(savePersonelGeciciGorevlendirilme);
             $(".modal").on("hidden.bs.modal", function () {
                 $('.modal').each(function () {
                     let modal = $(this);
@@ -319,14 +331,14 @@
                 event.preventDefault();
                 let id = $(this).data('id');
                 if (id) {
-                    editPersonelIzin(id);
+                    editPersonelGeciciGorevlendirilme(id);
                 }
             });
             $(document).on('click', '.btn-showinfo', function (event) {
                 event.preventDefault(); // Sayfanın yeniden yüklenmesini engelle
                 let id = $(this).data('id');
                 if (id) {
-                    showInfoPersonelIzin(id);
+                    showInfoPersonelGeciciGorevlendirilme(id);
                 }
             });
             $(document).on('click', '.btn-delete', function (event) {
@@ -339,8 +351,9 @@
                         if (response.success) {
                             const personelData = response.data;
                             console.log(personelData);
-                            $('#deleteModal #DeletePersonelGeciciGorevlendirilmeID').val(personelData.PersonelGeciciGorevlendirilmeID);
-                            $('#deleteModal #PersonelGeciciGorevlendirilmeIzinTur').text(personelData.aciklama);
+                            $('#deleteModal #DeletePersonelGeciciGorevlendirilmeID').val(personelData.personelGeciciGorevlendirilmeID);
+                            $('#deleteModal #PersonelGeciciGorevlendirilmeGorevlendirilmeTipiAciklama').text(personelData.gorevlendirilmeTipiAciklama);
+                            $('#deleteModal #PersonelGeciciGorevlendirilmeKurumAdi').text(personelData.kurumAdi);
                             $('#deleteModal #PersonelGeciciGorevlendirilmeBaslangicTarihi').text(changeDateFormatTo(personelData.baslangicTarihi));
                             $('#deleteModal #PersonelGeciciGorevlendirilmeBitisTarihi').text(changeDateFormatTo(personelData.bitisTarihi));
                             $('#deleteModal').modal('show'); // Modalı aç
@@ -355,8 +368,16 @@
             });
             $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' });
             $('[data-mask]').inputmask();
+            $('#createSehirler').change(function() {
+                var selectedSehirId = $(this).val();
+                changeKurum(null, selectedSehirId, "create");
+            });
+            $('#updateSehirler').change(function() {
+                var selectedSehirId = $(this).val();
+                changeKurum(null, selectedSehirId, "update");
+            });
             // Düzenle Kaydet Butonu
-            $('#GuncellePersonelIzinButton').click(saveUpdatedPersonelIzin);
+            $('#GuncellePersonelGeciciGorevlendirilmeButton').click(saveUpdatedPersonelGeciciGorevlendirilme);
             // Sil Modal'ı
             $('#SilPersonelGeciciGorevlendirilmeButton').click(deletePersonelGeciciGorevlendirilme);
         });
@@ -370,7 +391,7 @@
                 "autoWidth": false,
                 "lengthChange": true,
                 "pageLength": 15,
-                "order": [1, 'asc'],
+                "order": [0, 'asc'],
                 "language": {
                     "searchPanes": {
                         "emptyPanes": 'Filtreleme Paneli Bulunamadı',
@@ -535,19 +556,34 @@
             const [yy, mm, dd] = onlyDate.split("-");
             return `${dd}/${mm}/${yy}`;
         };
-        function savePersonelIzinleri() {
+        function reloadComponent(componentSelector, url) {
+            $(componentSelector).load(url, function(response, status, xhr) {
+                if (status === "error") {
+                    setTimeout(function() {
+                        window.location.reload(); // Sayfayı yeniden yükle
+                    }, 1500);
+                }
+            });
+        }
+        function changeKurum(selectedKurumId, id, deger) {
+            // URL'yi doğru şekilde oluşturma
+            var url = `/Admin/Personel/GetirKurumlar?deger=${deger}&selectedKurumId=${selectedKurumId}&id=${id}`;
+            if (deger === "create") {
+                reloadComponent("#createModal #createKurumComponent", url);
+            }
+            else if (deger === "update") {
+                reloadComponent("#editModal #updateKurumComponent", url);
+            }
+            else {
+                console.warn("Geçersiz işlem türü (deger):", deger);
+            }
+        }
+        function savePersonelGeciciGorevlendirilme() {
             $('#createModal span.text-danger').text('');
             $('#createModal .overlay').show();
-            var selectedOption = document.querySelector("#createPersonelGeciciGorevlendirilme option:checked");
-            if (selectedOption) {
-                var kaliciAyrilis = selectedOption.getAttribute("data-kalici-ayrilis");
-                var donanimUyarisi = selectedOption.getAttribute("data-donanim-uyarisi");
-                document.getElementById("CreateKaliciAyrilisMi").value = kaliciAyrilis;
-                document.getElementById("CreateDonanimUyarisi").value = donanimUyarisi;
-            }
-            var formData = $('#PersonelIzinEkleForm').serialize(); // Form verilerini serialize et
+            var formData = $('#PersonelGeciciGorevlendirilmeEkleForm').serialize(); // Form verilerini serialize et
             $.ajax({
-                url: '/Admin/Personel/EklePersonelIzin', // Hedef URL
+                url: '/Admin/Personel/EklePersonelGeciciGorevlendirilme', // Hedef URL
                 type: 'POST',
                 data: formData,
                 success: function (response) {
@@ -572,7 +608,7 @@
                 }
             });
         }
-        function editPersonelIzin(id) {
+        function editPersonelGeciciGorevlendirilme(id) {
             // event.preventDefault();
             $.ajax({
                 url: `/Admin/Personel/GetPersonelGeciciGorevlendirilmeById/${id}`,
@@ -582,12 +618,26 @@
                         const data = response.data;
                         console.log(data);
                         $('#editModal #UpdatePersonelId').val(data.personelId);
-                        $('#editModal #UpdatePersonelGeciciGorevlendirilmeID').val(data.PersonelGeciciGorevlendirilmeID);
-                        $('#UpdateKaliciAyrilisMi').val(data.kaliciAyrilisMi);
-                        $('#UpdateDonanimUyarisi').val(data.donanimUyarisi);
-                        $('#editModal #updatePersonelGeciciGorevlendirilme option').each(function() {
+                        $('#editModal #UpdatePersonelGeciciGorevlendirilmeID').val(data.personelGeciciGorevlendirilmeID);
+                        $('#editModal #updateGorevlendirilmeTipleri option').each(function() {
                             const optionValue = $(this).val();
-                            if (optionValue == data.PersonelGeciciGorevlendirilmeId) {
+                            if (optionValue == data.gorevlendirilmeTipi) {
+                                $(this).prop('selected', true);
+                            } else {
+                                $(this).prop('selected', false);
+                            }
+                        });
+                        $('#editModal #updateSehirler option').each(function() {
+                            const optionValue = $(this).val();
+                            if (optionValue == data.sehirId) {
+                                $(this).prop('selected', true);
+                            } else {
+                                $(this).prop('selected', false);
+                            }
+                        });
+                        $('#editModal #updateKurumlar option').each(function() {
+                            const optionValue = $(this).val();
+                            if (optionValue == data.personelAyrilisYeri) {
                                 $(this).prop('selected', true);
                             } else {
                                 $(this).prop('selected', false);
@@ -603,6 +653,7 @@
                                 $(this).prop('selected', false);
                             }
                         });
+                        changeKurum(data.personelAyrilisYeri, data.sehirId, "update");
                         $('#editModal .overlay').hide();
                         $('#editModal').modal('show');
                     }
@@ -616,17 +667,23 @@
                 }
             });
         }
-        function saveUpdatedPersonelIzin() {
-            var formData = $('#PersonelIzinGuncelleForm').serialize(); // Form verilerini al
+        function saveUpdatedPersonelGeciciGorevlendirilme() {
+            var formData = $('#PersonelGeciciGorevlendirilmeGuncelleForm').serialize(); // Form verilerini al
             $.ajax({
-                url: '/Admin/Personel/GuncellePersonelIzin',
+                url: '/Admin/Personel/GuncellePersonelGeciciGorevlendirilme',
                 type: 'POST',
                 data: formData,
                 success: function (response) {
                     if (response.success) {
-                        $('#editModal').modal('hide'); // Modalı kapat
-                        reloadTable(); // Tabloyu yeniden yükle
-                        showToast(response.message, 'Bilgi Mesajı', 'topRight', 2500, 'bg-success', true);
+                        if (response.completeStatus) {
+                            $('#editModal').modal('hide'); // Modalı kapat
+                            reloadTable(); // Tabloyu yeniden yükle
+                            showToast(response.message, 'Bilgi Mesajı', 'topRight', 2500, 'bg-success', true);
+                        }
+                        else {
+                            showToast(response.message, 'Bilgi Mesajı', 'topRight', 45000, 'bg-warning', true);
+                           // showSwalAlert('Hata!', 'Beklenmeyen bir hata oluştu. Lütfen yaptığınız işlemi tekrar deneyiniz. Hatanın devam etmesi durumunda Bilgi İşlem Personeline bildiriniz.', 'error', 6500, true, true);
+                        }
                     }
                     else {
                         // Hataları göster
@@ -661,9 +718,9 @@
                 }
             });
         }
-        function showInfoPersonelIzin(id) {
+        function showInfoPersonelGeciciGorevlendirilme(id) {
             $.ajax({
-                url: `/Admin/Personel/GetirPersonelIzinSafahatBilgi/${id}`,
+                url: `/Admin/Personel/GetirPersonelGeciciGorevlendirilmeSafahatBilgi/${id}`,
                 type: 'GET',
                 success: function (response) {
                     $("#auditTrailModal").find(".modal-body").html(response);
@@ -671,15 +728,6 @@
                 },
                 error: function () {
                     showToast('Safahat bilgileri getirilemedi. Lütfen tekrar deneyiniz.', 'Hata!', 'topRight', 3500, 'bg-danger', true);
-                }
-            });
-        }
-        function reloadComponent(componentSelector, url) {
-            $(componentSelector).load(url, function (response, status, xhr) {
-                if (status === "error") {
-                    setTimeout(function () {
-                        window.location.reload(); // Sayfayı yeniden yükle
-                    }, 1500);
                 }
             });
         }
@@ -691,11 +739,11 @@
             }
             var personelID = $('#CreatePersonelId').val();
             // Tabloyu yeniden yükle
-            $('#PersonelGeciciGorevlendirilmeTablosu').load('/Admin/Personel/PersonelGeciciGorevlendirilmelari?PersonelID=' + personelID + ' #PersonelGeciciGorevlendirilmeTablosu', function(response, status, xhr) {
+            $('#PersonelGeciciGorevlendirilmeTablosu').load('/Admin/Personel/PersonelGeciciGorevlendirilme?PersonelID=' + personelID + ' #PersonelGeciciGorevlendirilmeTablosu', function(response, status, xhr) {
                 if (status === "success") {
                     initDataTable(); // DataTable başlat
                 } else if (status === "error") {
-                    showToast("Tablo yüklenemedi. Lütfen sayfayı yenileyin.", "Hata", "topRight", 3500, "bg-danger", true);
+                    showToast("Tablo yüklenemedi. Lütfen sayfayı yenileyin.", "Hata", "topRight", 3500, "bg-danger", true);           
                 }
             });
         }

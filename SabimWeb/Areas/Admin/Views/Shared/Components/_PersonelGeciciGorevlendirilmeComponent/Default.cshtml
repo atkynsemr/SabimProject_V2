@@ -12,6 +12,13 @@
                 @(geciciGorevlendirilme.BitisTarihi.HasValue ? geciciGorevlendirilme.BitisTarihi.Value.ToString("dd/MM/yyyy") : "-")
             </td>
             <td>@geciciGorevlendirilme.GorevlendirilmeTipiAciklama</td>
+            <td class="text-center text-nowrap">
+                <div class="d-flex align-items-center justify-content-center gap-2">
+                    @Html.Raw(IconHelper.GetStatusIcon(geciciGorevlendirilme.GorevlendirilmeAktifMi))
+                    @Html.Raw(BadgeHelper.GetBadge(geciciGorevlendirilme.GorevlendirilmeAktifMi))
+                </div>
+            </td>
+            <td>@geciciGorevlendirilme.KurumAdi</td>
             <td class="text-center">
                 <div class="d-flex align-items-center justify-content-center">
                     @Html.Raw(IconHelper.GetStatusNameIcon(geciciGorevlendirilme.DurumAdi))
@@ -20,9 +27,9 @@
             </td>
             <td class="text-center">
                 <div class="d-flex align-items-center justify-content-center">
-                    @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-showinfo", "", IconHelper.GetInfoIcon(), "Göster", "showInfoPersonelGorevlendirilme", geciciGorevlendirilme.PersonelGeciciGorevlendirilmeID.ToString()))
-                    @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-edit", "", IconHelper.GetEditIcon(), "Düzenle", "editPersonelGorevlendirilme", geciciGorevlendirilme.PersonelGeciciGorevlendirilmeID.ToString()))
-                    @Html.Raw(IconHelper.CreateLink("btn btn-icon btn-delete", "", IconHelper.GetDeleteIcon(), "Sil", "deletePersonelGorevlendirilme", geciciGorevlendirilme.PersonelGeciciGorevlendirilmeID.ToString()))
+                    @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-showinfo", "", IconHelper.GetInfoIcon(), "Göster", "showInfoPersonelGeciciGorevlendirilme", geciciGorevlendirilme.PersonelGeciciGorevlendirilmeID.ToString()))
+                    @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-edit", "", IconHelper.GetEditIcon(), "Düzenle", "editPersonelGeciciGorevlendirilme", geciciGorevlendirilme.PersonelGeciciGorevlendirilmeID.ToString()))
+                    @Html.Raw(IconHelper.CreateLink("btn btn-icon btn-delete", "", IconHelper.GetDeleteIcon(), "Sil", "deletePersonelGeciciGorevlendirilme", geciciGorevlendirilme.PersonelGeciciGorevlendirilmeID.ToString()))
                 </div>
             </td>
         </tr>

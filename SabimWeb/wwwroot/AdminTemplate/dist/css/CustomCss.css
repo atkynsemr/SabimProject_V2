@@ -114,3 +114,10 @@ input[type="number"] {
     -moz-appearance: textfield;
 }
 
+#toastsContainerTopRight {
+    z-index: 1051 !important;
+}
+/* Modal için z-index değerini düşürerek toast'ın önünde olmasını sağlıyoruz */
+.modal {
+    z-index: 1050 !important;
+}

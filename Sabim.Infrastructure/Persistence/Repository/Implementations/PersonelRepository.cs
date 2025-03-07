@@ -25,6 +25,84 @@ namespace Sabim.Infrastructure.Persistence.Repository.Implementations
             _userManager = userManager;
             _mapper = mapper;
         }
+
+        public async Task<string> AddPersonelGeciciGorevlendirilmeAsync(CreatePersonelGeciciGorevlendirilmeDto createPersonelGeciciGorevlendirilmeDto)
+        {
+            try
+            {
+                // Aynı personelin tarihleri çakışan bir kaydı var mı?
+                bool hasConflict = await _context.PersonelGeciciGorevlendirilme.AnyAsync(gorevlendirme =>
+                    gorevlendirme.PersonelId == createPersonelGeciciGorevlendirilmeDto.PersonelId &&
+                    (
+                        // 1️⃣ Yeni kayıt başlangıç tarihi, mevcut bir izin süresine denk geliyorsa
+                        (gorevlendirme.BaslangicTarihi <= createPersonelGeciciGorevlendirilmeDto.BaslangicTarihi &&
+                         (gorevlendirme.BitisTarihi == null || createPersonelGeciciGorevlendirilmeDto.BaslangicTarihi <= gorevlendirme.BitisTarihi)) ||
+
+                        // 2️⃣ Yeni kayıt bitiş tarihi mevcut bir izin aralığına denk geliyorsa (bitiş tarihi null değilse)
+                        (createPersonelGeciciGorevlendirilmeDto.BitisTarihi.HasValue &&
+                         gorevlendirme.BaslangicTarihi <= createPersonelGeciciGorevlendirilmeDto.BitisTarihi &&
+                         (gorevlendirme.BitisTarihi == null || createPersonelGeciciGorevlendirilmeDto.BitisTarihi <= gorevlendirme.BitisTarihi)) ||
+
+                        // 3️⃣ Yeni kayıt, mevcut bir kaydı tamamen kapsıyorsa
+                        (gorevlendirme.BaslangicTarihi >= createPersonelGeciciGorevlendirilmeDto.BaslangicTarihi &&
+                         (createPersonelGeciciGorevlendirilmeDto.BitisTarihi == null || gorevlendirme.BitisTarihi <= createPersonelGeciciGorevlendirilmeDto.BitisTarihi)) ||
+
+                        // 4️⃣ Başlangıç tarihi tam olarak aynıysa
+                        (gorevlendirme.BaslangicTarihi == createPersonelGeciciGorevlendirilmeDto.BaslangicTarihi) ||
+
+                        // 5️⃣ Bitiş tarihi tam olarak aynıysa (bitiş tarihi null değilse)
+                        (createPersonelGeciciGorevlendirilmeDto.BitisTarihi.HasValue &&
+                         gorevlendirme.BitisTarihi.HasValue &&
+                         gorevlendirme.BitisTarihi == createPersonelGeciciGorevlendirilmeDto.BitisTarihi)
+                    )
+                );
+                if (hasConflict)
+                {
+                    return OperationStatus.DateConflict; // Çakışma varsa işlemi durdur
+                }
+                var geciciGorevlendirilme = _mapper.Map<PersonelGeciciGorevlendirilme>(createPersonelGeciciGorevlendirilmeDto);
+                await _context.PersonelGeciciGorevlendirilme.AddAsync(geciciGorevlendirilme);
+                var affectedRows = await _context.SaveChangesAsync(); // Veritabanına kaydet // Eğer etkilenen satır sayısı 0 ise, işlem başarısız olabilir
+                if (affectedRows > 0)
+                {
+                    if (createPersonelGeciciGorevlendirilmeDto.BitisTarihi == null || createPersonelGeciciGorevlendirilmeDto.BitisTarihi.Value.Date > DateTime.Now.Date)
+                    {
+                        // 1️⃣ PersonelGeciciGorevlendirilme Tablosunda Güncelleme
+                        var gorevlendirmeKayitlari = await _context.PersonelGorevlendirilme
+                            .Where(pg => pg.PersonelId == createPersonelGeciciGorevlendirilmeDto.PersonelId && pg.GorevlendirilmeBitisTarihi == null && pg.DurumId == 1 && pg.GorevlendirilmeAktifMi == true).ToListAsync();
+                        foreach (var kayit in gorevlendirmeKayitlari)
+                        {
+                            kayit.GorevlendirilmeBitisTarihi = createPersonelGeciciGorevlendirilmeDto.BaslangicTarihi;
+                            kayit.GorevlendirilmeAktifMi = false;
+                        }
+                        // 2️⃣ Personel Tablosunda Güncelleme
+                        var personel = await _context.Personel
+                            .FirstOrDefaultAsync(p => p.PersonelID == createPersonelGeciciGorevlendirilmeDto.PersonelId);
+                        if (personel != null)
+                        {
+                            personel.CalismaDurumuId = 2;
+                            personel.GorevlendirilmeTuruId = 3;
+                        }
+                        // Veritabanına değişiklikleri kaydet
+                        await _context.SaveChangesAsync();
+                    }
+                    return OperationStatus.Success; // İşlem başarılı
+                }
+
+                else
+                {
+                    return OperationStatus.GlobalError; // Satır eklenmediği takdirde hata
+                }
+            }
+            catch (DbUpdateException)
+            {
+                return OperationStatus.GlobalError; // Veritabanı hatası
+            }
+            catch (Exception)
+            {
+                return OperationStatus.GlobalError; // Genel hata
+            }
+        }
         public async Task<string> AddPersonelIzinleriAsync(CreatePersonelAyrilisDto createPersonelAyrilisDto)
         {
             try
@@ -211,6 +289,37 @@ namespace Sabim.Infrastructure.Persistence.Repository.Implementations
                 return OperationStatus.GlobalError;
             }
         }
+        public async Task<string> DeletePersonelGeciciGorevlendirilmeAsync(short personelGeciciGorevlendirilmeID)
+        {
+            try
+            {
+                var personelGeciciGorevlendirme = await _context.PersonelGeciciGorevlendirilme.FirstOrDefaultAsync(p => p.PersonelGeciciGorevlendirilmeID == personelGeciciGorevlendirilmeID);
+                if (personelGeciciGorevlendirme == null)
+                {
+                    return OperationStatus.NotFound;
+                }
+                _context.PersonelGeciciGorevlendirilme.Remove(personelGeciciGorevlendirme);
+                int affectedRows = await _context.SaveChangesAsync();
+                if (affectedRows > 0)
+                {
+                    return OperationStatus.Success; // İşlem başarılı
+                }
+                else
+                {
+                    return OperationStatus.GlobalError; // Genel hata
+                }
+            }
+            catch (DbUpdateException dbEx) when (dbEx.InnerException is SqlException sqlEx && sqlEx.Number == 547)
+            {
+                // Dış anahtar hatası (SQL 547: Foreign key violation)
+                return OperationStatus.ForeignKeyConflict;
+            }
+            catch (Exception)
+            {
+                // Diğer tüm hatalar
+                return OperationStatus.GlobalError;
+            }
+        }
         public async Task<string> DeletePersonelIzinAsync(short personelAyrilisID)
         {
             try
@@ -320,32 +429,74 @@ namespace Sabim.Infrastructure.Persistence.Repository.Implementations
                             .Where(pg => pg.AsilGorevlendirilmeYeriMi && pg.GorevlendirilmeAktifMi)
                             .OrderBy(pg => pg.PersonelGorevlendirilmeID)
                             .FirstOrDefault()
-                    }) .FirstOrDefaultAsync();
-                    if (query == null) throw new Exception("Personel bulunamadı!");
+                    }).FirstOrDefaultAsync();
+            if (query == null) throw new Exception("Personel bulunamadı!");
 
-                    return new ResultPersonelWithGorevYeriDto
-                    {
-                        PersonelID = personelId,
-                        Ad = query.Ad,
-                        Soyad = query.Soyad,
-                        SicilNumarasi = query.SicilNumarasi,
-                        UnvanAdi = query.UnvanAdi,
-                        CalismaDurumAdi = query.CalismaDurumAdi,
-                        KurumAdi = query.KurumAdi,
-                        KisimAdi = query.Gorevlendirme?.Kisim?.KisimAdi,
-                        BirimAdi = query.Gorevlendirme?.Kisim?.Birim?.BirimAdi,
-                        BolumAdi = query.Gorevlendirme?.Kisim?.Birim?.Bolum?.BolumAdi
-                    };
+            return new ResultPersonelWithGorevYeriDto
+            {
+                PersonelID = personelId,
+                Ad = query.Ad,
+                Soyad = query.Soyad,
+                SicilNumarasi = query.SicilNumarasi,
+                UnvanAdi = query.UnvanAdi,
+                CalismaDurumAdi = query.CalismaDurumAdi,
+                KurumAdi = query.KurumAdi,
+                KisimAdi = query.Gorevlendirme?.Kisim?.KisimAdi,
+                BirimAdi = query.Gorevlendirme?.Kisim?.Birim?.BirimAdi,
+                BolumAdi = query.Gorevlendirme?.Kisim?.Birim?.Bolum?.BolumAdi
+            };
+        }
+        public async Task<AuditTrailDto?> GetGeciciGorevlendirilmeAuditTrailWithDetailsAsync(short id)
+        {
+            // Entity'yi bul
+            var entity = await _context.PersonelGeciciGorevlendirilme.AsNoTracking().FirstOrDefaultAsync(p => p.PersonelGeciciGorevlendirilmeID == id);
+            if (entity == null) return null; // Eğer kayıt bulunamazsa
+            // Safahat bilgilerini al
+            short? olusturanPersonelId = entity.OlusturanPersonelId;
+            short? guncelleyenPersonelId = entity.GuncelleyenPersonelId;
+            short? silenPersonelId = entity.SilenPersonelId;
+            // Personel bilgilerini toplu olarak al
+            var personelIds = new List<short?> { olusturanPersonelId, guncelleyenPersonelId, silenPersonelId }
+                .Where(id => id.HasValue)
+                .Select(id => id.Value)
+                .Distinct()
+                .ToList();
+            var personeller = await _context.Personel
+                .AsNoTracking()
+                .Where(p => personelIds.Contains(p.PersonelID))
+                .ToDictionaryAsync(p => p.PersonelID, p => new { p.Ad, p.Soyad });
+            var olusturanPersonel = olusturanPersonelId.HasValue && personeller.ContainsKey(olusturanPersonelId.Value)
+                ? personeller[olusturanPersonelId.Value]
+                : null;
+            var guncelleyenPersonel = guncelleyenPersonelId.HasValue && personeller.ContainsKey(guncelleyenPersonelId.Value)
+                ? personeller[guncelleyenPersonelId.Value]
+                : null;
+            var silenPersonel = silenPersonelId.HasValue && personeller.ContainsKey(silenPersonelId.Value)
+                ? personeller[silenPersonelId.Value]
+                : null;
+            // Audit trail DTO'sunu oluştur
+            var auditTrail = new AuditTrailDto
+            {
+                Id = id,
+                OlusturanPersonelId = olusturanPersonelId,
+                OlusturanAdSoyad = olusturanPersonel != null ? $"{olusturanPersonel.Ad} {olusturanPersonel.Soyad}" : null,
+                OlusturulmaTarihi = entity.OlusturulmaTarihi ?? default,
+                GuncelleyenPersonelId = guncelleyenPersonelId,
+                GuncelleyenAdSoyad = guncelleyenPersonel != null ? $"{guncelleyenPersonel.Ad} {guncelleyenPersonel.Soyad}" : null,
+                GuncellenmeTarihi = entity.GuncellenmeTarihi ?? default,
+                SilenPersonelId = silenPersonelId,
+                SilenAdSoyad = silenPersonel != null ? $"{silenPersonel.Ad} {silenPersonel.Soyad}" : null,
+                SilinmeTarihi = entity.SilinmeTarihi ?? default,
+            };
+            return auditTrail;
         }
         public async Task<PersonelAyrilis> GetPersonelAyrilisById(short personelAyrilisId, bool trackChanges)
         {
-            IQueryable<PersonelAyrilis> query = _context.PersonelAyrilis.Where(x => x.PersonelAyrilisID == personelAyrilisId)
-                .Include(x => x.PersonelAyrilisNedenleri);
+            IQueryable<PersonelAyrilis> query = _context.PersonelAyrilis.Where(x => x.PersonelAyrilisID == personelAyrilisId).Include(x => x.PersonelAyrilisNedenleri);
             if (!trackChanges)
             {
                 query = query.AsNoTracking();
             }
-
             return await query.FirstOrDefaultAsync(); // Filtrelenmiş query'de ilk kaydı getir
         }
         public async Task<ResultPersonelDto> GetPersonelByIdAsync(int id, bool trackChanges)
@@ -358,7 +509,6 @@ namespace Sabim.Infrastructure.Persistence.Repository.Implementations
             var result = await query.ProjectTo<ResultPersonelDto>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(x => x.PersonelID == id);
             return result;
         }
-
         public async Task<List<ResultPersonelGeciciGorevlendirilmeDto>> GetPersonelGeciciGorevlendirilmeByIdAsync(short personelId, bool trackChanges)
         {
             IQueryable<PersonelGeciciGorevlendirilme> query = _context.PersonelGeciciGorevlendirilme;
@@ -373,7 +523,16 @@ namespace Sabim.Infrastructure.Persistence.Repository.Implementations
                 .ToListAsync();
             return result;
         }
-
+        public async Task<PersonelGeciciGorevlendirilme> GetPersonelGeciciGorevlendirilmeWithIdAsync(short personelGeciciGorevlendirilmeID, bool trackChanges)
+        {
+            IQueryable<PersonelGeciciGorevlendirilme> query =
+                _context.PersonelGeciciGorevlendirilme.Where(x => x.PersonelGeciciGorevlendirilmeID == personelGeciciGorevlendirilmeID).Include(x => x.GorevlendirilmeTipi).Include(x => x.PersonelAyrilisYeri);
+            if (!trackChanges)
+            {
+                query = query.AsNoTracking();
+            }
+            return await query.FirstOrDefaultAsync(); // Filtrelenmiş query'de ilk kaydı getir
+        }
         public async Task<AuditTrailDto?> GetPersonelIzinAuditTrailWithDetailsAsync(short id)
         {
             // Entity'yi bul
@@ -429,7 +588,6 @@ namespace Sabim.Infrastructure.Persistence.Repository.Implementations
 
             return auditTrail;
         }
-
         public async Task<List<ResultPersonelAyrilisDto>> GetPersonelIzinleriByIdAsync(short personelId, bool kaliciAyrilisMi, bool trackChanges)
         {
             IQueryable<PersonelAyrilis> query = _context.PersonelAyrilis;
@@ -537,6 +695,90 @@ namespace Sabim.Infrastructure.Persistence.Repository.Implementations
 
             return result;
         }
+        public async Task<List<PersonnelHistoryDto?>> GetPersonnelHistoryAsync(short id)
+        {
+            var personelHistory = new List<PersonnelHistoryDto>();
+
+            var personel = await _context.Personel.Where(p => p.PersonelID == id && p.DurumId==1)
+                .Select(p => new PersonnelHistoryDto
+                {
+                    Id = p.PersonelID,
+                    IslemTuru = "Mesleğe İlk Başlama",
+                    BaslamaTarihi = p.MeslegeGirisTarihi,
+                    BitisTarihi = null,
+                    Aciklama = "Personelin mesleğe ilk başlama tarihi"
+                }).FirstOrDefaultAsync();
+            if (personel != null)
+            {
+                personelHistory.Add(personel);
+            }
+
+            var buradaBaslama = await _context.Personel
+           .Where(p => p.PersonelID == id && p.DurumId == 1)
+           .Select(p => new PersonnelHistoryDto
+           {
+               Id = p.PersonelID,
+               IslemTuru = "Burada Göreve Başlama",
+               BaslamaTarihi = p.BuradaGoreveBaslamaTarihi,
+               BitisTarihi = null,
+               Aciklama = "Personelin mevcut kurumda göreve başlama tarihi"
+           }).FirstOrDefaultAsync();
+            if (buradaBaslama != null)
+            {
+                personelHistory.Add(buradaBaslama);
+            }
+
+            var kaliciAyrilis = await _context.PersonelAyrilis
+            .Where(kaliciAyrilis => kaliciAyrilis.PersonelId == id && kaliciAyrilis.DurumId == 1 && kaliciAyrilis.PersonelAyrilisNedenleri.KaliciAyrilisMi )
+            .Select(kaliciAyrilis => new PersonnelHistoryDto
+            {
+                Id = kaliciAyrilis.PersonelId,
+                IslemTuru = "Personel Kalıcı Ayrılış",
+                BaslamaTarihi = kaliciAyrilis.BaslangicTarihi,
+                BitisTarihi = kaliciAyrilis.BitisTarihi,
+                Aciklama = $"Personel <strong>{kaliciAyrilis.PersonelAyrilisNedenleri.Aciklama}</strong> gerekçesi ile kalıcı olarak görevden ayrılmıştır"
+            }).ToListAsync();
+            personelHistory.AddRange(kaliciAyrilis);
+
+            var geciciAyrilis = await _context.PersonelAyrilis
+            .Where(geciciAyrilis => geciciAyrilis.PersonelId == id && geciciAyrilis.DurumId == 1 && geciciAyrilis.PersonelAyrilisNedenleri.KaliciAyrilisMi==false)
+            .Select(geciciAyrilis => new PersonnelHistoryDto
+            {
+                Id = geciciAyrilis.PersonelId,
+                IslemTuru = "Personel Geçici Ayrılış",
+                BaslamaTarihi = geciciAyrilis.BaslangicTarihi,
+                BitisTarihi = geciciAyrilis.BitisTarihi,
+                Aciklama = $"Personel <strong>{geciciAyrilis.PersonelAyrilisNedenleri.Aciklama}</strong> gerekçesi ile geçici süre olarak görevden ayrılmıştır"
+            }).ToListAsync();
+            personelHistory.AddRange(geciciAyrilis);
+
+            var gorevlendirmeler = await _context.PersonelGorevlendirilme
+            .Where(g => g.PersonelId == id && g.DurumId == 1)
+            .Select(g => new PersonnelHistoryDto
+            {
+                Id = g.PersonelId,
+                IslemTuru = "Kurum İçi Görevlendirilme",
+                BaslamaTarihi = g.GorevlendirilmeBaslangicTarihi,
+                BitisTarihi = g.GorevlendirilmeBitisTarihi,
+                Aciklama = $"Personel <strong>{g.Kisim.Birim.Bolum.BolumAdi} - {g.Kisim.Birim.BirimAdi}</strong> biriminde <strong>{g.GorevlendirilmeTipi.GorevlendirilmeTipiAciklama}</strong> ile görevlendirildi"
+            }).ToListAsync();
+            personelHistory.AddRange(gorevlendirmeler);
+
+            var geciciGorevlendirmeler = await _context.PersonelGeciciGorevlendirilme
+            .Where(gg => gg.PersonelId == id && gg.DurumId == 1)
+            .Select(gg => new PersonnelHistoryDto
+            {
+                Id = gg.PersonelId,
+                IslemTuru = "Kurum Dışı Geçici Görevlendirme",
+                BaslamaTarihi = gg.BaslangicTarihi,
+                BitisTarihi = gg.BitisTarihi,
+                //Aciklama = gg.GorevlendirilmeTipi.GorevlendirilmeTipiAciklama
+                Aciklama = $"Personel <strong>{gg.PersonelAyrilisYeri.KurumAdi}</strong> kurumunda <strong>{gg.GorevlendirilmeTipi.GorevlendirilmeTipiAciklama}</strong> ile geçici olarak görevlendirildi"
+            }).ToListAsync();
+            personelHistory.AddRange(geciciGorevlendirmeler);
+
+            return personelHistory;
+        }
         public async Task<string> UpdateCalisilanKatipler(UpdateSavciCalisilanKatipDto updateSavciCalisilanKatipler)
         {
             try
@@ -575,6 +817,70 @@ namespace Sabim.Infrastructure.Persistence.Repository.Implementations
             catch
             {
                 return OperationStatus.GlobalError;
+            }
+        }
+        public async Task<string> UpdatePersonelGeciciGorevlendirilmeAsync(PersonelGeciciGorevlendirilme updatePersonelGeciciGorevlendirilme)
+        {
+            try
+            {
+                // 1️⃣ Tarih Çakışma Kontrolü
+                bool hasConflict = await _context.PersonelGeciciGorevlendirilme.AnyAsync(gorevlendirme =>
+                    gorevlendirme.PersonelId == updatePersonelGeciciGorevlendirilme.PersonelId &&
+                    gorevlendirme.PersonelGeciciGorevlendirilmeID != updatePersonelGeciciGorevlendirilme.PersonelGeciciGorevlendirilmeID && // Kendisini hariç tut
+                    (
+                        (gorevlendirme.BaslangicTarihi <= updatePersonelGeciciGorevlendirilme.BaslangicTarihi &&
+                         (gorevlendirme.BitisTarihi == null || updatePersonelGeciciGorevlendirilme.BaslangicTarihi <= gorevlendirme.BitisTarihi)) ||
+
+                        (updatePersonelGeciciGorevlendirilme.BitisTarihi.HasValue &&
+                         gorevlendirme.BaslangicTarihi <= updatePersonelGeciciGorevlendirilme.BitisTarihi &&
+                         (gorevlendirme.BitisTarihi == null || updatePersonelGeciciGorevlendirilme.BitisTarihi <= gorevlendirme.BitisTarihi)) ||
+
+                        (gorevlendirme.BaslangicTarihi >= updatePersonelGeciciGorevlendirilme.BaslangicTarihi &&
+                         (updatePersonelGeciciGorevlendirilme.BitisTarihi == null || gorevlendirme.BitisTarihi <= updatePersonelGeciciGorevlendirilme.BitisTarihi)) ||
+
+                        (gorevlendirme.BaslangicTarihi == updatePersonelGeciciGorevlendirilme.BaslangicTarihi) ||
+
+                        (updatePersonelGeciciGorevlendirilme.BitisTarihi.HasValue &&
+                         gorevlendirme.BitisTarihi.HasValue &&
+                         gorevlendirme.BitisTarihi == updatePersonelGeciciGorevlendirilme.BitisTarihi)
+                    )
+                );
+                if (hasConflict)
+                {
+                    return OperationStatus.DateConflict; // Çakışma var, güncelleme yapılamaz
+                }
+                if (updatePersonelGeciciGorevlendirilme.BitisTarihi == null || updatePersonelGeciciGorevlendirilme.BitisTarihi.Value.Date > DateTime.Now.Date)
+                {
+                    var eskiGorevlendirmeler = await _context.PersonelGorevlendirilme
+                        .Where(pg => pg.PersonelId == updatePersonelGeciciGorevlendirilme.PersonelId && pg.GorevlendirilmeBitisTarihi == null && pg.DurumId == 1 && pg.GorevlendirilmeAktifMi == true)
+                        .ToListAsync();
+
+                    foreach (var kayit in eskiGorevlendirmeler)
+                    {
+                        kayit.GorevlendirilmeBitisTarihi = updatePersonelGeciciGorevlendirilme.BaslangicTarihi;
+                        kayit.GorevlendirilmeAktifMi = false;
+                    }
+
+                    // 4️⃣ Personel Tablosunu Güncelle
+                    var personel = await _context.Personel.FirstOrDefaultAsync(p => p.PersonelID == updatePersonelGeciciGorevlendirilme.PersonelId);
+                    if (personel != null)
+                    {
+                        personel.CalismaDurumuId = 2;
+                        personel.GorevlendirilmeTuruId = 3;
+                    }
+                }
+                _context.Entry(updatePersonelGeciciGorevlendirilme).State = EntityState.Modified;
+
+                var affectedRows = await _context.SaveChangesAsync();
+                return affectedRows > 0 ? OperationStatus.Success : OperationStatus.GlobalError;
+            }
+            catch (DbUpdateException)
+            {
+                return OperationStatus.GlobalError; // Veritabanı hatası
+            }
+            catch (Exception)
+            {
+                return OperationStatus.GlobalError; // Genel hata
             }
         }
         public async Task<string> UpdatePersonelIzinAsync(PersonelAyrilis updatePersonelAyrilis)
