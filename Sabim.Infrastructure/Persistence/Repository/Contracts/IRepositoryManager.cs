@@ -1,6 +1,4 @@
-﻿using Sabim.Domain.Entities;
-
-namespace Sabim.Infrastructure.Persistence.Repository.Contracts
+﻿namespace Sabim.Infrastructure.Persistence.Repository.Contracts
 {
     public interface IRepositoryManager
     {
@@ -26,5 +24,11 @@ namespace Sabim.Infrastructure.Persistence.Repository.Contracts
         ISidebarMenuRepository SidebarMenu { get; } 
         IEkranRepository Ekran { get; }
         ISavciCalisilanKatipServiceRepository SavciCalisilanKatip { get; }
+        IMalzemeTuruRepository MalzemeTuru { get; }
+        IMalzemeCinsiRepository MalzemeCinsi{ get; }
+        IMalzemeMarkaRepository MalzemeMarka{ get; }
+        IMalzemeModelRepository MalzemeModel { get; }
+        IMalzemeDurumuRepository MalzemeDurumu { get; }
+        IMalzemeRepository Malzeme { get; }
     }
 }

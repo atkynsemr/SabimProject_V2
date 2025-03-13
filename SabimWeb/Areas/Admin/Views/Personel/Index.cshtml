@@ -442,7 +442,7 @@
 </div>
 <!-- ./Personel Silme Modal Başlangıç-->
 <!-- Modal -->
-<div class="modal fade" id="unvanBazlıVerilerModal" tabindex="-1" role="dialog" aria-labelledby="unvanBazlıVerilerModalLabel" aria-hidden="true">
+<div class="modal fade" id="unvanBazliVerilerModal" tabindex="-1" role="dialog" aria-labelledby="unvanBazliVerilerModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header font-weight-bolder text-primary">
@@ -456,7 +456,7 @@
                 <!-- Partial view içeriği burada dinamik olarak yerleştirilecek -->
             </div>
             <div class="modal-footer">
-                <button type="button" id="unvanBazlıVerilerCloseModal" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" id="unvanBazliVerilerButton" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
             </div>
         </div>
     </div>
@@ -484,7 +484,7 @@
 <!-- ./Personel Safahat Modal Başlangıç-->
 <div class="card">
     <div class="d-flex card-header">
-        <button type="button" class="btn btn-outline-dark btn-flat my-2" data-toggle="modal" data-target="#unvanBazlıVerilerModal"><i class="fas fa-chart-bar mr-1"></i> Ünvan İstatistikleri</button>
+        <button type="button" id="personelIstatistikBtn" class="btn btn-outline-dark btn-flat my-2" data-toggle="modal" data-target="#unvanBazliVerilerModal"><i class="fas fa-chart-bar mr-1"></i> Ünvan İstatistikleri</button>
         @Html.Raw(IconHelper.CreateButton("btn btn-outline-primary btn-flat my-2 ml-auto", "Yeni Personel", IconHelper.GetAddIcon(), "Yeni Personel Ekle", "createModal"))
     </div>
     <div class="card-body mt-2">
@@ -632,6 +632,13 @@
                     table.columns.adjust().draw(); // Sütunları yeniden boyutlandır ve yeniden çiz
                 }, 400); // Animasyon tamamlandıktan sonra
             });
+            $('#unvanBazliVerilerModal').on('hidden.bs.modal', function () {
+                    location.reload();
+            });
+            $(document).one('click', '#personelIstatistikBtn', function(event) {
+                event.preventDefault(); // Tekrar tetiklenmesini engelle
+                showUnvanBazliVerilerModal();
+            });
             $(document).one('click', '.btn-edit', function (event) {
                 event.preventDefault(); // Tekrar tetiklenmesini engelle
                 let id = $(this).data('id');
@@ -691,6 +698,18 @@
             toggleCreateKatiplerContent();
             toggleUpdateKatiplerContent();
         });
+        function showUnvanBazliVerilerModal() {
+                $.ajax({
+                url: '/Admin/Personel/UnvanBazliVeriler',
+                    type: 'GET',
+                    success: function(data) {
+                        $('#modalContent').html(data); // Verileri partial view içine yerleştir
+                    },
+                    error: function(response) {
+                        $('#loadingMessage').text('Veriler Yüklenemedi. Lütfen Bilgi İşlem Müdürlüğüne Bildiriniz.');
+                    }
+                });
+        }
         function initDataTable() {
             $('#example').DataTable({
                 "scrollX": true,
@@ -1172,6 +1191,5 @@
         }
     </script>
 }
-
 
 

@@ -1106,6 +1106,322 @@ namespace Sabim.Infrastructure.Persistence.Migrations
                     b.ToTable("KurumTipi");
                 });
 
+            modelBuilder.Entity("Sabim.Domain.Entities.Malzeme", b =>
+                {
+                    b.Property<short>("MalzemeID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("MalzemeID"));
+
+                    b.Property<short>("DurumId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<DateTime?>("GuncellenmeTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<short?>("GuncelleyenPersonelId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<byte>("MalzemeDurumuId")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("MalzemeModelId")
+                        .HasColumnType("tinyint");
+
+                    b.Property<short?>("OlusturanPersonelId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<DateTime?>("OlusturulmaTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SeriNumarasi")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(25)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(25)");
+
+                    b.Property<short?>("SilenPersonelId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<DateTime?>("SilinmeTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("MalzemeID");
+
+                    b.HasIndex("DurumId");
+
+                    b.HasIndex("GuncelleyenPersonelId");
+
+                    b.HasIndex("MalzemeDurumuId");
+
+                    b.HasIndex("MalzemeModelId");
+
+                    b.HasIndex("OlusturanPersonelId");
+
+                    b.HasIndex("SilenPersonelId");
+
+                    b.ToTable("Malzeme", (string)null);
+                });
+
+            modelBuilder.Entity("Sabim.Domain.Entities.MalzemeCinsi", b =>
+                {
+                    b.Property<byte>("MalzemeCinsiID")
+                        .HasColumnType("tinyint");
+
+                    b.Property<short>("DurumId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<DateTime?>("GuncellenmeTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<short?>("GuncelleyenPersonelId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<string>("MalzemeCinsiAdi")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(25)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(25)");
+
+                    b.Property<byte>("MalzemeTuruId")
+                        .HasColumnType("tinyint");
+
+                    b.Property<short?>("OlusturanPersonelId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<DateTime?>("OlusturulmaTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<short?>("SilenPersonelId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<DateTime?>("SilinmeTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("MalzemeCinsiID");
+
+                    b.HasIndex("DurumId");
+
+                    b.HasIndex("GuncelleyenPersonelId");
+
+                    b.HasIndex("MalzemeCinsiAdi")
+                        .IsUnique();
+
+                    b.HasIndex("MalzemeTuruId");
+
+                    b.HasIndex("OlusturanPersonelId");
+
+                    b.HasIndex("SilenPersonelId");
+
+                    b.ToTable("MalzemeCinsi", (string)null);
+                });
+
+            modelBuilder.Entity("Sabim.Domain.Entities.MalzemeDurumu", b =>
+                {
+                    b.Property<byte>("MalzemeDurumuID")
+                        .HasColumnType("tinyint");
+
+                    b.Property<short>("DurumId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<DateTime?>("GuncellenmeTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<short?>("GuncelleyenPersonelId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<string>("MalzemeDurumuAdi")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<short?>("OlusturanPersonelId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<DateTime?>("OlusturulmaTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<short?>("SilenPersonelId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<DateTime?>("SilinmeTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("MalzemeDurumuID");
+
+                    b.HasIndex("DurumId");
+
+                    b.HasIndex("GuncelleyenPersonelId");
+
+                    b.HasIndex("MalzemeDurumuAdi")
+                        .IsUnique();
+
+                    b.HasIndex("OlusturanPersonelId");
+
+                    b.HasIndex("SilenPersonelId");
+
+                    b.ToTable("MalzemeDurumu", (string)null);
+                });
+
+            modelBuilder.Entity("Sabim.Domain.Entities.MalzemeMarka", b =>
+                {
+                    b.Property<byte>("MalzemeMarkaID")
+                        .HasColumnType("tinyint");
+
+                    b.Property<short>("DurumId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<DateTime?>("GuncellenmeTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<short?>("GuncelleyenPersonelId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<string>("MarkaAdi")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<short?>("OlusturanPersonelId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<DateTime?>("OlusturulmaTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<short?>("SilenPersonelId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<DateTime?>("SilinmeTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("MalzemeMarkaID");
+
+                    b.HasIndex("DurumId");
+
+                    b.HasIndex("GuncelleyenPersonelId");
+
+                    b.HasIndex("MarkaAdi")
+                        .IsUnique();
+
+                    b.HasIndex("OlusturanPersonelId");
+
+                    b.HasIndex("SilenPersonelId");
+
+                    b.ToTable("MalzemeMarka", (string)null);
+                });
+
+            modelBuilder.Entity("Sabim.Domain.Entities.MalzemeModel", b =>
+                {
+                    b.Property<byte>("MalzemeModelID")
+                        .HasColumnType("tinyint");
+
+                    b.Property<short>("DurumId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<DateTime?>("GuncellenmeTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<short?>("GuncelleyenPersonelId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<byte>("MalzemeCinsiId")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("MalzemeMarkaId")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("ModelAdi")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(25)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(25)");
+
+                    b.Property<short?>("OlusturanPersonelId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<DateTime?>("OlusturulmaTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<short?>("SilenPersonelId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<DateTime?>("SilinmeTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("MalzemeModelID");
+
+                    b.HasIndex("DurumId");
+
+                    b.HasIndex("GuncelleyenPersonelId");
+
+                    b.HasIndex("MalzemeCinsiId");
+
+                    b.HasIndex("MalzemeMarkaId");
+
+                    b.HasIndex("OlusturanPersonelId");
+
+                    b.HasIndex("SilenPersonelId");
+
+                    b.ToTable("MalzemeModel", (string)null);
+                });
+
+            modelBuilder.Entity("Sabim.Domain.Entities.MalzemeTuru", b =>
+                {
+                    b.Property<byte>("MalzemeTuruID")
+                        .HasColumnType("tinyint");
+
+                    b.Property<short>("DurumId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<DateTime?>("GuncellenmeTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<short?>("GuncelleyenPersonelId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<short?>("OlusturanPersonelId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<DateTime?>("OlusturulmaTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<short?>("SilenPersonelId")
+                        .HasColumnType("SMALLINT");
+
+                    b.Property<DateTime?>("SilinmeTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TurAdi")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(30)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(30)");
+
+                    b.HasKey("MalzemeTuruID");
+
+                    b.HasIndex("DurumId");
+
+                    b.HasIndex("GuncelleyenPersonelId");
+
+                    b.HasIndex("OlusturanPersonelId");
+
+                    b.HasIndex("SilenPersonelId");
+
+                    b.HasIndex("TurAdi")
+                        .IsUnique();
+
+                    b.ToTable("MalzemeTuru", (string)null);
+                });
+
             modelBuilder.Entity("Sabim.Domain.Entities.Personel", b =>
                 {
                     b.Property<short>("PersonelID")
@@ -1420,6 +1736,8 @@ namespace Sabim.Infrastructure.Persistence.Migrations
                     b.HasKey("PersonelGeciciGorevlendirilmeID");
 
                     b.HasIndex("DurumId");
+
+                    b.HasIndex("GorevlendirilmeTipiId");
 
                     b.HasIndex("GuncelleyenPersonelId");
 
@@ -2416,6 +2734,238 @@ namespace Sabim.Infrastructure.Persistence.Migrations
                     b.Navigation("SilenPersonel");
                 });
 
+            modelBuilder.Entity("Sabim.Domain.Entities.Malzeme", b =>
+                {
+                    b.HasOne("Sabim.Domain.Entities.Durum", "Durum")
+                        .WithMany()
+                        .HasForeignKey("DurumId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Sabim.Domain.Entities.Personel", "GuncelleyenPersonel")
+                        .WithMany()
+                        .HasForeignKey("GuncelleyenPersonelId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Sabim.Domain.Entities.MalzemeDurumu", "MalzemeDurumu")
+                        .WithMany("Malzemes")
+                        .HasForeignKey("MalzemeDurumuId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Sabim.Domain.Entities.MalzemeModel", "MalzemeModel")
+                        .WithMany("Malzemes")
+                        .HasForeignKey("MalzemeModelId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Sabim.Domain.Entities.Personel", "OlusturanPersonel")
+                        .WithMany()
+                        .HasForeignKey("OlusturanPersonelId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Sabim.Domain.Entities.Personel", "SilenPersonel")
+                        .WithMany()
+                        .HasForeignKey("SilenPersonelId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Durum");
+
+                    b.Navigation("GuncelleyenPersonel");
+
+                    b.Navigation("MalzemeDurumu");
+
+                    b.Navigation("MalzemeModel");
+
+                    b.Navigation("OlusturanPersonel");
+
+                    b.Navigation("SilenPersonel");
+                });
+
+            modelBuilder.Entity("Sabim.Domain.Entities.MalzemeCinsi", b =>
+                {
+                    b.HasOne("Sabim.Domain.Entities.Durum", "Durum")
+                        .WithMany()
+                        .HasForeignKey("DurumId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Sabim.Domain.Entities.Personel", "GuncelleyenPersonel")
+                        .WithMany()
+                        .HasForeignKey("GuncelleyenPersonelId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Sabim.Domain.Entities.MalzemeTuru", "MalzemeTuru")
+                        .WithMany("MalzemeCinsis")
+                        .HasForeignKey("MalzemeTuruId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Sabim.Domain.Entities.Personel", "OlusturanPersonel")
+                        .WithMany()
+                        .HasForeignKey("OlusturanPersonelId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Sabim.Domain.Entities.Personel", "SilenPersonel")
+                        .WithMany()
+                        .HasForeignKey("SilenPersonelId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Durum");
+
+                    b.Navigation("GuncelleyenPersonel");
+
+                    b.Navigation("MalzemeTuru");
+
+                    b.Navigation("OlusturanPersonel");
+
+                    b.Navigation("SilenPersonel");
+                });
+
+            modelBuilder.Entity("Sabim.Domain.Entities.MalzemeDurumu", b =>
+                {
+                    b.HasOne("Sabim.Domain.Entities.Durum", "Durum")
+                        .WithMany()
+                        .HasForeignKey("DurumId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Sabim.Domain.Entities.Personel", "GuncelleyenPersonel")
+                        .WithMany()
+                        .HasForeignKey("GuncelleyenPersonelId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Sabim.Domain.Entities.Personel", "OlusturanPersonel")
+                        .WithMany()
+                        .HasForeignKey("OlusturanPersonelId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Sabim.Domain.Entities.Personel", "SilenPersonel")
+                        .WithMany()
+                        .HasForeignKey("SilenPersonelId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Durum");
+
+                    b.Navigation("GuncelleyenPersonel");
+
+                    b.Navigation("OlusturanPersonel");
+
+                    b.Navigation("SilenPersonel");
+                });
+
+            modelBuilder.Entity("Sabim.Domain.Entities.MalzemeMarka", b =>
+                {
+                    b.HasOne("Sabim.Domain.Entities.Durum", "Durum")
+                        .WithMany()
+                        .HasForeignKey("DurumId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Sabim.Domain.Entities.Personel", "GuncelleyenPersonel")
+                        .WithMany()
+                        .HasForeignKey("GuncelleyenPersonelId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Sabim.Domain.Entities.Personel", "OlusturanPersonel")
+                        .WithMany()
+                        .HasForeignKey("OlusturanPersonelId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Sabim.Domain.Entities.Personel", "SilenPersonel")
+                        .WithMany()
+                        .HasForeignKey("SilenPersonelId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Durum");
+
+                    b.Navigation("GuncelleyenPersonel");
+
+                    b.Navigation("OlusturanPersonel");
+
+                    b.Navigation("SilenPersonel");
+                });
+
+            modelBuilder.Entity("Sabim.Domain.Entities.MalzemeModel", b =>
+                {
+                    b.HasOne("Sabim.Domain.Entities.Durum", "Durum")
+                        .WithMany()
+                        .HasForeignKey("DurumId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Sabim.Domain.Entities.Personel", "GuncelleyenPersonel")
+                        .WithMany()
+                        .HasForeignKey("GuncelleyenPersonelId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Sabim.Domain.Entities.MalzemeCinsi", "MalzemeCinsi")
+                        .WithMany("MalzemeModels")
+                        .HasForeignKey("MalzemeCinsiId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Sabim.Domain.Entities.MalzemeMarka", "MalzemeMarka")
+                        .WithMany("MalzemeModels")
+                        .HasForeignKey("MalzemeMarkaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Sabim.Domain.Entities.Personel", "OlusturanPersonel")
+                        .WithMany()
+                        .HasForeignKey("OlusturanPersonelId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Sabim.Domain.Entities.Personel", "SilenPersonel")
+                        .WithMany()
+                        .HasForeignKey("SilenPersonelId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Durum");
+
+                    b.Navigation("GuncelleyenPersonel");
+
+                    b.Navigation("MalzemeCinsi");
+
+                    b.Navigation("MalzemeMarka");
+
+                    b.Navigation("OlusturanPersonel");
+
+                    b.Navigation("SilenPersonel");
+                });
+
+            modelBuilder.Entity("Sabim.Domain.Entities.MalzemeTuru", b =>
+                {
+                    b.HasOne("Sabim.Domain.Entities.Durum", "Durum")
+                        .WithMany()
+                        .HasForeignKey("DurumId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Sabim.Domain.Entities.Personel", "GuncelleyenPersonel")
+                        .WithMany()
+                        .HasForeignKey("GuncelleyenPersonelId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Sabim.Domain.Entities.Personel", "OlusturanPersonel")
+                        .WithMany()
+                        .HasForeignKey("OlusturanPersonelId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Sabim.Domain.Entities.Personel", "SilenPersonel")
+                        .WithMany()
+                        .HasForeignKey("SilenPersonelId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Durum");
+
+                    b.Navigation("GuncelleyenPersonel");
+
+                    b.Navigation("OlusturanPersonel");
+
+                    b.Navigation("SilenPersonel");
+                });
+
             modelBuilder.Entity("Sabim.Domain.Entities.Personel", b =>
                 {
                     b.HasOne("Sabim.Domain.Entities.CalismaDurumu", "CalismaDurumu")
@@ -2599,6 +3149,12 @@ namespace Sabim.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Sabim.Domain.Entities.GorevlendirilmeTipi", "GorevlendirilmeTipi")
+                        .WithMany("PersonelGeciciGorevlendirilmes")
+                        .HasForeignKey("GorevlendirilmeTipiId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Sabim.Domain.Entities.Personel", "GuncelleyenPersonel")
                         .WithMany()
                         .HasForeignKey("GuncelleyenPersonelId")
@@ -2627,6 +3183,8 @@ namespace Sabim.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Durum");
+
+                    b.Navigation("GorevlendirilmeTipi");
 
                     b.Navigation("GuncelleyenPersonel");
 
@@ -2914,6 +3472,8 @@ namespace Sabim.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Sabim.Domain.Entities.GorevlendirilmeTipi", b =>
                 {
+                    b.Navigation("PersonelGeciciGorevlendirilmes");
+
                     b.Navigation("PersonelGorevlendirilmes");
                 });
 
@@ -2954,6 +3514,31 @@ namespace Sabim.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("Sabim.Domain.Entities.KurumTipi", b =>
                 {
                     b.Navigation("Kurums");
+                });
+
+            modelBuilder.Entity("Sabim.Domain.Entities.MalzemeCinsi", b =>
+                {
+                    b.Navigation("MalzemeModels");
+                });
+
+            modelBuilder.Entity("Sabim.Domain.Entities.MalzemeDurumu", b =>
+                {
+                    b.Navigation("Malzemes");
+                });
+
+            modelBuilder.Entity("Sabim.Domain.Entities.MalzemeMarka", b =>
+                {
+                    b.Navigation("MalzemeModels");
+                });
+
+            modelBuilder.Entity("Sabim.Domain.Entities.MalzemeModel", b =>
+                {
+                    b.Navigation("Malzemes");
+                });
+
+            modelBuilder.Entity("Sabim.Domain.Entities.MalzemeTuru", b =>
+                {
+                    b.Navigation("MalzemeCinsis");
                 });
 
             modelBuilder.Entity("Sabim.Domain.Entities.Personel", b =>

@@ -779,6 +779,27 @@ namespace Sabim.Infrastructure.Persistence.Repository.Implementations
 
             return personelHistory;
         }
+
+        public async Task<List<PersonnelTitleStatisticsDto?>> GetUnvanBazliVerilerAsync()
+        {
+            var result = await _context.Personel
+                .Join(
+                    _context.Unvan,  // Unvan tablosu ile join yapıyoruz
+                    p => p.UnvanId,   // Personel tablosundaki UnvanId ile
+                    u => u.UnvanID,   // Unvan tablosundaki UnvanID ile eşleştiriyoruz
+                    (p, u) => new { p, u } // Personel ve Unvan objelerini birleştiriyoruz
+                )
+                .GroupBy(x => new { x.u.UnvanAdi, x.p.GorevlendirilmeTuru.GorevlendirilmeTuruAdi, x.u.OncelikSirasi })  // UnvanAdi, GorevlendirilmeTuruAdi ve OncelikSirasi'na göre grupla
+                .OrderBy(g => g.Key.OncelikSirasi)  // OncelikSirasi'na göre sıralama yapıyoruz
+                .Select(g => new PersonnelTitleStatisticsDto
+                {
+                    UnvanAdi = g.Key.UnvanAdi,  // Unvan adı
+                    UnvanSayisi = (short)g.Count(),  // Unvan sayısı
+                    GorevDurumu = g.Key.GorevlendirilmeTuruAdi  // Görevlendirilme türü
+                }).ToListAsync();
+            return result;
+        }
+
         public async Task<string> UpdateCalisilanKatipler(UpdateSavciCalisilanKatipDto updateSavciCalisilanKatipler)
         {
             try

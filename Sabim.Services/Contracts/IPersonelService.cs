@@ -2,7 +2,6 @@
 using Sabim.Domain.DTOs.PersonelAyrilisDtos;
 using Sabim.Domain.DTOs.PersonelDtos;
 using Sabim.Domain.DTOs.PersonelGeciciGorevlendirilmeDtos;
-using Sabim.Domain.DTOs.PersonelGorevlendirilmeDtos;
 using Sabim.Domain.DTOs.PersonelUnvanGecmisiDtos;
 using Sabim.Domain.DTOs.PersonelWithUserDto;
 using Sabim.Domain.DTOs.SavciCalisilanKatipDtos;
@@ -36,5 +35,6 @@ namespace Sabim.Services.Contracts
         Task<string> TDeletePersonelGeciciGorevlendirilmeAsync(short personelGeciciGorevlendirilmeID);
         Task<AuditTrailDto?> TGetGeciciGorevlendirilmeAuditTrailWithDetailsAsync(short id);
         Task<List<PersonnelHistoryDto?>> TGetPersonnelHistoryAsync(short id);
+        Task<List<PersonnelTitleStatisticsDto?>> TGetUnvanBazliVerilerAsync();
     }
 }

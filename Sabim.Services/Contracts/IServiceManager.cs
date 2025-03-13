@@ -27,5 +27,11 @@
         ILoggerService LoggerService { get; }
         ISavciCalisilanKatipService SavciCalisilanKatipService { get; }
         IPersonelAyrilisNedenleriService PersonelAyrilisNedenleriService { get; }
+        IMalzemeTuruService MalzemeTuruService { get; }
+        IMalzemeCinsiService MalzemeCinsiService { get; }
+        IMalzemeMarkaService MalzemeMarkaService { get; }
+        IMalzemeModelService MalzemeModelService { get; }
+        IMalzemeDurumuService MalzemeDurumuService { get; }
+        IMalzemeService MalzemeService { get; }
     }
 }

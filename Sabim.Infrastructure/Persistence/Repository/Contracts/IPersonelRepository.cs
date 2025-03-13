@@ -34,5 +34,6 @@ namespace Sabim.Infrastructure.Persistence.Repository.Contracts
         Task<string> DeletePersonelGeciciGorevlendirilmeAsync(short personelGeciciGorevlendirilmeID);
         Task<AuditTrailDto?> GetGeciciGorevlendirilmeAuditTrailWithDetailsAsync(short id);
         Task<List<PersonnelHistoryDto?>> GetPersonnelHistoryAsync(short id);
+        Task<List<PersonnelTitleStatisticsDto?>> GetUnvanBazliVerilerAsync();
     }
 }

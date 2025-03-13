@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
-using Sabim.Domain.DTOs.CinsiyetDtos;
 using Sabim.Domain.DTOs.KurumTipiDtos;
 using Sabim.Domain.Entities;
 using Sabim.Infrastructure.Persistence.Context;

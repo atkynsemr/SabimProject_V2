@@ -1,0 +1,23 @@
+﻿@using Sabim.Domain.DTOs.MalzemeTuruDtos
+@model List<ResultMalzemeTuruDto>
+<tbody class="text-heading">
+    @foreach (var malzemeTur in Model)
+    {
+        <tr>
+            <td>@malzemeTur.TurAdi</td>
+            <td class="text-center">
+                <div class="d-flex align-items-center justify-content-center">
+                    @Html.Raw(IconHelper.GetStatusNameIcon(malzemeTur.DurumAdi))
+                    <span class="badge badge-lg @BadgeHelper.GetBadgeClass(malzemeTur.DurumId)"> @malzemeTur.DurumAdi</span>
+                </div>
+            </td>
+            <td class="text-center">
+                <div class="d-flex align-items-center justify-content-center">
+                    @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-showinfo", "", IconHelper.GetInfoIcon(), "Göster", "showInfoMalzemeTuru", malzemeTur.MalzemeTuruID.ToString()))
+                    @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-edit", "", IconHelper.GetEditIcon(), "Düzenle", "editMalzemeTuru", malzemeTur.MalzemeTuruID.ToString()))
+                    @Html.Raw(IconHelper.CreateLink("btn btn-icon btn-delete", "", IconHelper.GetDeleteIcon(), "Sil", "deleteMalzemeTuru", malzemeTur.MalzemeTuruID.ToString()))
+                </div>
+            </td>
+        </tr>
+    }
+</tbody>

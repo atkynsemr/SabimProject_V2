@@ -457,7 +457,6 @@ namespace Sabim.Infrastructure.Persistence.Repository.Implementations
                 ? await query.ToListAsync()
                 : await query.AsNoTracking().ToListAsync();
         }
-
         public async Task<T> FindByIdWithIncludesAsync<TKey>(TKey id, bool trackChanges, params Expression<Func<T, object>>[] childrens)
         {
             if (!PrimaryKeyCache.TryGetValue(typeof(T), out var keyProperty))

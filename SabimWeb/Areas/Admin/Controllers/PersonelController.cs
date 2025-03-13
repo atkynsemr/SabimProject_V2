@@ -692,6 +692,12 @@ namespace Sabim.Web.Areas.Admin.Controllers
             };
             return View(viewModel);
         }
+        [HttpGet]
+        public async Task<IActionResult> UnvanBazliVeriler()
+        {
+            var veriler = await _manager.PersonelService.TGetUnvanBazliVerilerAsync();
+            return PartialView("~/Views/Shared/Partials/_UnvanBazliVeriler.cshtml", veriler);
+        }
     }
 }
 

@@ -1,0 +1,12 @@
+﻿@using Sabim.Domain.DTOs.MalzemeModelDtos
+@model List<ResultMalzemeModelDto>
+
+<div class="form-group">
+    <label for="ModelAdi">Malzeme Model</label>
+    <select class="form-control" id="@(ViewBag.Deger ?? "")MalzemeModelleri" name="MalzemeModelID" style="width: 100%;">
+        @foreach (var malzemeModel in Model)
+        {
+            <option value="@malzemeModel.MalzemeModelID" selected="@malzemeModel.Selected">@malzemeModel.ModelAdi</option>
+        }
+    </select>
+</div>

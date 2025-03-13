@@ -1,0 +1,25 @@
+﻿@using Sabim.Domain.DTOs.MalzemeModelDtos
+@model List<ResultMalzemeModelDto>
+<tbody class="text-heading">
+    @foreach (var malzemeModel in Model)
+    {
+        <tr>
+            <td>@malzemeModel.MarkaAdi</td>
+            <td>@malzemeModel.ModelAdi</td>
+            <td>@malzemeModel.MalzemeCinsiAdi</td>
+            <td class="text-center">
+                <div class="d-flex align-items-center justify-content-center">
+                    @Html.Raw(IconHelper.GetStatusNameIcon(malzemeModel.DurumAdi))
+                    <span class="badge badge-lg @BadgeHelper.GetBadgeClass(malzemeModel.DurumId)"> @malzemeModel.DurumAdi</span>
+                </div>
+            </td>
+            <td class="text-center">
+                <div class="d-flex align-items-center justify-content-center">
+                    @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-showinfo", "", IconHelper.GetInfoIcon(), "Göster", "showInfoMalzemeModel", malzemeModel.MalzemeModelID.ToString()))
+                    @Html.Raw(IconHelper.CreateActionLink("btn btn-icon btn-edit", "", IconHelper.GetEditIcon(), "Düzenle", "editMalzemeModel", malzemeModel.MalzemeModelID.ToString()))
+                    @Html.Raw(IconHelper.CreateLink("btn btn-icon btn-delete", "", IconHelper.GetDeleteIcon(), "Sil", "deleteMalzemeModel", malzemeModel.MalzemeModelID.ToString()))
+                </div>
+            </td>
+        </tr>
+    }
+</tbody>

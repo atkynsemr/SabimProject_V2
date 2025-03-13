@@ -126,5 +126,10 @@ namespace Sabim.Services.Implementations
         {
             return await _repositoryManager.Personel.GetPersonnelHistoryAsync(id);
         }
+
+        public async Task<List<PersonnelTitleStatisticsDto?>> TGetUnvanBazliVerilerAsync()
+        {
+            return await _repositoryManager.Personel.GetUnvanBazliVerilerAsync();
+        }
     }
 }

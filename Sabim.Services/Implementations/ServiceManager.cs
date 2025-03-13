@@ -29,13 +29,19 @@ namespace Sabim.Services.Implementations
         private readonly ILoggerService _loggerService;
         private readonly ISavciCalisilanKatipService _savciCalisilanKatipService;
         private readonly IPersonelAyrilisNedenleriService _personelAyrilisNedenleriService;
+        private readonly IMalzemeTuruService _malzemeTuruService;
+        private readonly IMalzemeCinsiService _malzemeCinsiService;
+        private readonly IMalzemeMarkaService _malzemeMarkaService;
+        private readonly IMalzemeModelService _malzemeModelService;
+        private readonly IMalzemeDurumuService _malzemeDurumuService;
+        private readonly IMalzemeService _malzemeService;
 
         public ServiceManager(ICalismaDurumuService calismaDurumuService, ICinsiyetService cinsiyetService, IDurumService durumService,
             IGorevlendirilmeTuruService gorevlendirilmeTuruService, IKadroTuruService kadroTuruService,
             IKanGrubuService kanGrubuService, IKurumService kurumService, IKurumTipiService kurumTipiService, IPersonelService personelService,
             ISehirService sehirService, IUnvanService unvanService, IBolumService bolumService, IBirimService birimService, IKisimService kisimService, IKabinetBazliBolumService kabinetBazliBolumService,
             IGorevlendirilmeTipiService gorevlendirilmeTipiService, IPersonelGorevlendirilmeService personelGorevlendirilmeService, IAppRoleService appRoleService, IAppUserService appUserService,
-            ISidebarMenuService sidebarMenuService, IEkranService ekranService, IEmailService emailService, ILoggerService loggerService, ISavciCalisilanKatipService savciCalisilanKatipService, IPersonelAyrilisNedenleriService personelAyrilisNedenleriService)
+            ISidebarMenuService sidebarMenuService, IEkranService ekranService, IEmailService emailService, ILoggerService loggerService, ISavciCalisilanKatipService savciCalisilanKatipService, IPersonelAyrilisNedenleriService personelAyrilisNedenleriService, IMalzemeTuruService malzemeTuruService, IMalzemeCinsiService malzemeCinsiService, IMalzemeMarkaService malzemeMarkaService, IMalzemeModelService malzemeModelService, IMalzemeDurumuService malzemeDurumuService, IMalzemeService malzemeService)
         {
             _calismaDurumuService = calismaDurumuService;
             _cinsiyetService = cinsiyetService;
@@ -62,6 +68,12 @@ namespace Sabim.Services.Implementations
             _loggerService = loggerService;
             _savciCalisilanKatipService = savciCalisilanKatipService;
             _personelAyrilisNedenleriService = personelAyrilisNedenleriService;
+            _malzemeTuruService = malzemeTuruService;
+            _malzemeCinsiService = malzemeCinsiService;
+            _malzemeMarkaService = malzemeMarkaService;
+            _malzemeModelService = malzemeModelService;
+            _malzemeDurumuService = malzemeDurumuService;
+            _malzemeService = malzemeService;
         }
 
         public ICalismaDurumuService CalismaDurumuService => _calismaDurumuService;
@@ -89,5 +101,11 @@ namespace Sabim.Services.Implementations
         public ILoggerService LoggerService => _loggerService;
         public ISavciCalisilanKatipService SavciCalisilanKatipService => _savciCalisilanKatipService;
         public IPersonelAyrilisNedenleriService PersonelAyrilisNedenleriService => _personelAyrilisNedenleriService;
+        public IMalzemeTuruService MalzemeTuruService => _malzemeTuruService;
+        public IMalzemeCinsiService MalzemeCinsiService => _malzemeCinsiService;
+        public IMalzemeMarkaService MalzemeMarkaService => _malzemeMarkaService;
+        public IMalzemeModelService MalzemeModelService => _malzemeModelService;
+        public IMalzemeDurumuService MalzemeDurumuService => _malzemeDurumuService;
+        public IMalzemeService MalzemeService => _malzemeService;
     }
 }

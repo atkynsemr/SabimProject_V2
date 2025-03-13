@@ -52,6 +52,13 @@ namespace Sabim.Web.Extensions
             services.AddScoped<IRepositoryBase<Ekran>, EkranRepository>();
             services.AddScoped<IRepositoryBase<SavciCalisilanKatip>, SavciCalisilanKatipServiceRepository>();
             services.AddScoped<IRepositoryBase<PersonelAyrilisNedenleri>, PersonelAyrilisNedenleriRepository>();
+            services.AddScoped<IRepositoryBase<MalzemeTuru>, MalzemeTuruRepository>();
+            services.AddScoped<IRepositoryBase<MalzemeCinsi>, MalzemeCinsiRepository>();
+            services.AddScoped<IRepositoryBase<MalzemeMarka>, MalzemeMarkaRepository>();
+            services.AddScoped<IRepositoryBase<MalzemeModel>, MalzemeModelRepository>();
+            services.AddScoped<IRepositoryBase<MalzemeDurumu>, MalzemeDurumuRepository>();
+            services.AddScoped<IRepositoryBase<Malzeme>, MalzemeRepository>();
+
             //Repository
             services.AddScoped<ICalismaDurumuRepository, CalismaDurumuRepository>();
             services.AddScoped<ICinsiyetRepository, CinsiyetRepository>();
@@ -76,6 +83,12 @@ namespace Sabim.Web.Extensions
             services.AddScoped<IEkranRepository, EkranRepository>();
             services.AddScoped<ISavciCalisilanKatipServiceRepository, SavciCalisilanKatipServiceRepository>();
             services.AddScoped<IPersonelAyrilisNedenleriRepository, PersonelAyrilisNedenleriRepository>();
+            services.AddScoped<IMalzemeTuruRepository, MalzemeTuruRepository>();
+            services.AddScoped<IMalzemeCinsiRepository, MalzemeCinsiRepository>();
+            services.AddScoped<IMalzemeMarkaRepository, MalzemeMarkaRepository>();
+            services.AddScoped<IMalzemeModelRepository, MalzemeModelRepository>();
+            services.AddScoped<IMalzemeDurumuRepository, MalzemeDurumuRepository>();
+            services.AddScoped<IMalzemeRepository, MalzemeRepository>();
         }
         public static void ConfigureRepositoryManager(this IServiceCollection services)
         {
@@ -112,6 +125,12 @@ namespace Sabim.Web.Extensions
             services.AddSingleton<ILoggerService, LoggerService>();
             services.AddScoped<ISavciCalisilanKatipService, SavciCalisilanKatipService>();
             services.AddScoped<IPersonelAyrilisNedenleriService, PersonelAyrilisNedenleriService>();
+            services.AddScoped<IMalzemeTuruService, MalzemeTuruService>();
+            services.AddScoped<IMalzemeCinsiService, MalzemeCinsiService>();
+            services.AddScoped<IMalzemeMarkaService, MalzemeMarkaService>();
+            services.AddScoped<IMalzemeModelService, MalzemeModelService>();
+            services.AddScoped<IMalzemeDurumuService, MalzemeDurumuService>();
+            services.AddScoped<IMalzemeService, MalzemeService>();
         }
         public static void ConfigureServiceManager(this IServiceCollection services)
         {

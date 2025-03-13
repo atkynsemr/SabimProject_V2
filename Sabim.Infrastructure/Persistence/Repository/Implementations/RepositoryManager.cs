@@ -28,6 +28,12 @@ namespace Sabim.Infrastructure.Persistence.Repository.Implementations
         private readonly ISidebarMenuRepository _sidebarMenuRepository;
         private readonly IEkranRepository _ekranRepository;
         private readonly ISavciCalisilanKatipServiceRepository _savciCalisilanKatipServiceRepository;
+        private readonly IMalzemeTuruRepository _malzemeTuruRepository;
+        private readonly IMalzemeCinsiRepository _malzemeCinsiRepository;
+        private readonly IMalzemeMarkaRepository _malzemeMarkaRepository;
+        private readonly IMalzemeModelRepository _malzemeModelRepository;
+        private readonly IMalzemeDurumuRepository _malzemeDurumuRepository;
+        private readonly IMalzemeRepository _malzemeRepository;
 
         public RepositoryManager(SabimDbContext context, ICalismaDurumuRepository calismaDurumuRepository,
             ICinsiyetRepository cinsiyetRepository, IDurumRepository durumRepository,
@@ -35,9 +41,9 @@ namespace Sabim.Infrastructure.Persistence.Repository.Implementations
             IKanGrubuRepository kanGrubuRepository, IKurumRepository kurumRepository,
             IKurumTipiRepository kurumTipiRepository, IPersonelRepository personelRepository,
             ISehirRepository sehirRepository, IUnvanRepository unvanRepository, IBolumRepository bolumRepository, IBirimRepository birimRepository, IKisimRepository kisimRepository,
-            IKabinetBazliBolumRepository kabinetBazliBolumRepository, IGorevlendirilmeTipiRepository gorevlendirilmeTipiRepository, IPersonelGorevlendirilmeRepository personelGorevlendirilmeRepository, 
-            IAppUserRepository appUserRepository, IAppRoleRepository appRoleRepository, ISidebarMenuRepository sidebarMenuRepository, 
-            IEkranRepository ekranRepository, ISavciCalisilanKatipServiceRepository savciCalisilanKatipServiceRepository)
+            IKabinetBazliBolumRepository kabinetBazliBolumRepository, IGorevlendirilmeTipiRepository gorevlendirilmeTipiRepository, IPersonelGorevlendirilmeRepository personelGorevlendirilmeRepository,
+            IAppUserRepository appUserRepository, IAppRoleRepository appRoleRepository, ISidebarMenuRepository sidebarMenuRepository,
+            IEkranRepository ekranRepository, ISavciCalisilanKatipServiceRepository savciCalisilanKatipServiceRepository, IMalzemeTuruRepository malzemeTuruRepository, IMalzemeCinsiRepository malzemeCinsiRepository, IMalzemeMarkaRepository malzemeMarkaRepository, IMalzemeModelRepository malzemeModelRepository, IMalzemeDurumuRepository malzemeDurumuRepository, IMalzemeRepository malzemeRepository)
         {
             _context = context;
             _calismaDurumuRepository = calismaDurumuRepository;
@@ -62,6 +68,12 @@ namespace Sabim.Infrastructure.Persistence.Repository.Implementations
             _sidebarMenuRepository = sidebarMenuRepository;
             _ekranRepository = ekranRepository;
             _savciCalisilanKatipServiceRepository = savciCalisilanKatipServiceRepository;
+            _malzemeTuruRepository = malzemeTuruRepository;
+            _malzemeCinsiRepository = malzemeCinsiRepository;
+            _malzemeMarkaRepository = malzemeMarkaRepository;
+            _malzemeModelRepository = malzemeModelRepository;
+            _malzemeDurumuRepository = malzemeDurumuRepository;
+            _malzemeRepository = malzemeRepository;
         }
         public ICalismaDurumuRepository CalismaDurumu => _calismaDurumuRepository;
         public ICinsiyetRepository Cinsiyet => _cinsiyetRepository;
@@ -85,6 +97,12 @@ namespace Sabim.Infrastructure.Persistence.Repository.Implementations
         public ISidebarMenuRepository SidebarMenu => _sidebarMenuRepository;
         public IEkranRepository Ekran => _ekranRepository;
         public ISavciCalisilanKatipServiceRepository SavciCalisilanKatip => _savciCalisilanKatipServiceRepository;
+        public IMalzemeTuruRepository MalzemeTuru=> _malzemeTuruRepository;
+        public IMalzemeCinsiRepository MalzemeCinsi => _malzemeCinsiRepository;
+        public IMalzemeMarkaRepository MalzemeMarka => _malzemeMarkaRepository;
+        public IMalzemeModelRepository MalzemeModel => _malzemeModelRepository;
+        public IMalzemeDurumuRepository MalzemeDurumu => _malzemeDurumuRepository;
+        public IMalzemeRepository Malzeme => _malzemeRepository;
         public IRepositoryBase<T> GetRepository<T>() where T : class
         {
             return new RepositoryBase<T>(_context);
