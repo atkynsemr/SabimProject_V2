@@ -69,7 +69,7 @@
                         @* @await Component.InvokeAsync("_MalzemeCinsiGenelComponent", new { deger = "create" }) *@
                     </div>
                     <div id="malzemeMarkaEkleComponent">
-                        @* @await Component.InvokeAsync("_MalzemeMarkaGenelComponent", new { deger = "create" }) *@
+                         @await Component.InvokeAsync("_MalzemeMarkaGenelComponent", new { deger = "create" }) 
                     </div>
                     @await Component.InvokeAsync("_MalzemeModelGenelComponent", new { deger = "create" })
                     <input type="hidden" id="DurumId" name="DurumId" asp-for="YeniMalzeme.DurumId" value="1" />
@@ -78,7 +78,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                <button type="button" class="btn btn-primary" id="KaydetMalzemeButton">Kaydet</button><
+                <button type="button" class="btn btn-primary" id="KaydetMalzemeButton">Kaydet</button>
             </div>
         </div>
     </div>
@@ -297,7 +297,8 @@
             });
             $('#createMalzemeCinsilari').change(function() {
                 var selectedMalzemeCinsiId = $(this).val();
-                changeMalzemeTuru(null, selectedMalzemeCinsiId, "create");
+                alert(selectedMalzemeCinsiId);
+                changeMalzemeCinsi(null, selectedMalzemeCinsiId, "create");
             });
             // Düzenle Kaydet Butonu
             $('#GuncelleMalzemeButton').click(saveUpdatedMalzeme);
@@ -307,11 +308,23 @@
 
 
         document.addEventListener("DOMContentLoaded", function() {
-            var selectedMalzemeTuruId = document.getElementById("createMalzemeTurleri")?.value;
-            if (selectedMalzemeTuruId) {
-                changeMalzemeTuru(null, selectedMalzemeTuruId, "create");
-            }
+            setTimeout(function() {
+                var selectedMalzemeTuruId = document.getElementById("createMalzemeTurleri")?.value;
+                if (selectedMalzemeTuruId) {
+                    changeMalzemeTuru(null, selectedMalzemeTuruId, "create");
+                    setTimeout(function() {
+                        var selectedMalzemeMarkaId = document.getElementById("createMalzemeCinsilari")?.value;
+                        if (selectedMalzemeMarkaId) {
+                            changeMalzemeCinsi(null, selectedMalzemeMarkaId, "create");
+                        }
+                    }, 1000); 
+                }
+            }, 500); 
         });
+
+
+
+
 
         function changeMalzemeTuru(selectedMalzemeCinsiId, id, deger) {
             // URL'yi doğru şekilde oluşturma
@@ -329,7 +342,7 @@
 
         function changeMalzemeCinsi(selectedMalzemeCinsiId, id, deger) {
             // URL'yi doğru şekilde oluşturma
-            var url = `/Admin/Malzeme/GetirMalzemeMarka?deger=${deger}&selectedMalzemeMarkaId=${selectedMalzemeMarkaId}&malzemeTuruId=${id}`;
+            var url = `/Admin/Malzeme/GetirMalzemeMarka?deger=${deger}&selectedMalzemeMarkaId=${selectedMalzemeCinsiId}&malzemeCinsiId=${id}`;
             if (deger === "create") {
                 reloadComponent("#createModal #malzemeMarkaEkleComponent", url);
             }

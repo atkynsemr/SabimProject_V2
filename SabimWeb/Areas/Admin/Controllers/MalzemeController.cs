@@ -35,9 +35,9 @@ namespace Sabim.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetirMalzemeMarka(string? deger, int? selectedMalzemeCinsiId, int? malzemeTuruId)
+        public async Task<IActionResult> GetirMalzemeMarka(string? deger, int? selectedMalzemeMarkaId, int? malzemeCinsiId)
         {
-            return ViewComponent("_MalzemeMarkaGenelComponent", new { deger, selectedMalzemeCinsiId, malzemeTuruId });
+            return ViewComponent("_MalzemeMarkaGenelComponent", new { deger, selectedMalzemeMarkaId, malzemeCinsiId });
         }
 
         [HttpPost]
