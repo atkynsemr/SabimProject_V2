@@ -64,8 +64,10 @@
                         <input type="text" class="form-control capitalize-input" id="malzemeModelAdi" name="ModelAdi" asp-for="YeniMalzemeModel.ModelAdi" placeholder="Malzeme Model Adı Giriniz" maxlength="50" required />
                         <span asp-validation-for="YeniMalzemeModel.ModelAdi" name="ModelAdi" class="text-danger"></span>
                     </div>
-                    @await Component.InvokeAsync("_MalzemeMarkaGenelComponent", new { deger = "create" })
                     @await Component.InvokeAsync("_MalzemeCinsiGenelComponent", new { deger = "create" })
+                    <div id="malzemeModelEkleComponent">
+                    @await Component.InvokeAsync("_MalzemeMarkaGenelComponent", new { deger = "create" })
+                    </div>
                     <input type="hidden" id="DurumId" name="DurumId" asp-for="YeniMalzemeModel.DurumId" value="1" />
                 </form>
             </div>
@@ -107,8 +109,10 @@
                         <input type="text" class="form-control capitalize-input" id="malzemeModelAdi" name="ModelAdi" asp-for="GuncelleMalzemeModel.ModelAdi" placeholder="Malzeme Model Adı Giriniz" maxlength="50" required />
                         <span asp-validation-for="GuncelleMalzemeModel.ModelAdi" name="ModelAdi" class="text-danger"></span>
                     </div>
-                    @await Component.InvokeAsync("_MalzemeMarkaGenelComponent", new { deger = "update" })
-                    @await Component.InvokeAsync("_MalzemeCinsiGenelComponent", new { deger = "update" })
+                     @await Component.InvokeAsync("_MalzemeCinsiGenelComponent", new { deger = "update" })
+                    <div id="malzemeModelGuncelleComponent">
+                     @await Component.InvokeAsync("_MalzemeMarkaGenelComponent", new { deger = "update" })
+                    </div>
                     @await Component.InvokeAsync("_DurumListesiGenelComponent")
                 </form>
             </div>
@@ -278,11 +282,37 @@
                     showInfoMalzemeModel(id);
                 }
             });
+            $(document).on('change', '#createMalzemeCinsleri', function () {
+                var selectedMalzemeCinsiId = $(this).val();
+                changeMalzemeCinsi(null, selectedMalzemeCinsiId, "create");
+            });
+            $(document).on('change', '#updateMalzemeCinsleri', function () {
+                var selectedMalzemeCinsiId = $(this).val();
+                changeMalzemeCinsi(null, selectedMalzemeCinsiId, "update");
+            });
             // Düzenle Kaydet Butonu
             $('#GuncelleMalzemeModelButton').click(saveUpdatedMalzemeModel);
             // Sil Modal'ı
             $('#SilMalzemeModelButton').click(deleteMalzemeModel);
         });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            setTimeout(function () {
+                var selectedMalzemeCinsiId = document.getElementById("createMalzemeCinsleri")?.value;
+                if (selectedMalzemeCinsiId) {
+                    changeMalzemeCinsi(null, selectedMalzemeCinsiId, "create");
+
+                    setTimeout(function () {
+                        var selectedMalzemeMarkaId = document.getElementById("createMalzemeMarkalari")?.value;
+                        if (selectedMalzemeMarkaId) {
+                            changeMalzemeTuru(null, selectedMalzemeMarkaId, "create");
+                        }
+                    }, 500); // İç içe geçişleri hızlandırmak için süreyi kısalttım.
+                }
+            }, 500);
+        });
+
+
         function initDataTable() {
             $('#example').DataTable({
                 "fixedHeader": true,
@@ -451,6 +481,19 @@
                 ]
             });
         }
+        function changeMalzemeCinsi(selectedMalzemeCinsiId, id, deger) {
+            // URL'yi doğru şekilde oluşturma
+            var url = `/Admin/MalzemeModel/GetirMalzemeMarka?deger=${deger}&selectedMalzemeMarkaId=${selectedMalzemeCinsiId}&malzemeCinsiId=${id}`;
+            if (deger === "create") {
+                reloadComponent("#createModal #malzemeModelEkleComponent", url);
+            }
+            else if (deger === "update") {
+                reloadComponent("#editModal #malzemeModelGuncelleComponent", url);
+            }
+            else {
+                console.warn("Geçersiz işlem türü (deger):", deger);
+            }
+        }
         function editMalzemeModel(id) {
             // event.preventDefault();
             $.ajax({
@@ -462,7 +505,7 @@
                         console.log(data);
                         $('#editModal #MalzemeModelID').val(data.malzemeModelID);
                         $('#editModal #malzemeModelAdi').val(data.modelAdi);
-                        $('#editModal #updateMalzemeTurleri option').each(function () {
+                        $('#editModal #updateMalzemeCinsleri option').each(function () {
                             const optionValue = $(this).val();
                             if (optionValue == data.malzemeTuruId) {
                                 $(this).prop('selected', true);
@@ -514,7 +557,6 @@
                 }
             });
         }
-
         function saveMalzemeModel() {
             $('#createModal span.text-danger').text('');
             $('#createModal .overlay').show();
@@ -539,7 +581,6 @@
                 }
             });
         }
-
         function deleteMalzemeModel() {
             $('#deleteModal .overlay').show();
             var formData = $('#MalzemeModelSilForm').serialize(); // Form verilerini al
@@ -563,7 +604,6 @@
                 }
             });
         }
-
         function showInfoMalzemeModel(id) {
             $.ajax({
                 url: `/Admin/MalzemeModel/GetirSafahatBilgi/${id}`,
@@ -577,7 +617,6 @@
                 }
             });
         }
-
         function reloadTable() {
             // Eski tabloyu kaldır
             if ($.fn.DataTable.isDataTable('#example')) {
@@ -593,7 +632,6 @@
                 }
             });
         }
-
         function handleError(xhr) {
             $('.modal .overlay').hide();
             if (xhr.responseJSON && xhr.responseJSON.errors) {
@@ -606,6 +644,15 @@
                 $('.modal').modal('hide'); // Tüm açık modalları kapatır
                 showSwalAlert('Hata!', 'Beklenmeyen bir hata oluştu. Lütfen yaptığınız işlemi tekrar deneyiniz. Hatanın devam etmesi durumunda Bilgi İşlem Birimine bildiriniz.', 'error', 6500, true, true);
             }
+        }
+        function reloadComponent(componentSelector, url) {
+            $(componentSelector).load(url, function (response, status, xhr) {
+                if (status === "error") {
+                    setTimeout(function () {
+                        window.location.reload(); // Sayfayı yeniden yükle
+                    }, 1500);
+                }
+            });
         }
     </script>
 }

@@ -19,10 +19,16 @@ namespace Sabim.Infrastructure.Persistence.Configurations
                    .HasForeignKey(x => x.MalzemeTuruId)
                    .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasMany(x => x.MalzemeModels)
+            //builder.HasMany(x => x.MalzemeModels)
+            //       .WithOne(x => x.MalzemeCinsi)
+            //       .HasForeignKey(x => x.MalzemeCinsiId)
+            //       .OnDelete(DeleteBehavior.Restrict); 
+
+
+            builder.HasMany(x => x.MalzemeMarkas)
                    .WithOne(x => x.MalzemeCinsi)
                    .HasForeignKey(x => x.MalzemeCinsiId)
-                   .OnDelete(DeleteBehavior.Restrict); ;
+                   .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasIndex(x => x.MalzemeCinsiAdi).IsUnique();
             var config = new BaseEntityConfiguration<MalzemeCinsi>();

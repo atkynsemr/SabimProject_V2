@@ -9,6 +9,7 @@ namespace Sabim.Services.AutoMapperProfiles
         public MalzemeMarkaProfile()
         {
             CreateMap<MalzemeMarka, ResultMalzemeMarkaDto>()
+                .ForMember(dest => dest.MalzemeCinsiAdi, opt => opt.MapFrom(src => src.MalzemeCinsi.MalzemeCinsiAdi))
                 .ForMember(dest => dest.DurumAdi, opt => opt.MapFrom(src => src.Durum.DurumAdi)).ReverseMap();
             CreateMap<CreateMalzemeMarkaDto, MalzemeMarka>();
             CreateMap<UpdateMalzemeMarkaDto, MalzemeMarka>();

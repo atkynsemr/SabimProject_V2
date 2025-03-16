@@ -65,6 +65,7 @@
                         <input type="text" class="form-control capitalize-input" id="MarkaAdi" name="MarkaAdi" asp-for="YeniMalzemeMarka.MarkaAdi" placeholder="Marka Adı Giriniz" maxlength="50" required />
                         <span asp-validation-for="YeniMalzemeMarka.MarkaAdi" name="MarkaAdi" class="text-danger"></span>
                     </div>
+                    @await Component.InvokeAsync("_MalzemeCinsiGenelComponent", new { deger = "create" })
                     <input type="hidden" id="DurumId" name="DurumId" asp-for="YeniMalzemeMarka.DurumId" value="1" />
                 </form>
             </div>
@@ -107,6 +108,7 @@
                         <input type="text" class="form-control capitalize-input" id="MarkaAdi" name="MarkaAdi" asp-for="GuncelleMalzemeMarka.MarkaAdi" placeholder="Marka Adı Giriniz" maxlength="50" required />
                         <span asp-validation-for="GuncelleMalzemeMarka.MarkaAdi" name="MarkaAdi" class="text-danger"></span>
                     </div>
+                    @await Component.InvokeAsync("_MalzemeCinsiGenelComponent", new { deger = "update" })
                     @await Component.InvokeAsync("_DurumListesiGenelComponent")
                 </form>
             </div>
@@ -166,6 +168,7 @@
                 <thead>
                     <tr>
                         <th>Marka Adı</th>
+                        <th>Malzeme Cinsi</th>
                         <th>Durum</th>
                         <th>İşlemler</th>
                     </tr>
@@ -174,6 +177,7 @@
                 <tfoot>
                     <tr>
                         <th>Marka Adı</th>
+                        <th>Malzeme Cinsi</th>
                         <th>Durum</th>
                         <th>İşlemler</th>
                     </tr>
@@ -459,6 +463,14 @@
                         console.log(data);
                         $('#editModal #MalzemeMarkaID').val(data.malzemeMarkaID);
                         $('#editModal #MarkaAdi').val(data.markaAdi);
+                        $('#editModal #updateMalzemeCinsleri option').each(function () {
+                            const optionValue = $(this).val();
+                            if (optionValue == data.malzemeTuruId) {
+                                $(this).prop('selected', true);
+                            } else {
+                                $(this).prop('selected', false);
+                            }
+                        });
                         // Durum listesindeki seçili durumu güncelle
                         $('#editModal #durumlar option').each(function () {
                             const optionValue = $(this).val();

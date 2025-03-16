@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Sabim.Domain.DTOs.MalzemeCinsiDtos;
 using Sabim.Domain.DTOs.MalzemeMarkaDtos;
+using Sabim.Domain.Entities;
 using Sabim.Services.Contracts;
 
 namespace Sabim.Web.Areas.Admin.ViewComponents.MalzemeMarkaViewComponents
@@ -13,16 +15,21 @@ namespace Sabim.Web.Areas.Admin.ViewComponents.MalzemeMarkaViewComponents
             _manager = manager;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(string? deger, int? selectedMalzemeMarkaId = null)
+        public async Task<IViewComponentResult> InvokeAsync(string? deger, int? selectedMalzemeMarkaId = null, int? malzemeCinsiId = null)
         {
-            var malzemeMarkalari = await _manager.MalzemeMarkaService.TFindAllAsync(false);
+            var malzemeMarkalariQuery = _manager.MalzemeMarkaService.
+                TFindAllByConditionAsync(x => (!malzemeCinsiId.HasValue || x.MalzemeCinsiId == malzemeCinsiId.Value),false);
             ViewBag.Deger = deger;
-            var malzemeMarkaDtoList = malzemeMarkalari.Select(k => new ResultMalzemeMarkaDto
-            {
-                MalzemeMarkaID = k.MalzemeMarkaID,
-                MarkaAdi = k.MarkaAdi,
-                Selected = selectedMalzemeMarkaId.HasValue && selectedMalzemeMarkaId.Value == k.MalzemeMarkaID
-            }).ToList();
+            var malzemeMarkaModelleri = await malzemeMarkalariQuery;
+            var malzemeMarkaDtoList = malzemeMarkaModelleri
+                .OrderBy(k => k.MarkaAdi)
+                .Select(k => new ResultMalzemeMarkaDto
+                {
+                    MalzemeMarkaID = k.MalzemeMarkaID,
+                    MarkaAdi = k.MarkaAdi,
+                    Selected = selectedMalzemeMarkaId == k.MalzemeMarkaID
+                })
+                .ToList();
             return View(malzemeMarkaDtoList);
         }
     }

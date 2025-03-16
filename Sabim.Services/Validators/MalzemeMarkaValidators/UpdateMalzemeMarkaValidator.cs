@@ -16,15 +16,22 @@ namespace Sabim.Services.Validators.MalzemeMarkaValidators
                 .NotEmpty().WithMessage("Marka adı boş bırakılamaz.")
                 .MaximumLength(50).WithMessage("Marka adı en fazla 50 karakter olmalıdır.")
                 .MinimumLength(2).WithMessage("Marka adı en az 2 karakter olmalıdır.")
-                .Must((dto, markaAdi) => BeUniqueName(markaAdi, dto.MalzemeMarkaID)).WithMessage("Bu marka zaten kayıtlı!");
+                .Must((dto, markaAdi) => BeUniqueName(markaAdi, dto.MalzemeCinsiId, dto.MalzemeMarkaID))
+                .WithMessage("Bu marka zaten kayıtlı!");
+
+
+            RuleFor(x => x.MalzemeCinsiId).NotEmpty().WithMessage("Cins ID boş bırakılamaz.");
 
             RuleFor(x => x.DurumId)
                 .NotNull().WithMessage("Durum alanı boş olamaz.");
         }
 
-        private bool BeUniqueName(string markaAdi, byte? excludeId)
+        private bool BeUniqueName(string markaAdi, byte malzemeCinsiId, byte? excludeId)
         {
-            return !_manager.MalzemeMarkaService.TIsAny(x => x.MarkaAdi == markaAdi && x.MalzemeMarkaID != excludeId);
+            return !_manager.MalzemeMarkaService.TIsAny(x =>
+                x.MarkaAdi == markaAdi &&
+                x.MalzemeCinsiId == malzemeCinsiId &&
+                x.MalzemeMarkaID != excludeId);
         }
     }
 }

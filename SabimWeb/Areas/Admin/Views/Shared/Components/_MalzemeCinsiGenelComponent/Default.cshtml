@@ -3,7 +3,7 @@
 
 <div class="form-group">
     <label for="MalzemeCinsiAdi">Malzeme Cinsi</label>
-    <select class="form-control" id="@(ViewBag.Deger ?? "")MalzemeCinsilari" name="MalzemeCinsiID" style="width: 100%;">
+    <select class="form-control" id="@(ViewBag.Deger ?? "")MalzemeCinsleri" name="MalzemeCinsiID" style="width: 100%;">
         @foreach (var malzemeCinsi in Model)
         {
             <option value="@malzemeCinsi.MalzemeCinsiID" selected="@malzemeCinsi.Selected">@malzemeCinsi.MalzemeCinsiAdi</option>

@@ -21,8 +21,8 @@ namespace Sabim.Services.Validators.MalzemeModelValidators
             RuleFor(x => x.MalzemeMarkaId)
                 .NotEmpty().WithMessage("Marka ID boş bırakılamaz.");
 
-            RuleFor(x => x.MalzemeCinsiId)
-                .NotEmpty().WithMessage("Cins ID boş bırakılamaz.");
+            //RuleFor(x => x.MalzemeCinsiId)
+            //    .NotEmpty().WithMessage("Cins ID boş bırakılamaz.");
 
             RuleFor(x => x.DurumId)
                 .NotNull().WithMessage("Durum alanı boş olamaz.");

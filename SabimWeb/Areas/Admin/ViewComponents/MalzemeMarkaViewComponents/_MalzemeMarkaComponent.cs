@@ -18,7 +18,7 @@ namespace Sabim.Web.Areas.Admin.ViewComponents.MalzemeMarkaViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var malzemeMarkalar = await _manager.MalzemeMarkaService.TFindAllAsyncWithEntities(false, x => x.Durum);
+            var malzemeMarkalar = await _manager.MalzemeMarkaService.TFindAllAsyncWithEntities(false, x => x.Durum, x => x.MalzemeCinsi);
             var malzemeMarkalariDto = _mapper.Map<List<ResultMalzemeMarkaDto>>(malzemeMarkalar);
             return View(malzemeMarkalariDto);
         }

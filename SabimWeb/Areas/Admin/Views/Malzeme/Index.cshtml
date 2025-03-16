@@ -295,7 +295,7 @@
                 var selectedMalzemeTuruId = $(this).val();
                 changeMalzemeTuru(null, selectedMalzemeTuruId, "update");
             });
-            $('#createMalzemeCinsilari').change(function() {
+            $('#createMalzemeCinsleri').change(function() {
                 var selectedMalzemeCinsiId = $(this).val();
                 alert(selectedMalzemeCinsiId);
                 changeMalzemeCinsi(null, selectedMalzemeCinsiId, "create");
@@ -305,15 +305,13 @@
             // Sil Modal'ı
             $('#SilMalzemeButton').click(deleteMalzeme);
         });
-
-
         document.addEventListener("DOMContentLoaded", function() {
             setTimeout(function() {
                 var selectedMalzemeTuruId = document.getElementById("createMalzemeTurleri")?.value;
                 if (selectedMalzemeTuruId) {
                     changeMalzemeTuru(null, selectedMalzemeTuruId, "create");
                     setTimeout(function() {
-                        var selectedMalzemeMarkaId = document.getElementById("createMalzemeCinsilari")?.value;
+                        var selectedMalzemeMarkaId = document.getElementById("createMalzemeCinsleri")?.value;
                         if (selectedMalzemeMarkaId) {
                             changeMalzemeCinsi(null, selectedMalzemeMarkaId, "create");
                         }
@@ -321,11 +319,6 @@
                 }
             }, 500); 
         });
-
-
-
-
-
         function changeMalzemeTuru(selectedMalzemeCinsiId, id, deger) {
             // URL'yi doğru şekilde oluşturma
             var url = `/Admin/Malzeme/GetirMalzemeCinsi?deger=${deger}&selectedMalzemeCinsiId=${selectedMalzemeCinsiId}&malzemeTuruId=${id}`;

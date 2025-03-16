@@ -17,7 +17,7 @@ namespace Sabim.Web.Areas.Admin.ViewComponents.MalzemeViewComponents
         }
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var malzeme = await _manager.MalzemeService.TFindAllAsyncWithEntities(false, x => x.Durum, x => x.MalzemeModel, x => x.MalzemeModel.MalzemeMarka, x => x.MalzemeModel.MalzemeCinsi, x => x.MalzemeModel.MalzemeCinsi.MalzemeTuru);
+            var malzeme = await _manager.MalzemeService.TFindAllAsyncWithEntities(false, x => x.Durum, x => x.MalzemeModel, x => x.MalzemeModel.MalzemeMarka, x => x.MalzemeModel.MalzemeMarka.MalzemeCinsi, x => x.MalzemeModel.MalzemeMarka.MalzemeCinsi.MalzemeTuru);
             var malzemeDto = _mapper.Map<List<ResultMalzemeDto>>(malzeme);
             return View(malzemeDto);
         }

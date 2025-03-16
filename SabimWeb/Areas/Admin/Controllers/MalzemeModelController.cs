@@ -28,6 +28,12 @@ namespace Sabim.Web.Areas.Admin.Controllers
             return View();
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetirMalzemeMarka(string? deger, int? selectedMalzemeMarkaId, int? malzemeCinsiId)
+        {
+            return ViewComponent("_MalzemeMarkaGenelComponent", new { deger, selectedMalzemeMarkaId, malzemeCinsiId });
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EkleMalzemeModel([FromForm] CreateMalzemeModelDto createMalzemeModelDto)
@@ -67,12 +73,22 @@ namespace Sabim.Web.Areas.Admin.Controllers
         {
             try
             {
-                var malzemeModel = await _manager.MalzemeModelService.TGetByIdAsync(id, false);
+                var malzemeModel = await _manager.MalzemeModelService.TFindByIdWithIncludesAsync(id, false, x => x.MalzemeMarka.MalzemeCinsi);
                 if (malzemeModel == null)
                 {
                     return Json(new { success = false });
                 }
-                return Json(new { success = true, data = malzemeModel });
+
+                var responseDto = new ResultMalzemeModelDto
+                {
+                    MalzemeModelID = malzemeModel.MalzemeModelID,
+                    ModelAdi = malzemeModel.ModelAdi,
+                    MarkaId = malzemeModel.MalzemeMarka?.MarkaId,
+                    MalzemeCinsiId = malzemeModel.MalzemeMarka?.MalzemeCinsi?.MalzemeCinsiID,
+                    DurumId= malzemeModel.DurumId
+                };
+
+                return Json(new { success = true, data = responseDto });
             }
             catch (Exception ex)
             {
@@ -81,6 +97,7 @@ namespace Sabim.Web.Areas.Admin.Controllers
                 return Json(new { success = false });
             }
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]

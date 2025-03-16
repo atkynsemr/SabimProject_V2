@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sabim.Infrastructure.Persistence.Context;
 
@@ -11,9 +12,11 @@ using Sabim.Infrastructure.Persistence.Context;
 namespace Sabim.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(SabimDbContext))]
-    partial class SabimDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250315084455_ChangeMarka-ModelTables")]
+    partial class ChangeMarkaModelTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1312,12 +1315,12 @@ namespace Sabim.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("MalzemeCinsiId");
 
+                    b.HasIndex("MarkaAdi")
+                        .IsUnique();
+
                     b.HasIndex("OlusturanPersonelId");
 
                     b.HasIndex("SilenPersonelId");
-
-                    b.HasIndex("MarkaAdi", "MalzemeCinsiId")
-                        .IsUnique();
 
                     b.ToTable("MalzemeMarka", (string)null);
                 });

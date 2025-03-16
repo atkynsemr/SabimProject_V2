@@ -7,7 +7,6 @@ using Sabim.Domain.Entities;
 using Sabim.Services.Contracts;
 using Sabim.Web.Helpers.MethodHelper;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace Sabim.Web.Areas.Admin.Controllers
 {
